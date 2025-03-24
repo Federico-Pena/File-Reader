@@ -21,6 +21,8 @@ app.use(cors(apiConfig.CORS_SETTINGS))
 app.use(logger)
 
 // Serve static files.
+console.log(cwd)
+
 const staticPath = path.join(__dirname, './frontend')
 app.use('/', express.static(staticPath))
 

@@ -1,7 +1,4 @@
-const BASE_URL =
-  import.meta.env.MODE === 'development'
-    ? 'http://localhost:1234/api/v1'
-    : 'https://file-reader2.vercel.app/api/v1'
+const BASE_URL = import.meta.env.MODE === 'development' ? 'http://localhost:1234/api/v1' : '/api/v1'
 const POST_FILE_URL = `${BASE_URL}/upload-file`
 const GET_MIME_TYPES_URL = `${BASE_URL}/get-mime-types`
 

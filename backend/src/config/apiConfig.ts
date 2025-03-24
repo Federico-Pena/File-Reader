@@ -1,7 +1,5 @@
 const API_URL =
-  process.env.NODE_ENV === 'development'
-    ? `http://localhost:${process.env.PORT ?? 1234}`
-    : 'https://file-reader-xi.vercel.app'
+  process.env.NODE_ENV === 'development' ? `http://localhost:${process.env.PORT ?? 1234}` : '/'
 const ACCEPTED_MIME_TYPES = {
   pdf: {
     server: 'application/pdf',

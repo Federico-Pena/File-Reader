@@ -23,7 +23,7 @@ app.use(logger)
 // Serve static files.
 console.log(`Current directory: ${cwd()}`)
 
-const staticPath = path.join(cwd(), '/dist', '/frontend')
+const staticPath = path.join(cwd(), '/frontend')
 app.use('/', express.static(staticPath))
 
 // Use one router

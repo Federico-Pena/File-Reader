@@ -23,8 +23,8 @@ app.use(logger)
 // Serve static files.
 console.log(`Current directory: ${path.join(__dirname, './public')}`)
 
-const staticPath = path.join(__dirname, '/public')
-app.use('/', express.static('./public'))
+const staticPath = './public'
+app.use('/', express.static(staticPath))
 
 // Use one router
 app.use(fileReader)

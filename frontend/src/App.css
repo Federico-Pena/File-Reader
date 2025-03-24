@@ -1,0 +1,41 @@
+.mainApp {
+  min-height: 100dvh;
+  max-width: 1200px;
+  width: 100%;
+  margin: auto;
+  padding: 1rem;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 1rem;
+  @media screen and (max-width: 796px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+  }
+}
+
+.section-formFile,
+.section-textOutput,
+.section-advice {
+  display: grid;
+  row-gap: 0.5rem;
+  box-shadow: 3px 3px 10px 0px #00000099;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--bg-color-secondary);
+  h1 {
+    font-size: clamp(1rem, 2.5vw, 3rem);
+    font-family: var(--font-bold);
+    text-align: center;
+  }
+
+  h2 {
+    text-align: center;
+    font-family: var(--font-bold);
+    font-size: clamp(1.5rem, 2.3vw, 3rem);
+  }
+  h3 {
+    text-align: center;
+    font-family: var(--font-bold);
+    font-size: clamp(1.2rem, 2vw, 5rem);
+  }
+}

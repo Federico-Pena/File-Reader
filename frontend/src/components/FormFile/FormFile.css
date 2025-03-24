@@ -1,0 +1,45 @@
+form {
+  display: grid;
+  row-gap: 1rem;
+  .mime-types-list {
+    display: flex;
+    column-gap: 0.5rem;
+    align-items: center;
+    overflow: hidden;
+    p {
+      word-break: keep-all;
+    }
+    ul {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      overflow: auto;
+
+      column-gap: 0.5rem;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+    li {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+  label {
+    display: grid;
+    row-gap: 0.5rem;
+    #fileInput {
+      cursor: pointer;
+      transition: scale 0.6s;
+      display: grid;
+      &::file-selector-button {
+        display: none;
+      }
+      &:hover {
+        scale: 0.98;
+        transition: scale 0.2s;
+      }
+    }
+  }
+}

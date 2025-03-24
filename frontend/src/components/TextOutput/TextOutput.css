@@ -1,0 +1,207 @@
+.articleText {
+  display: flex;
+  flex-direction: column;
+  &:not(:has(header)) {
+    h3 {
+      background-color: transparent;
+    }
+  }
+  h2 {
+    padding: 1rem;
+  }
+  h3 {
+    background-color: var(--bg-color);
+    padding: 1rem;
+    margin-top: 2rem;
+    border-radius: 0.3rem;
+  }
+  header {
+    position: sticky;
+    z-index: 1;
+    top: 0;
+    padding: 1rem;
+    border-bottom: 1px solid;
+    background-color: var(--bg-color-secondary);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    .btns-controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+      .btn-control {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: scale 0.2s;
+        &:hover {
+          scale: 1.1;
+        }
+      }
+    }
+    .control-btns {
+      span {
+        background-color: var(--bg-color);
+        border-radius: 0.3rem;
+        border: 1px solid var(--bg-color);
+        color: var(--text-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.3rem;
+        cursor: pointer;
+        transition: border-radius 0.2s, scale 0.2s;
+        &:hover {
+          border-radius: 100%;
+          scale: 1.2;
+        }
+      }
+    }
+    .volume-rate-container {
+      display: flex;
+      gap: 1rem;
+      grid-row: 2;
+      grid-column: 1/-1;
+      div {
+        display: grid;
+        width: 100%;
+      }
+    }
+    .pages-btns {
+      grid-row: 3;
+      grid-column: 1/-1;
+      display: flex;
+      overflow: hidden;
+      overflow-x: auto;
+      gap: 1rem;
+      padding: 1rem;
+      span {
+        max-height: 2rem;
+        max-width: 2rem;
+        width: 100%;
+        white-space: nowrap;
+        aspect-ratio: 1;
+        background-color: var(--bg-color);
+        border-radius: 0.3rem;
+        border: 1px solid var(--bg-color);
+        color: var(--text-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.3rem;
+        cursor: pointer;
+        transition: filter 0.2s;
+        &:hover {
+          filter: invert(1);
+        }
+        &.active {
+          pointer-events: none;
+          opacity: 0.5;
+        }
+      }
+    }
+    .voice-select {
+      width: 100%;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.5rem;
+      align-items: center;
+      select {
+        width: 100%;
+      }
+    }
+  }
+}
+.text-line {
+  padding: 0 1rem;
+  margin: 1rem 0;
+  .word {
+    white-space: nowrap;
+    cursor: pointer;
+    margin: 0 0.15rem;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+.word-highlighted {
+  filter: brightness(2);
+  color: green;
+}
+.error {
+  color: red;
+  text-align: center;
+  font-weight: bolder;
+}
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .custom-loader {
+    width: 70px;
+    height: 70px;
+    display: grid;
+    color: var(--text-color);
+    background: radial-gradient(
+      farthest-side,
+      currentColor calc(100% - 6px),
+      #0000 calc(100% - 5px) 0
+    );
+    mask: radial-gradient(farthest-side, #0000 calc(100% - 13px), #000 calc(100% - 12px));
+    -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 13px), #000 calc(100% - 12px));
+    border-radius: 50%;
+    animation: s9 2s infinite linear;
+  }
+  .custom-loader::before,
+  .custom-loader::after {
+    content: '';
+    grid-area: 1/1;
+    background: linear-gradient(currentColor 0 0) center, linear-gradient(currentColor 0 0) center;
+    background-size: 100% 10px, 10px 100%;
+    background-repeat: no-repeat;
+  }
+  .custom-loader::after {
+    transform: rotate(45deg);
+  }
+}
+
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type='range']:focus {
+  outline: none;
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+  background-color: var(--bg-color);
+  border-radius: 0.5rem;
+  height: 0.5rem;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -4px;
+  background-color: var(--text-color);
+  border-radius: 0.5rem;
+  height: 1rem;
+  width: 1rem;
+}
+
+input[type='range']:focus::-webkit-slider-thumb {
+  outline: 3px solid var(--text-color);
+  outline-offset: 0.125rem;
+}
+
+@keyframes s9 {
+  100% {
+    transform: rotate(1turn);
+  }
+}

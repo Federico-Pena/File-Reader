@@ -31,8 +31,6 @@ app.use('/', express.static(staticPath))
 app.use(fileReader)
 
 // Handle all other requests.
-app.use('*', (req, res) => {
-  res.sendFile(path.join(staticPath, '/index.html'))
-})
+app.use('*', express.static(staticPath))
 
 export default app

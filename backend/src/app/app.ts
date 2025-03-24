@@ -21,7 +21,7 @@ app.use(cors(apiConfig.CORS_SETTINGS))
 app.use(logger)
 
 // Serve static files.
-console.log(`Current directory: ${path.join('./public')}`)
+console.log(`Current directory: ${path.join(__dirname, '/public')}`)
 
 const staticPath = path.join(__dirname, '/public')
 

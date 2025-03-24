@@ -21,9 +21,9 @@ app.use(cors(apiConfig.CORS_SETTINGS))
 app.use(logger)
 
 // Serve static files.
-console.log(`Current directory: ${path.join(cwd(), './public')}`)
+console.log(`Current directory: ${path.join('./public')}`)
 
-const staticPath = path.join(cwd(), './public')
+const staticPath = path.resolve('./dist/public')
 
 app.use('/', express.static(staticPath))
 

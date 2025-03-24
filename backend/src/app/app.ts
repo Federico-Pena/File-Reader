@@ -23,7 +23,7 @@ app.use(logger)
 // Serve static files.
 console.log(`Current directory: ${path.join('./public')}`)
 
-const staticPath = path.resolve('./dist/public')
+const staticPath = path.join(__dirname, '/public')
 
 app.use('/', express.static(staticPath))
 

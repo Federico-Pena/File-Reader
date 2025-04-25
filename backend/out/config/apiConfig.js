@@ -1,24 +1,7 @@
 const API_URL = process.env.NODE_ENV === "development" ? `http://localhost:${process.env.PORT ?? 1234}` : "/";
-const ACCEPTED_MIME_TYPES = {
-  pdf: {
-    server: "application/pdf",
-    client: "pdf"
-  },
-  docx: {
-    server: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    client: "docx"
-  },
-  txt: {
-    server: "text/plain",
-    client: "txt"
-  },
-  md: {
-    server: ".md",
-    client: "md"
-  }
-};
+const ACCEPTED_MIME_TYPES = ["pdf", "docx", "txt", "md"];
 const CORS_SETTINGS = {
-  origin: [API_URL, "http://localhost:5173"],
+  origin: [API_URL, "http://localhost:5173", "http://localhost:1234"],
   // Allow specific origins
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization", "Control-Allow-Credentials"]

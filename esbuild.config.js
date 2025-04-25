@@ -1,8 +1,9 @@
 // https://esbuild.github.io/getting-started/
 import esbuild from 'esbuild'
 const NODE_ENV = process.env.NODE_ENV
+console.log('NODE_ENV', NODE_ENV)
 
-if (NODE_ENV === 'devexlopment') {
+if (NODE_ENV === 'develsopment') {
   const ctx = await esbuild.context({
     entryPoints: ['backend/src/**/*.ts'],
     format: 'esm',
@@ -24,15 +25,14 @@ if (NODE_ENV === 'devexlopment') {
   esbuild
     .build({
       entryPoints: ['backend/src/index.ts'],
-      outfile: 'dist/index.cjs',
+      outfile: 'dist/index.js',
       bundle: true,
       minify: true,
       platform: 'node',
-      format: 'cjs',
-      target: ['node16']
-      /* banner: {
+      format: 'esm',
+      banner: {
         js: 'import { createRequire } from "node:module"; const require = createRequire(import.meta.url);'
-      } */
+      }
     })
     .then(() => {
       console.log('Build successful')

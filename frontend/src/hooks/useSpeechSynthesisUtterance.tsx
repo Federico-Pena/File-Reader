@@ -1,4 +1,3 @@
-import { normalizeText } from '@/utils/normalizeText'
 import { useLocalDataContext, useVoiceContext } from './useCustomContext'
 
 export const useSpeechSynthesisUtterance = () => {
@@ -12,13 +11,11 @@ export const useSpeechSynthesisUtterance = () => {
     state: { rateUtterance, selectedVoice, volume, readWords, voices }
   } = useVoiceContext()
 
-  const globalText = normalizeText(textPages[currentPage]?.text ?? '')
-    .replace(/\n\n/g, ' ')
-    .replace(/\n/g, ' ')
+  const globalText = textPages[currentPage]?.cleaned ?? ''
 
   const handleOnBoundary = (event: SpeechSynthesisEvent) => {
     if (event.name === 'word') {
-      const globalWords = globalText.split(' ')
+      const globalWords = globalText.split(/\s+/g)
       let currentIndex = 0
       let currentWord = ''
       const startingWordIndex = readWords[readWords.length - 1]?.index ?? 0

@@ -10,12 +10,11 @@ app.disable("x-powered-by");
 app.use(express.json());
 app.use(cors(apiConfig.CORS_SETTINGS));
 app.use(logger);
-const staticPath = path.join(cwd(), "dist", "frontend");
+console.log(`Current directory: ${path.join(cwd(), "dist/public")}`);
+const staticPath = path.join(cwd(), "dist/public");
 app.use("/", express.static(staticPath));
 app.use(fileReader);
-app.get("*", (req, res) => {
-  res.sendFile(path.join(staticPath, "index.html"));
-});
+app.use("*", express.static(staticPath));
 var app_default = app;
 export {
   app_default as default

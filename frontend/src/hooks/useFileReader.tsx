@@ -69,6 +69,8 @@ const useFileReader = () => {
         changeError('Ocurrió un error inesperado, inténtelo más tarde.')
         return
       }
+      console.log(data)
+
       dispatch({
         type: 'SET_NAME_FILE',
         payload: {

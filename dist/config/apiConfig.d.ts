@@ -12,22 +12,5 @@ export declare const apiConfig: {
         methods: string[];
         allowedHeaders: string[];
     };
-    ACCEPTED_MIME_TYPES: {
-        pdf: {
-            server: string;
-            client: string;
-        };
-        docx: {
-            server: string;
-            client: string;
-        };
-        txt: {
-            server: string;
-            client: string;
-        };
-        md: {
-            server: string;
-            client: string;
-        };
-    };
+    ACCEPTED_MIME_TYPES: string[];
 };

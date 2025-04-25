@@ -4,11 +4,21 @@ interface FileReaderContextType {
   changeError: (error: string) => void
   changeLoading: (isLoading: boolean) => void
 }
+type RichBlock =
+  | { type: 'title' | 'subtitle'; content: RichInline[] }
+  | { type: 'paragraph'; content: RichInline[] }
+  | { type: 'blockquote'; content: RichInline[] }
+
+type RichInline =
+  | { type: 'text'; text: string }
+  | { type: 'quote'; text: string }
+  | { type: 'link'; url: string; text: string }
 
 /////////// LOCAL DATA CONTEXT ///////////
 
 type TextPages = {
-  text: string
+  cleaned: string
+  withLineBreaks: RichBlock[]
   page: number
 }
 

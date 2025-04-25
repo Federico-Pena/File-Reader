@@ -1,6 +1,6 @@
 import { useLocalDataContext, useVoiceContext } from '@/hooks/useCustomContext'
 import { IconPause, IconPlay, IconStop } from '../Icons/Icons'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useUtterance } from '@/hooks/useUtterance'
 
 const Header = () => {
@@ -13,7 +13,15 @@ const Header = () => {
     state: { textPages, currentPage }
   } = useLocalDataContext()
   const { play, stop } = useUtterance()
-
+  const pageRef = React.useRef<HTMLSpanElement>(null)
+  useEffect(() => {
+    if (pageRef.current) {
+      pageRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      })
+    }
+  }, [currentPage])
   const handleVoiceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.trim() === '') return
     const voiceName = event.target.value
@@ -91,7 +99,13 @@ const Header = () => {
         >
           {speaking ? <IconPause /> : <IconPlay />}
         </button>
-        <button title={'Stop'} type="button" className="btn-control" onClick={stop}>
+        <button
+          disabled={!speaking && !window.speechSynthesis.speaking}
+          title={'Stop'}
+          type="button"
+          className="btn-control"
+          onClick={stop}
+        >
           <IconStop />
         </button>
       </div>
@@ -100,6 +114,7 @@ const Header = () => {
           <>
             {textPages.map((page, i) => (
               <span
+                ref={currentPage === i ? pageRef : null}
                 key={i}
                 className={currentPage === i ? 'active' : ''}
                 onClick={() => handleSetPage(i)}

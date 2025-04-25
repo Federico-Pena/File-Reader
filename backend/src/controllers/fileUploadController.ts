@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express'
-import { switchServices } from '../services/switchServices.js'
 import { apiConfig } from '../config/apiConfig.js'
+import { extractTextWithPython } from '../services/extractTextWithPython.js'
+import { parseTextToRichBlocks } from '../utils/normalizeText.js'
 
 const fileUploadController = async (req: Request, res: Response) => {
   try {
@@ -9,7 +10,7 @@ const fileUploadController = async (req: Request, res: Response) => {
       return
     }
     const fileExt = req.file.originalname.split('.').pop()?.toLowerCase() || ''
-    const mimeTypes = Object.values(apiConfig.ACCEPTED_MIME_TYPES).map((type) => type.client)
+    const mimeTypes = apiConfig.ACCEPTED_MIME_TYPES
 
     if (!mimeTypes.includes(fileExt)) {
       const clientMimeTypes = mimeTypes.map((type) => `"${type}"`).join(', ')
@@ -17,10 +18,17 @@ const fileUploadController = async (req: Request, res: Response) => {
       res.status(400).json({ error: msg })
       return
     }
-    const sendPage = async (data: Data[]) => {
-      res.status(200).json({ data })
-    }
-    await switchServices(fileExt, req.file.buffer, sendPage)
+
+    const pages = await extractTextWithPython(req.file.buffer, fileExt)
+    const pagesWithRichText = pages.map((page) => {
+      const { withLineBreaks, cleaned } = parseTextToRichBlocks(page.text)
+      return {
+        ...page,
+        withLineBreaks,
+        cleaned
+      }
+    })
+    res.status(200).json({ data: pagesWithRichText })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Internal server error' })

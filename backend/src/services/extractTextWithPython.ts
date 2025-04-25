@@ -2,11 +2,7 @@ import { spawn } from 'node:child_process'
 import { join } from 'node:path'
 import { consoleStyler } from 'logpainter'
 
-export const extractTextWithPython = (
-  fileBuffer: Buffer,
-  fileExt: string,
-  sendPage: (data: Data[]) => void
-): Promise<void> => {
+export const extractTextWithPython = (fileBuffer: Buffer, fileExt: string): Promise<Data[]> => {
   const scriptPath = join(process.cwd(), 'backend', 'src', 'scripts', 'main.py')
   const venvPath = join(process.cwd(), 'venv', 'Scripts', 'python.exe')
 
@@ -32,13 +28,13 @@ export const extractTextWithPython = (
         reject(new Error(`Python process exited with code ${code}: ${errorOutput}`))
       } else {
         try {
+          consoleStyler(extractedOutput)
           if (extractedOutput.startsWith('{"error":') || extractedOutput.startsWith('{"pages":')) {
             const { pages, error }: { pages: Data[]; error: string } = JSON.parse(extractedOutput)
             if (error) {
               reject(new Error(error))
             }
-
-            sendPage(pages)
+            resolve(pages)
           }
         } catch (error: any) {
           reject(new Error(`Failed to parse output: ${error.message}`))

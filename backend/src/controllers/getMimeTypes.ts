@@ -3,7 +3,7 @@ import { apiConfig } from '../config/apiConfig.js'
 
 const getMimeTypes = async (req: Request, res: Response) => {
   try {
-    const clientMimeTypes = Object.values(apiConfig.ACCEPTED_MIME_TYPES).map((type) => type.client)
+    const clientMimeTypes = apiConfig.ACCEPTED_MIME_TYPES
     res.status(200).json({
       data: clientMimeTypes
     })

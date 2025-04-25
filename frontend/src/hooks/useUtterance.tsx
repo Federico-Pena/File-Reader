@@ -16,37 +16,30 @@ export const useUtterance = () => {
     window.speechSynthesis.cancel()
   }, [])
 
-  const pause = useCallback(() => {
-    window.speechSynthesis.pause()
-    voiceDispatch({
-      type: 'SET_SPEAKING',
-      payload: {
-        speaking: false
-      }
-    })
-  }, [voiceDispatch])
-
-  const resume = useCallback(() => {
-    window.speechSynthesis.resume()
-    voiceDispatch({
-      type: 'SET_SPEAKING',
-      payload: {
-        speaking: true
-      }
-    })
-  }, [voiceDispatch])
-
   const play = useCallback(() => {
     const utterance = createUtterance()
     if (!utterance) return
-
-    window.speechSynthesis.speak(utterance)
-    if (speaking) {
-      pause()
-    } else {
-      resume()
-    }
-  }, [speaking, createUtterance, pause, resume])
+    setTimeout(() => {
+      window.speechSynthesis.speak(utterance)
+      if (speaking) {
+        window.speechSynthesis.pause()
+        voiceDispatch({
+          type: 'SET_SPEAKING',
+          payload: {
+            speaking: false
+          }
+        })
+      } else {
+        window.speechSynthesis.resume()
+        voiceDispatch({
+          type: 'SET_SPEAKING',
+          payload: {
+            speaking: true
+          }
+        })
+      }
+    }, 500)
+  }, [speaking, createUtterance, voiceDispatch])
 
   const stop = () => {
     window.speechSynthesis.cancel()

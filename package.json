@@ -1,19 +1,19 @@
 {
   "name": "file-reader",
   "version": "0.0.1",
-  "main": "dist/index.cjs",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
     "test": "vitest",
-    "dev:esbuild": "node --env-file .env esbuild.config.js",
-    "dev:node": "node --watch --env-file .env backend/out/index.js",
+    "dev:esbuild": "node esbuild.config.js",
+    "dev:node": "node backend/out/index.js",
     "dev": "run-p dev:*",
     "build:tsc": "tsc",
     "build:esbuild": "node esbuild.config.js",
-    "build": "run-p build:*",
+    "build": "run-p build:* ",
     "lint": "eslint ./backend/src",
-    "start": "node dist/index.cjs"
+    "start": "node dist/index.js"
   },
   "keywords": [
     "OCR",
@@ -27,14 +27,11 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.2",
-    "mammoth": "^1.9.0",
-    "markdown-it": "^14.1.0",
     "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
-    "@types/markdown-it": "^14.1.2",
     "@types/multer": "^1.4.12",
     "@types/node": "^22.13.10",
     "@types/supertest": "^6.0.2",

@@ -1,5 +1,7 @@
 const API_URL =
-  process.env.NODE_ENV === 'development' ? `http://localhost:${process.env.PORT ?? 1234}` : '/'
+  process.env.NODE_ENV === 'development'
+    ? `http://localhost:${process.env.PORT ?? 1234}`
+    : 'https://file-reader-again.vercel.app'
 
 const ACCEPTED_MIME_TYPES = ['pdf', 'docx', 'txt', 'md']
 const CORS_SETTINGS = {

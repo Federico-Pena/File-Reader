@@ -18,7 +18,7 @@ def pdf_processor(buffer):
         pages_text = []
         poppler_path = os.path.join(os.path.dirname(__file__), "../", "poppler", "bin")
         tesseract_path = os.path.join(
-            os.path.dirname(__file__), "../", "tesseract", "tesseract.exe"
+            os.path.dirname(__file__), "../", "tesseract", "tesseract"
         )
         pytesseract.pytesseract.tesseract_cmd = tesseract_path
         images = convert_from_bytes(buffer, poppler_path=poppler_path, grayscale=True)

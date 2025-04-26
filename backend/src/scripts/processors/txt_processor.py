@@ -9,4 +9,4 @@ def txt_processor(buffer: bytes):
         text = buffer.decode("utf-8").strip()
         return split_text_into_pages(text)
     except Exception as e:
-        raise Exception("Can't extract text from TXT file.")
+        raise Exception(f"Can't extract text from file. {e}")

@@ -12,4 +12,4 @@ def docx_processor(buffer: bytes):
         text = result.value.strip()
         return split_text_into_pages(text)
     except Exception as e:
-        raise Exception("Can't extract text from DOCX file.")
+        raise Exception(f"Can't extract text from file. {e}")

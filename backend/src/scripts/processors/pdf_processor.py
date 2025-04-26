@@ -32,4 +32,4 @@ def pdf_processor(buffer):
             pages_text.append({"text": text_result, "page": index})
         return pages_text
     except Exception as e:
-        raise Exception("Can't extract text from file.")
+        raise Exception(f"Can't extract text from file. {e}")

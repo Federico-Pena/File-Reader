@@ -21,8 +21,8 @@ if __name__ == "__main__":
         elif file_ext == ".txt":
             pages = txt_processor(file_bytes)
         else:
-            print(json.dumps({"error": "Format not supported."}).encode("utf-8"))
+            print(json.dumps({"error": "Format not supported."}))
 
-        print(json.dumps({"pages": pages}).encode("utf-8"))
+        print(json.dumps({"pages": pages}))
     except Exception as e:
-        print(json.dumps({"error": str(e)}).encode("utf-8"))
+        print(json.dumps({"error": str(e)}))

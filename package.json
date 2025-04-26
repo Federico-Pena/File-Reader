@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "vitest",
-    "dev:esbuild": "node esbuild.config.js",
-    "dev:node": "node backend/out/index.js",
+    "dev:esbuild": "node --env-file=.env esbuild.config.js",
+    "dev:node": "node --env-file=.env backend/out/index.js",
     "dev": "run-p dev:*",
     "build:tsc": "tsc",
     "build:esbuild": "node esbuild.config.js",

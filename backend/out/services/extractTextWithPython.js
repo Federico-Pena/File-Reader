@@ -4,8 +4,10 @@ import { consoleStyler } from "logpainter";
 const extractTextWithPython = (fileBuffer, fileExt) => {
   const scriptPath = join(process.cwd(), "backend", "src", "scripts", "main.py");
   const venvPath = join(process.cwd(), "venv", "Scripts", "python.exe");
+  const isRender = process.env.RENDER === "true";
+  const pythonPath = isRender ? "python3" : process.platform === "win32" ? join(process.cwd(), "venv", "Scripts", "python.exe") : join(process.cwd(), "venv", "bin", "python");
   return new Promise((resolve, reject) => {
-    const pythonProcess = spawn(venvPath, [scriptPath, `.${fileExt}`]);
+    const pythonProcess = spawn(pythonPath, [scriptPath, `.${fileExt}`]);
     let extractedOutput = "";
     let errorOutput = "";
     pythonProcess.stdin.write(fileBuffer, "utf-8");

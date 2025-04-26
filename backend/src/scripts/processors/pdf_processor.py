@@ -16,10 +16,13 @@ def pdf_processor(buffer):
     """Extract text from a file."""
     try:
         pages_text = []
-        poppler_path = os.path.join(os.path.dirname(__file__), "../", "poppler", "bin")
-        tesseract_path = os.path.join(
-            os.path.dirname(__file__), "../", "tesseract", "tesseract"
+        poppler_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), "../poppler/bin")
         )
+        tesseract_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), "../tesseract/tesseract")
+        )
+
         pytesseract.pytesseract.tesseract_cmd = tesseract_path
         images = convert_from_bytes(buffer, poppler_path=poppler_path, grayscale=True)
         for index, image in enumerate(images):

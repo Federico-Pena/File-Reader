@@ -39,7 +39,7 @@ const fileUploadController = async (req: Request, res: Response) => {
     const tempPath = join(dirPath, fileName)
 
     await writeFile(tempPath, buffer)
-    const baseUrl = `${req.protocol}://${req.get('host')}${apiConfig.API_ROUTES.streamingFile}`
+    const baseUrl = `${req.get('host')}${apiConfig.API_ROUTES.streamingFile}`
     const url = `${baseUrl}?fileId=${fileId}&ext=${fileExt}&lang=${lang}&initPage=${initPage}&endPage=${endPage}`
 
     res.status(200).json({ url })

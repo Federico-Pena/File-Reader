@@ -3,7 +3,9 @@ import { join } from 'node:path'
 
 const ACCEPTED_MIME_TYPES = ['pdf', 'docx', 'txt', 'md']
 const API_URL =
-  process.env.NODE_ENV === 'development' ? `http://localhost:${process.env.PORT ?? 1234}` : '/'
+  process.env.NODE_ENV === 'development'
+    ? `http://localhost:${process.env.PORT ?? 1234}`
+    : 'https://file-reader-1.onrender.com'
 const CORS_SETTINGS = {
   origin: [API_URL, 'http://localhost:5173', 'http://localhost:1234'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],

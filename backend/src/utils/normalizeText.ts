@@ -4,10 +4,6 @@ export function parseTextToRichBlocks(raw: string) {
   for (const section of sections) {
     const trimmed = section.trim()
     if (!trimmed) continue
-    if (/^"/.test(trimmed) && /".*$/.test(trimmed)) {
-      withLineBreaks.push({ type: 'blockquote', content: parseInline(trimmed) })
-      continue
-    }
     withLineBreaks.push({ type: 'paragraph', content: parseInline(trimmed) })
   }
   const cleaned = sections.join('\n\n').replace(/\n+/gm, ' ')
@@ -19,7 +15,7 @@ function preprocessOCRText(text: string) {
     .replace(/["'»«“”]+/gm, '"')
     .replace(/\r+/gm, '')
     .replace(/-\s?\n/gm, '')
-    .replace(/(?<=[A-ZÁÉÍÓÚÑa-záéíóúñ,])\n+(?=[a-záéíóúñ])/gm, '\n')
+    .replace(/(?<=[A-ZÁÉÍÓÚÑa-záéíóúñ,]|[0-9])\n+(?=[a-záéíóúñ])/gm, '\n')
     .replace(/\n{2,}/gm, '\n\n')
     .trim()
   return normalizedText
@@ -38,7 +34,6 @@ function parseInline(text: string): RichInline[] {
   const inlines: RichInline[] = []
   const parts = text.split(/\n+/)
 
-  // Quotes (con puntuación justo después), links y emails
   const quotePattern = /"[^"]*?"[.,!?;:]?/gm
   const linkPattern = /\b(?:https?:\/\/|www\.)[^\s]+/gm
   const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}\b/gi
@@ -78,7 +73,6 @@ function parseInline(text: string): RichInline[] {
       lastIndex = index + matchText.length
     }
 
-    // Resto del texto después del último match
     if (lastIndex < part.length) {
       const after = part.slice(lastIndex).trim()
       if (after) {

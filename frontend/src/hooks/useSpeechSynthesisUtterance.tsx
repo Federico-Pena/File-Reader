@@ -1,10 +1,11 @@
-import { useLocalDataContext, useVoiceContext } from './useCustomContext'
+import { useFileReaderContext, useLocalDataContext, useVoiceContext } from './useCustomContext'
 
 export const useSpeechSynthesisUtterance = () => {
   const {
     dispatch: dataDispatch,
     state: { currentPage, textPages }
   } = useLocalDataContext()
+  const { loading } = useFileReaderContext()
 
   const {
     dispatch: voiceDispatch,
@@ -76,17 +77,14 @@ export const useSpeechSynthesisUtterance = () => {
 
   const createUtterance = () => {
     if (!textPages) return
+    if (loading && textPages.length < 3) return
     if (!selectedVoice) return
     if (!voices) return
     let textToRead = globalText
     const startingWordIndex = readWords[readWords.length - 1]?.index
     if (startingWordIndex && typeof startingWordIndex === 'number') {
       const words = globalText.split(' ')
-      textToRead = words
-        .slice(startingWordIndex)
-        .join(' ')
-        .replace(/\n\n/g, ' ')
-        .replace(/\n/g, ' ')
+      textToRead = words.slice(startingWordIndex).join(' ')
     }
     const utterance = new SpeechSynthesisUtterance(textToRead)
     utterance.voice = voices.find((voice) => voice.name === selectedVoice) || null

@@ -1,8 +1,9 @@
 import '@/App.css'
 import { speechSynthesisInWindow } from '@/utils/compatibilityNavigator'
 import Compatibility from '@/components/Compatibility/Compatibility'
-import { FormFile } from './components/FormFile/FormFile'
-import TextOutput from './components/TextOutput/TextOutput'
+import { FormFile } from '@/components/FormFile/FormFile'
+import TextOutput from '@/components/TextOutput/TextOutput'
+import { Toast } from '@/components/Toast/Toast'
 
 function App() {
   const navegador = speechSynthesisInWindow()
@@ -19,14 +20,13 @@ function App() {
 
   return (
     <main className="mainApp">
+      <Toast />
       {speechSynthesisInWindow() === 'Android no Edge' && (
         <section className="section-advice">
           <Compatibility />
         </section>
       )}
-      <section className="section-formFile">
-        <FormFile />
-      </section>
+      <FormFile />
       <section className="section-textOutput">
         <TextOutput />
       </section>

@@ -110,7 +110,7 @@ const Header = () => {
         </button>
       </div>
       <div className="pages-btns">
-        {textPages.length > 1 && (
+        {textPages.length > 0 && (
           <>
             {textPages.map((page, i) => (
               <span

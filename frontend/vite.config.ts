@@ -4,6 +4,14 @@ import path from 'node:path'
 // import { VitePWA } from 'vite-plugin-pwa'
 // https://vite.dev/config/
 export default defineConfig({
+  build: {
+    outDir: 'dist'
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src')
+    }
+  },
   plugins: [
     react()
     /*   VitePWA({
@@ -50,13 +58,5 @@ export default defineConfig({
         ]
       }
     }) */
-  ],
-  build: {
-    outDir: '../dist/public'
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src')
-    }
-  }
+  ]
 })

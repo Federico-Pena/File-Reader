@@ -3,25 +3,20 @@
   max-width: 1200px;
   width: 100%;
   margin: auto;
-  padding: 1rem;
-  display: grid;
-  grid-template-rows: auto 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
-  @media screen and (max-width: 796px) {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto 1fr;
-  }
+  position: relative;
 }
 
 .section-formFile,
 .section-textOutput,
 .section-advice {
-  display: grid;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   row-gap: 0.5rem;
-  box-shadow: 3px 3px 10px 0px #00000099;
   padding: 1rem;
-  border-radius: 0.5rem;
-  background-color: var(--bg-color-secondary);
   h1 {
     font-size: clamp(1rem, 2.5vw, 3rem);
     font-family: var(--font-bold);
@@ -38,4 +33,7 @@
     font-family: var(--font-bold);
     font-size: clamp(1.2rem, 2vw, 5rem);
   }
+}
+.section-formFile {
+  background-color: transparent;
 }

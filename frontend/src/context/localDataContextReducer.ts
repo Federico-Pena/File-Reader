@@ -12,6 +12,19 @@ const localDataContextReducer = (state: LocalDataStateType, action: LocalDataAct
         textPages: action.payload.textPages,
         currentPage: 0
       }
+    case 'SET_TEXT_PAGES_APPEND':
+      const sortedPages = [
+        ...state.textPages.filter((page) => page.page !== action.payload.page.page),
+        action.payload.page
+      ].sort((a, b) => a.page - b.page)
+      updateLocalStorage({
+        textPages: sortedPages,
+        currentPage: state.currentPage
+      })
+      return {
+        ...state,
+        textPages: sortedPages
+      }
     case 'SET_NAME_FILE':
       updateLocalStorage({
         nameFile: action.payload.nameFile

@@ -1,6 +1,10 @@
 import app from "./app/app.js";
 import { apiConfig } from "./config/apiConfig.js";
+import { cleanTempDirFIles } from "./utils/cleanTempDirFIles.js";
 app.listen(apiConfig.PORT, () => {
   const text = `Server running in: ${apiConfig.API_URL}`;
   console.log(text);
+  const tempDir = apiConfig.PATH_DIR_TEMP_FILES ?? "";
+  cleanTempDirFIles(tempDir);
 });
+//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsiLi4vc3JjL2luZGV4LnRzIl0sCiAgInNvdXJjZXNDb250ZW50IjogWyJpbXBvcnQgYXBwIGZyb20gJy4vYXBwL2FwcC5qcydcclxuaW1wb3J0IHsgYXBpQ29uZmlnIH0gZnJvbSAnLi9jb25maWcvYXBpQ29uZmlnLmpzJ1xyXG5pbXBvcnQgeyBjbGVhblRlbXBEaXJGSWxlcyB9IGZyb20gJy4vdXRpbHMvY2xlYW5UZW1wRGlyRklsZXMuanMnXHJcblxyXG5hcHAubGlzdGVuKGFwaUNvbmZpZy5QT1JULCAoKSA9PiB7XHJcbiAgY29uc3QgdGV4dCA9IGBTZXJ2ZXIgcnVubmluZyBpbjogJHthcGlDb25maWcuQVBJX1VSTH1gXHJcbiAgY29uc29sZS5sb2codGV4dClcclxuICBjb25zdCB0ZW1wRGlyID0gYXBpQ29uZmlnLlBBVEhfRElSX1RFTVBfRklMRVMgPz8gJydcclxuICBjbGVhblRlbXBEaXJGSWxlcyh0ZW1wRGlyKVxyXG59KVxyXG4iXSwKICAibWFwcGluZ3MiOiAiQUFBQSxPQUFPLFNBQVM7QUFDaEIsU0FBUyxpQkFBaUI7QUFDMUIsU0FBUyx5QkFBeUI7QUFFbEMsSUFBSSxPQUFPLFVBQVUsTUFBTSxNQUFNO0FBQy9CLFFBQU0sT0FBTyxzQkFBc0IsVUFBVSxPQUFPO0FBQ3BELFVBQVEsSUFBSSxJQUFJO0FBQ2hCLFFBQU0sVUFBVSxVQUFVLHVCQUF1QjtBQUNqRCxvQkFBa0IsT0FBTztBQUMzQixDQUFDOyIsCiAgIm5hbWVzIjogW10KfQo=

@@ -1,3 +1,24 @@
+export const SendIcon = () => (
+  <svg width="1em" height="1em" viewBox="0 0 24 24">
+    <path
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11zm7.318-19.539l-10.94 10.939"
+    />
+  </svg>
+)
+export const IconUpload = () => (
+  <svg width="1em" height="1em" viewBox="0 0 24 24">
+    <path
+      fill="currentColor"
+      d="M11 16V7.85l-2.6 2.6L7 9l5-5l5 5l-1.4 1.45l-2.6-2.6V16zm-5 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z"
+    />
+  </svg>
+)
+
 export function IconBackNext() {
   return (
     <svg width="28px" height="28px" viewBox="0 0 2048 2048">

@@ -1,8 +1,10 @@
 interface FileReaderContextType {
   loading: boolean
   error: string
+  queued: number
   changeError: (error: string) => void
   changeLoading: (isLoading: boolean) => void
+  changeQueued: (position: number) => void
 }
 type RichBlock =
   | { type: 'title' | 'subtitle'; content: RichInline[] }
@@ -36,6 +38,7 @@ type LocalDataAction =
         textPages: TextPages[]
       }
     }
+  | { type: 'SET_TEXT_PAGES_APPEND'; payload: { page: TextPages } }
   | { type: 'SET_NAME_FILE'; payload: { nameFile: string } }
   | { type: 'SET_PAGE'; payload: { currentPage: number } }
   | { type: 'SET_VOICE_NAME'; payload: { voice: string } }

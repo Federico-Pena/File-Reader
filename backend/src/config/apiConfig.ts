@@ -1,26 +1,27 @@
-const API_URL =
-  process.env.NODE_ENV === 'development' ? `http://localhost:${process.env.PORT ?? 1234}` : '/'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 
 const ACCEPTED_MIME_TYPES = ['pdf', 'docx', 'txt', 'md']
+const API_URL =
+  process.env.NODE_ENV === 'development' ? `http://localhost:${process.env.PORT ?? 1234}` : '/'
 const CORS_SETTINGS = {
-  origin: [API_URL, 'http://localhost:5173', 'http://localhost:1234'], // Allow specific origins
+  origin: [API_URL, 'http://localhost:5173', 'http://localhost:1234'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Control-Allow-Credentials']
-  // credentials: true,
-  // optionsSuccessStatus: 200,
-  // maxAge: 3600
-  // preflightContinue: true,
 }
 const API_ROUTES = {
-  uploadFile: {
-    uploadFile: '/api/v1/upload-file',
-    getMimeTypes: '/api/v1/get-mime-types'
-  }
+  uploadFile: '/api/v1/upload-file',
+  getMimeTypes: '/api/v1/get-mime-types',
+  streamingFile: '/api/v1/streaming-file'
 }
+const PORT = process.env.PORT ?? 1234
+const PATH_DIR_TEMP_FILES = join(tmpdir(), 'queueFiles') ?? '/tmp/queueFiles'
+
 export const apiConfig = {
   API_URL,
-  PORT: process.env.PORT ?? 1234,
+  PORT: PORT,
   API_ROUTES,
   CORS_SETTINGS,
-  ACCEPTED_MIME_TYPES
+  ACCEPTED_MIME_TYPES,
+  PATH_DIR_TEMP_FILES
 }

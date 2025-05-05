@@ -2,12 +2,11 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
 const ACCEPTED_MIME_TYPES = ['pdf', 'docx', 'txt', 'md']
-const API_URL =
-  process.env.NODE_ENV === 'development'
-    ? `http://localhost:${process.env.PORT ?? 1234}`
-    : 'https://file-reader-1.onrender.com'
+const API_PROTOCOL = process.env.NODE_ENV === 'development' ? 'http' : 'https'
+const API_HOST = process.env.NODE_ENV === 'development' ? 'localhost' : 'file-reader-1.onrender.com'
+const API_BASE_URL = `${API_PROTOCOL}://${API_HOST}:${process.env.PORT ?? 1234}`
 const CORS_SETTINGS = {
-  origin: [API_URL, 'http://localhost:5173', 'http://localhost:1234'],
+  origin: [API_BASE_URL, 'http://localhost:5173'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Control-Allow-Credentials']
 }
@@ -20,7 +19,7 @@ const PORT = process.env.PORT ?? 1234
 const PATH_DIR_TEMP_FILES = join(tmpdir(), 'queueFiles') ?? '/tmp/queueFiles'
 
 export const apiConfig = {
-  API_URL,
+  API_BASE_URL,
   PORT: PORT,
   API_ROUTES,
   CORS_SETTINGS,

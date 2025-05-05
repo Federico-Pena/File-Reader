@@ -77,22 +77,23 @@ export const useFileReader = () => {
         payload: { page }
       })
     })
+
     eventSource.addEventListener('error', (ev: MessageEvent) => {
-      console.log('📛 Event of error', ev.data)
-      // const message: string = JSON.parse(ev.data)
+      console.log('📛 Event of error', ev)
       changeError('Error al procesar el archivo.')
       eventSource.close()
       changeLoading(false)
     })
     eventSource.addEventListener('errorEvent', (ev: MessageEvent) => {
-      console.log('📛 Event of errorEvent', ev.data)
-      // const message: string = JSON.parse(ev.data)
-      changeError('Error al procesar el archivo.')
+      const message: string = JSON.parse(ev.data).message
+      console.log('📛 Event of errorEvent')
+      console.log(message)
+      changeError(message)
       eventSource.close()
       changeLoading(false)
     })
     eventSource.addEventListener('errorReached', (ev: MessageEvent) => {
-      const message: string = JSON.parse(ev.data ?? '{}').message
+      const message: string = JSON.parse(ev.data).message
       console.log('📛 Event of errorReached', message)
       changeError('Servidor ocupado. Inténtelo en unos minutos.')
       eventSource.close()

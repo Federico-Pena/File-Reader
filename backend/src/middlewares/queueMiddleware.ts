@@ -32,7 +32,7 @@ export async function queueMiddleware(req: Request, res: Response, next: NextFun
       'Cache-Control': 'no-cache',
       Connection: 'keep-alive'
     })
-    /*   res.on('close', () => {
+    res.on('close', () => {
       if (existsSync(filePath)) {
         unlinkSync(filePath)
       }
@@ -40,7 +40,6 @@ export async function queueMiddleware(req: Request, res: Response, next: NextFun
     })
     const files = await readdir(dirPath)
     if (files.length > 5) {
-      res.status(500)
       sendEventStream(res, {
         eventName: 'errorReached',
         data: { message: 'Too many files in queue' }
@@ -66,7 +65,6 @@ export async function queueMiddleware(req: Request, res: Response, next: NextFun
       if (position < MAX_FILES) {
         isFull = true
       } else {
-        res.status(200)
         sendEventStream(res, {
           eventName: 'queued',
           data: { position: position }
@@ -74,10 +72,9 @@ export async function queueMiddleware(req: Request, res: Response, next: NextFun
         await sleep()
       }
     }
- */
+
     next()
   } catch (error: any) {
-    res.status(500)
     sendEventStream(res, {
       eventName: 'errorEvent',
       data: { message: error.message }

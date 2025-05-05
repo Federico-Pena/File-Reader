@@ -32,21 +32,18 @@ export const streamController = (req: Request, res: Response) => {
     }
 
     res.on('close', () => {
-      sendEventStream(res, {
-        eventName: 'error',
-        data: { message: 'Server closed the connection.' }
-      })
       cleanup("res.on('close')")
     })
 
     rl.on('line', (line) => {
       const payload = JSON.parse(line)
-      typeof payload === 'string' && console.log('👉 Log line', payload)
-      if (!payload.text) return
-      console.log('👉 line', { ...payload, text: payload.text?.slice(0, 10) })
       const { error, text, page } = payload
+      if (payload.text) {
+        console.log('👉 line', { ...payload, text: payload.text?.slice(0, 10) })
+      } else {
+        console.log('👉 line', error)
+      }
       if (error) {
-        res.status(500)
         sendEventStream(res, {
           eventName: 'errorEvent',
           data: { message: error }
@@ -55,7 +52,6 @@ export const streamController = (req: Request, res: Response) => {
         return
       }
       if (text) {
-        res.status(200)
         const parsed = { ...parseTextToRichBlocks(text), page }
         sendEventStream(res, {
           eventName: 'data',
@@ -66,28 +62,22 @@ export const streamController = (req: Request, res: Response) => {
 
     pythonProcess.on('close', (code) => {
       if (code === 0) {
-        res.status(200)
         sendEventStream(res, {
           eventName: 'done',
-          data: { message: 'Finished processing.' }
+          data: { message: 'Tarea finalizada.' }
         })
         cleanup("pythonProcess.on('close') - code === 0")
       } else {
-        res.status(500)
         sendEventStream(res, {
           eventName: 'errorEvent',
-          data: { message: `Error processing file. Code: ${code}` }
+          data: { message: `Ocurrió un error al procesar el archivo. Código: ${code ?? '?'}` }
         })
-        sendEventStream(res, {
-          eventName: 'error',
-          data: { message: `Error processing file. Code: ${code}` }
-        })
+
         cleanup(`pythonProcess.on('close'). Code: ${code}`)
       }
     })
   } catch (error: any) {
     console.log('📛 Error', error)
-    res.status(500)
     sendEventStream(res, {
       eventName: 'errorEvent',
       data: { message: error.message }

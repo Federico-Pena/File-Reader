@@ -6,7 +6,6 @@ export const Toast = () => {
     return (
       <div className={`toast`}>
         <p>{error}</p>
-        {error.includes('Agregado') && <span className="loader"></span>}
       </div>
     )
   }
@@ -14,7 +13,10 @@ export const Toast = () => {
     return (
       <div className={`toast`}>
         <div className="loaderContainer">
-          <span>Agregado a la cola, hay {queued} procesos restantes.</span>
+          <span>
+            Esperando para iniciar, hay {queued} {queued > 1 ? 'procesos' : 'proceso'} antes que
+            usted.
+          </span>
           <span className="loader"></span>
         </div>
       </div>

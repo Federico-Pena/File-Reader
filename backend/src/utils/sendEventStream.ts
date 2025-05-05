@@ -1,5 +1,5 @@
 import type { Response } from 'express'
-type EventsNames = 'queued' | 'errorReached' | 'data' | 'errorEvent' | 'done' | 'error'
+type EventsNames = 'queued' | 'errorReached' | 'data' | 'errorEvent' | 'done'
 export function sendEventStream(
   res: Response,
   { eventName, data }: { eventName: EventsNames; data: any }

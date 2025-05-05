@@ -28,7 +28,7 @@ if __name__ == "__main__":
             elif file_ext == "txt":
                 txt_processor(file_bytes)
             else:
-                print(json.dumps({"error": "Format not supported."}), flush=True)
+                print(json.dumps({"error": "Formato de archivo no soportado."}), flush=True)
 
         except Exception as e:
-            print(json.dumps({"error": str(e)}), flush=True)
+            print(json.dumps({"error": "Error al extraer texto del archivo."}), flush=True)

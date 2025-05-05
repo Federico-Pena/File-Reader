@@ -78,7 +78,6 @@ export const useSpeechSynthesisUtterance = () => {
   const createUtterance = () => {
     if (!textPages) return
     if (loading && textPages.length < 3) return
-    if (!selectedVoice) return
     if (!voices) return
     let textToRead = globalText
     const startingWordIndex = readWords[readWords.length - 1]?.index

@@ -10,6 +10,6 @@ type RichBlock =
 
 type RichInline =
   | { type: 'text'; text: string }
-  | { type: 'link'; /*  url: string; */ text: string }
+  | { type: 'link'; url: string; text: string }
   | { type: 'email'; text: string }
   | { type: 'quote'; text: string }

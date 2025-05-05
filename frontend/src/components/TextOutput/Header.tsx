@@ -22,7 +22,11 @@ const Header = () => {
       })
     }
   }, [currentPage])
+
+  const isSpeaking = speaking || window.speechSynthesis.speaking
+
   const handleVoiceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (isSpeaking) return
     if (event.target.value.trim() === '') return
     const voiceName = event.target.value
     const voice = voices.find((voice) => voice.name === voiceName)
@@ -53,6 +57,7 @@ const Header = () => {
   }
 
   const handleVolumeChange = (volume: number) => {
+    if (isSpeaking) return
     dispatch({
       type: 'SET_VOLUME',
       payload: {
@@ -62,6 +67,7 @@ const Header = () => {
   }
 
   const handleRateChange = (rateUtterance: number) => {
+    if (isSpeaking) return
     dispatch({
       type: 'SET_RATE_UTTERANCE',
       payload: {
@@ -75,6 +81,7 @@ const Header = () => {
       <div className="voice-select">
         <label htmlFor="voiceSelect">Voz:</label>
         <input
+          disabled={isSpeaking}
           defaultValue={selectedVoice}
           onChange={handleVoiceChange}
           type="search"
@@ -100,7 +107,7 @@ const Header = () => {
           {speaking ? <IconPause /> : <IconPlay />}
         </button>
         <button
-          disabled={!speaking && !window.speechSynthesis.speaking}
+          disabled={!isSpeaking}
           title={'Stop'}
           type="button"
           className="btn-control"
@@ -129,6 +136,7 @@ const Header = () => {
         <div>
           <label htmlFor="volumeRate">Volumen: {volume}</label>
           <input
+            disabled={isSpeaking}
             onChange={(e) => handleVolumeChange(Number(e.target.value))}
             type="range"
             min="0"
@@ -142,6 +150,7 @@ const Header = () => {
         <div>
           <label htmlFor="rate">Rate: {rateUtterance}</label>
           <input
+            disabled={isSpeaking}
             onChange={(e) => handleRateChange(Number(e.target.value))}
             type="range"
             min="0"

@@ -33,6 +33,9 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  &:disabled {
+    cursor: not-allowed;
+  }
 }
 *::after,
 *::before {

@@ -11,75 +11,107 @@ export function parseTextToRichBlocks(raw: string) {
 }
 
 function preprocessOCRText(text: string) {
-  const normalizedText = text
+  const cleaned = text
     .replace(/["'»«“”]+/gm, '"')
+    // Eliminar retornos de carro
     .replace(/\r+/gm, '')
-    .replace(/-\s?\n/gm, '')
-    .replace(/(?<=[A-ZÁÉÍÓÚÑa-záéíóúñ,]|[0-9])\n+(?=[a-záéíóúñ])/gm, '\n')
+    // Unir palabras cortadas por guión al final de línea
+    .replace(/-\s*\n/gm, '')
+    // Mantener saltos de línea que separan oraciones pero eliminar los que no tienen sentido
+    .replace(/(?<=[A-Za-zÁÉÍÓÚáéíóúñ0-9])\n(?=[a-záéíóúñ])/gm, ' ')
+    // Normalizar múltiples saltos de línea
     .replace(/\n{2,}/gm, '\n\n')
+    // Eliminar líneas que consisten solo en símbolos o caracteres especiales
+    .replace(/^[^A-Za-zÁÉÍÓÚáéíóúñ0-9\n]{2,}$/gm, '')
+    // Eliminar líneas que no parecen contener palabras válidas
+    .replace(/^\s*[^a-zA-ZÁÉÍÓÚáéíóúñ]{0,3}\s*$/gm, '')
     .trim()
-  return normalizedText
+
+  const fixed = fixUnmatchedQuotes(cleaned)
+
+  return fixed
 }
 
-function isLikelySubheading(text: string): boolean {
-  const trimmed = text.trim()
-  if (trimmed.length > 80) return false
-  const numbered = /^(\d+\.|[a-zA-Z]\))\s+[A-ZÁÉÍÓÚÑ]/.test(trimmed)
-  const wordCount = trimmed.split(' ').length
-  const endsWithPunct = /[.?!0-9]$/.test(trimmed)
-  return numbered && wordCount <= 8 && !endsWithPunct
+function fixUnmatchedQuotes(text: string): string {
+  const quoteRegex = /"/g
+  let match
+  let count = 0
+  const positions: number[] = []
+
+  while ((match = quoteRegex.exec(text)) !== null) {
+    positions.push(match.index)
+    count++
+  }
+
+  // Si ya están balanceadas, no hacer nada
+  if (count % 2 === 0) return text
+
+  // Si hay una comilla de apertura sin cierre
+  if (positions.length % 2 === 1) {
+    const lastQuotePos = positions[positions.length - 1] ?? 0
+
+    // Buscamos hasta el próximo punto, salto de línea o final de texto para cerrar la cita
+    const end = text.slice(lastQuotePos).search(/[.?!\n]/)
+    if (end !== -1) {
+      return text.slice(0, lastQuotePos + end + 1) + '"' + text.slice(lastQuotePos + end + 1)
+    } else {
+      // Si no hay buen lugar para cerrar, la quitamos
+      return text.slice(0, lastQuotePos) + text.slice(lastQuotePos + 1)
+    }
+  }
+
+  return text
+}
+
+function restoreOriginalQuotes(text: string, quoteMap: Map<number, string>) {
+  let restored = ''
+  for (let i = 0; i < text.length; i++) {
+    if (quoteMap.has(i)) {
+      restored += quoteMap.get(i)
+    } else {
+      restored += text[i]
+    }
+  }
+  return restored
 }
 
 function parseInline(text: string): RichInline[] {
-  const inlines: RichInline[] = []
-  const parts = text.split(/\n+/)
-
+  const elements: RichInline[] = []
   const quotePattern = /"[^"]*?"[.,!?;:]?/gm
-  const linkPattern = /\b(?:https?:\/\/|www\.)[^\s]+/gm
-  const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}\b/gi
-  const combinedPattern = new RegExp(
+  const linkPattern = /https?:\/\/[^\s]+|www\.[^\s]+/gm
+  const emailPattern = /[\\w.-]+@[\\w.-]+\\.\\w+/gm
+  const pattern = new RegExp(
     `${quotePattern.source}|${linkPattern.source}|${emailPattern.source}`,
     'gmi'
   )
 
-  for (const part of parts) {
-    if (!part) continue
+  let lastIndex = 0
+  let match: RegExpExecArray | null
 
-    let lastIndex = 0
-    const matches = Array.from(part.matchAll(combinedPattern))
-
-    for (const match of matches) {
-      const matchText = match[0]
-      const index = match.index ?? 0
-
-      if (index > lastIndex) {
-        const before = part.slice(lastIndex, index)
-        const clean = before.trim()
-        if (clean) {
-          inlines.push({ type: 'text', text: clean })
-        }
-      }
-
-      if (matchText.startsWith('"')) {
-        const quote = matchText.match(/^"(.*?)"([.,!?;):]?)$/)
-        const text = quote ? `"${quote[1]}"${quote[2] || ''}` : matchText
-        inlines.push({ type: 'quote', text })
-      } else if (matchText.includes('@')) {
-        inlines.push({ type: 'email', text: matchText })
-      } else {
-        inlines.push({ type: 'link', text: matchText })
-      }
-
-      lastIndex = index + matchText.length
+  while ((match = pattern.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      elements.push({ type: 'text', text: text.slice(lastIndex, match.index) })
     }
 
-    if (lastIndex < part.length) {
-      const after = part.slice(lastIndex).trim()
-      if (after) {
-        inlines.push({ type: 'text', text: after })
-      }
+    const matchedStr = match[0]
+
+    if (match[0].startsWith('"') && match[0].endsWith('"')) {
+      const quote = matchedStr.match(/^"(.*?)"([.,!?;):]?)$/)
+      const text = quote ? `"${quote[1]}"${quote[2] || ''}` : matchedStr
+      elements.push({ type: 'quote', text })
+    } else if (matchedStr.includes('@')) {
+      elements.push({ type: 'email', text: matchedStr })
+    } else if (matchedStr.startsWith('http') || matchedStr.startsWith('www.')) {
+      const href = matchedStr.startsWith('www.') ? `https://${matchedStr}` : matchedStr
+      elements.push({ type: 'link', url: href, text: matchedStr })
     }
+
+    lastIndex = pattern.lastIndex
   }
 
-  return inlines
+  if (lastIndex < text.length) {
+    elements.push({ type: 'text', text: text.slice(lastIndex) })
+  }
+
+  return elements
 }

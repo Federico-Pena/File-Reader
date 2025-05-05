@@ -19,11 +19,7 @@ export const streamController = (req: Request, res: Response) => {
   const { filePath, lang, initPage, endPage } = req.body
   const payload = { filePath, lang, initPage, endPage }
   try {
-    /*   if (!existsSync(pythonPath)) {
-      console.log(readdirSync('/opt/venv/bin'))
-      throw new Error(`Python binary not found at: ${pythonPath}`)
-    } */
-    const pythonProcess = spawn(pythonPath, [scriptPath, JSON.stringify(payload)])
+    const pythonProcess = spawn(pythonPath, [scriptPath, JSON.stringify(payload)], {})
     const rl = readline.createInterface({ input: pythonProcess.stdout })
     const cleanup = (source: string) => {
       console.log(`🛑 Killing process from ${source}.`)

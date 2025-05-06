@@ -5,7 +5,7 @@ export const useSpeechSynthesisUtterance = () => {
     dispatch: dataDispatch,
     state: { currentPage, textPages }
   } = useLocalDataContext()
-  const { loading, queued } = useFileReaderContext()
+  const { queued } = useFileReaderContext()
 
   const {
     dispatch: voiceDispatch,

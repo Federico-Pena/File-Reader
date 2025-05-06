@@ -76,6 +76,16 @@ export const useFileReader = () => {
         type: 'SET_TEXT_PAGES_APPEND',
         payload: { page }
       })
+      const forreadcleaned = page.cleaned.split(/\s+/g)
+      const forreadWithLineBreaks = page.withLineBreaks
+        .map((block) => block.content.map((inline) => inline.text))
+        .join('\n\n')
+        .replace(/\n+/gm, ' ')
+        .split(/\s+/g)
+      console.log({
+        forreadcleaned: forreadcleaned.length,
+        forreadWithLineBreaks: forreadWithLineBreaks.length
+      })
     })
 
     eventSource.addEventListener('error', (ev: MessageEvent) => {

@@ -27,18 +27,14 @@ const TextOutput = () => {
 
   const handleOnClickWord = (word: string, index: number) => {
     if (speaking || window.speechSynthesis.speaking) return
+    console.log('👉 handleOnClickWord', word, index)
+
     dispatch({ type: 'SET_READED_WORDS', payload: { readWord: null } })
-    for (let i = 0; i < index; i++) {
-      if (i === index) {
-        dispatch({ type: 'SET_READED_WORDS', payload: { readWord: { word, index } } })
-      } else {
-        dispatch({ type: 'SET_READED_WORDS', payload: { readWord: { word: '', index: i } } })
-      }
-    }
+    dispatch({ type: 'SET_READED_WORDS', payload: { readWord: { word, index } } })
   }
 
   const renderInline = (inline: RichInline) => {
-    const words = inline.text.split(/\s+/)
+    const words = inline.text.split(/\s+/g)
 
     return words.map((word) => {
       const currentIndex = globalIndex++

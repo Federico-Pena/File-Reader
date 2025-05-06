@@ -40,7 +40,7 @@ export const FormFile = () => {
   const handleStateChange = (newState: Partial<FormFileState>) => {
     setState((prevState) => ({ ...prevState, ...newState }))
   }
-
+  const ext = state.file?.name.split('.').pop()?.toLowerCase()
   return (
     <>
       {!loading && (
@@ -91,7 +91,7 @@ export const FormFile = () => {
             <option value="eng">Inglés</option>
           </select>
         </label>
-        {state.file && state.file.name.split('.').pop()?.toLowerCase() === 'pdf' && (
+        {state.file && ext === 'pdf' && (
           <label htmlFor="initPage" className="pages">
             Paginas
             <span>
@@ -116,6 +116,7 @@ export const FormFile = () => {
                 onChange={(e) => handleStateChange({ endPage: e.target.value })}
               />
             </span>
+            <small>Para PDF escaneados se recomienda hacerlo de a pocas páginas.</small>
           </label>
         )}
 

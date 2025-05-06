@@ -5,7 +5,6 @@ type Data = {
 type RichBlock =
   | { type: 'title' | 'subtitle'; content: RichInline[] }
   | { type: 'paragraph'; content: RichInline[] }
-  | { type: 'list'; ordered: boolean; depth: number; items: RichInline[][] }
   | { type: 'blockquote'; content: RichInline[] }
 
 type RichInline =

@@ -4,32 +4,32 @@ export function parseTextToRichBlocks(raw: string) {
   for (const section of sections) {
     const trimmed = section.trim()
     if (!trimmed) continue
-    withLineBreaks.push({ type: 'paragraph', content: parseInline(trimmed) })
+    withLineBreaks.push({ type: 'paragraph', content: [{ type: 'text', text: trimmed }] })
   }
-  const cleaned = sections.join('\n\n').replace(/\n+/gm, ' ')
+  const cleaned = sections.join('\n\n').replace(/\n+/gm, ' ').trim()
   return { withLineBreaks, cleaned }
 }
 
 function preprocessOCRText(text: string) {
-  const cleaned = text
-    .replace(/["'»«“”]+/gm, '"')
-    // Eliminar retornos de carro
-    .replace(/\r+/gm, '')
-    // Unir palabras cortadas por guión al final de línea
-    .replace(/-\s*\n/gm, '')
-    // Mantener saltos de línea que separan oraciones pero eliminar los que no tienen sentido
-    .replace(/(?<=[A-Za-zÁÉÍÓÚáéíóúñ0-9])\n(?=[a-záéíóúñ])/gm, ' ')
-    // Normalizar múltiples saltos de línea
-    .replace(/\n{2,}/gm, '\n\n')
-    // Eliminar líneas que consisten solo en símbolos o caracteres especiales
-    .replace(/^[^A-Za-zÁÉÍÓÚáéíóúñ0-9\n]{2,}$/gm, '')
-    // Eliminar líneas que no parecen contener palabras válidas
-    .replace(/^\s*[^a-zA-ZÁÉÍÓÚáéíóúñ]{0,3}\s*$/gm, '')
-    .trim()
-
-  const fixed = fixUnmatchedQuotes(cleaned)
-
-  return fixed
+  return (
+    text
+      .replace(/["'»«“”]+/gm, '"')
+      // Eliminar retornos de carro
+      .replace(/\r+?\n/gm, ' ')
+      // Unir palabras cortadas por guión al final de línea
+      .replace(/-\s*\n/gm, '')
+      // Mantener saltos de línea que separan oraciones pero eliminar los que no tienen sentido
+      .replace(/(?<=[A-Za-zÁÉÍÓÚáéíóúñ0-9])\n(?=[a-záéíóúñ])/gm, ' ')
+      // Normalizar múltiples saltos de línea
+      .replace(/\n{2,}/gm, '\n\n')
+      // Eliminar líneas que consisten solo en símbolos o caracteres especiales
+      .replace(/^[^A-Za-zÁÉÍÓÚáéíóúñ0-9\n]{2,}$/gm, '')
+      // Eliminar líneas que no parecen contener palabras válidas
+      .replace(/^\s*[^a-zA-ZÁÉÍÓÚáéíóúñ]{0,3}\s*$/gm, '')
+      // Eliminar caracteres de control y espacios invisibles
+      .replace(/[\u200B-\u200D\uFEFF]/g, '') // Esto elimina caracteres como ZERO WIDTH SPACE, JOINER, etc.
+      .trim()
+  )
 }
 
 function fixUnmatchedQuotes(text: string): string {
@@ -95,7 +95,7 @@ function parseInline(text: string): RichInline[] {
 
     const matchedStr = match[0]
 
-    if (match[0].startsWith('"') && match[0].endsWith('"')) {
+    /*  if (match[0].startsWith('"') && match[0].endsWith('"')) {
       const quote = matchedStr.match(/^"(.*?)"([.,!?;):]?)$/)
       const text = quote ? `"${quote[1]}"${quote[2] || ''}` : matchedStr
       elements.push({ type: 'quote', text })
@@ -104,7 +104,7 @@ function parseInline(text: string): RichInline[] {
     } else if (matchedStr.startsWith('http') || matchedStr.startsWith('www.')) {
       const href = matchedStr.startsWith('www.') ? `https://${matchedStr}` : matchedStr
       elements.push({ type: 'link', url: href, text: matchedStr })
-    }
+    } */
 
     lastIndex = pattern.lastIndex
   }

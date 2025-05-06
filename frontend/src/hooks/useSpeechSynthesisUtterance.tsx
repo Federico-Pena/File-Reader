@@ -5,7 +5,7 @@ export const useSpeechSynthesisUtterance = () => {
     dispatch: dataDispatch,
     state: { currentPage, textPages }
   } = useLocalDataContext()
-  const { loading } = useFileReaderContext()
+  const { loading, queued } = useFileReaderContext()
 
   const {
     dispatch: voiceDispatch,
@@ -19,12 +19,16 @@ export const useSpeechSynthesisUtterance = () => {
       const globalWords = globalText.split(/\s+/g)
       let currentIndex = 0
       let currentWord = ''
+
       const startingWordIndex = readWords[readWords.length - 1]?.index ?? 0
       const truncatedWords = globalWords.slice(startingWordIndex)
       for (let i = 0; i < truncatedWords.length; i++) {
         if (currentIndex + truncatedWords[i].length >= event.charIndex) {
           currentWord = truncatedWords[i]
+
           const globalIndex = startingWordIndex + i
+          console.log('👉 handleOnBoundary', currentWord, globalIndex)
+          voiceDispatch({ type: 'SET_READED_WORDS', payload: { readWord: null } })
           voiceDispatch({
             type: 'SET_READED_WORDS',
             payload: {
@@ -77,13 +81,12 @@ export const useSpeechSynthesisUtterance = () => {
 
   const createUtterance = () => {
     if (!textPages) return
-    if (loading && textPages.length < 3) return
-    if (!voices) return
+    if (queued && textPages.length < 3) return
     let textToRead = globalText
     const startingWordIndex = readWords[readWords.length - 1]?.index
     if (startingWordIndex && typeof startingWordIndex === 'number') {
-      const words = globalText.split(' ')
-      textToRead = words.slice(startingWordIndex).join(' ')
+      const words = globalText.split(/\s+/g)
+      textToRead = words.slice(startingWordIndex).join(' ').trim()
     }
     const utterance = new SpeechSynthesisUtterance(textToRead)
     utterance.voice = voices.find((voice) => voice.name === selectedVoice) || null

@@ -3,44 +3,38 @@
 import json
 import pytesseract
 from pdf2image import convert_from_bytes
-from PIL import Image
+import fitz
+
 
 def pdf_processor(buffer, language="eng", init_page=1, end_page=0, batch_size=10):
-    """Extract text from a PDF buffer in page batches."""
+    """Extract text from a PDF buffer in page batches using PyMuPDF first, fallback to OCR."""
     try:
+        doc = fitz.open(stream=buffer, filetype="pdf")
+        total_pages = len(doc)
         current_page = max(0, init_page - 1)
-        max_page = end_page if end_page > 0 else None
+        max_page = min(end_page if end_page > 0 else total_pages, total_pages)
 
-        while True:
-            first_page = current_page + 1
-            last_page = first_page + batch_size - 1
+        while current_page < max_page:
+            end_batch = min(current_page + batch_size, max_page)
+            for idx in range(current_page, end_batch):
+                page = doc[idx]
+                text_result = page.get_text().strip()
 
-            if max_page and first_page > max_page:
-                break
-            if max_page:
-                last_page = min(last_page, max_page)
+                if not text_result:
+                    images = convert_from_bytes(
+                        buffer, grayscale=True, first_page=idx + 1, last_page=idx + 1
+                    )
+                    if images:
+                        preprocessed_image = images[0].convert("L")
+                        text_result = pytesseract.image_to_string(
+                            preprocessed_image, lang=language
+                        ).strip()
 
-            images = convert_from_bytes(
-                buffer,
-                grayscale=True,
-                first_page=first_page,
-                last_page=last_page
-            )
-            if len(images) == 0:
-                print(json.dumps({"error": "No se pudo extraer texto"}), flush=True)
-                break
-            for idx, image in enumerate(images, start=current_page):
-                preprocessed_image = image.convert("L")
-                text_result = (
-                    pytesseract.image_to_string(preprocessed_image, lang=language)
-                ).strip()
                 print(json.dumps({"text": text_result, "page": idx}), flush=True)
-
-            if len(images) < batch_size:
-                break  # terminamos si no quedan más páginas
 
             current_page += batch_size
 
     except Exception as e:
-        print(json.dumps({"error": "Error al extraer texto del archivo PDF."}), flush=True)
-
+        print(
+            json.dumps({"error": "Error al extraer texto del archivo PDF."}), flush=True
+        )

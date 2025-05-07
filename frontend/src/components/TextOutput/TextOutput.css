@@ -116,13 +116,15 @@ header {
   .richTextContent {
     flex: 1;
     background-color: var(--bg-color-secondary);
-    text-wrap: pretty;
     display: flex;
     flex-direction: column;
     gap: 1rem;
     border-radius: 0.3rem;
     padding: 1rem;
     font-family: lato-regular, Arial, Helvetica, sans-serif;
+    pre {
+      text-wrap: wrap;
+    }
     .link {
       color: coral;
       text-decoration: none;

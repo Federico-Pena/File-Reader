@@ -82,10 +82,7 @@ export const useFileReader = () => {
         .join('\n\n')
         .replace(/\n+/gm, ' ')
         .split(/\s+/g)
-      console.log({
-        forreadcleaned: forreadcleaned.length,
-        forreadWithLineBreaks: forreadWithLineBreaks.length
-      })
+      console.log(forreadcleaned.length === forreadWithLineBreaks.length)
     })
 
     eventSource.addEventListener('error', (ev: MessageEvent) => {

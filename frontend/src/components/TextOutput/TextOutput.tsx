@@ -35,11 +35,9 @@ const TextOutput = () => {
 
   const renderInline = (inline: RichInline) => {
     const words = inline.text.split(/\s+/g)
-
     return words.map((word) => {
       const currentIndex = globalIndex++
       const isRead = readWords && readWords[readWords.length - 1]?.index >= currentIndex
-
       const span = (
         <span
           key={currentIndex}

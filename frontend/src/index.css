@@ -42,6 +42,7 @@
   box-sizing: border-box;
 }
 body {
+  letter-spacing: 1px;
   position: relative;
   overflow-x: hidden;
   overflow-y: scroll;

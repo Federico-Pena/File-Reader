@@ -15,6 +15,7 @@ type RichInline =
   | { type: 'text'; text: string }
   | { type: 'quote'; text: string }
   | { type: 'link'; url: string; text: string }
+  | { type: 'email'; text: string }
 
 /////////// LOCAL DATA CONTEXT ///////////
 

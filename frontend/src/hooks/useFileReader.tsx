@@ -44,7 +44,7 @@ export const useFileReader = () => {
       dispatch({ type: 'SET_PAGE', payload: { currentPage: 0 } })
 
       voiceDispatch({ type: 'SET_SPEAKING', payload: { speaking: false } })
-      voiceDispatch({ type: 'SET_READED_WORDS', payload: { readWord: null } })
+      voiceDispatch({ type: 'SET_READED_WORD', payload: null })
 
       dispatch({
         type: 'SET_NAME_FILE',
@@ -57,9 +57,6 @@ export const useFileReader = () => {
       formData.append('endPage', endPage.toString() ?? '0')
       const res = await fetch(POST_FILE_URL, { method: 'POST', body: formData })
       const { url } = await res.json()
-      console.log('👉 POST_FILE_URL', {
-        url
-      })
       startOCRStream(url)
     } catch {
       changeError('Ocurrió un error al leer el archivo.')
@@ -71,50 +68,35 @@ export const useFileReader = () => {
     eventSource.addEventListener('data', (ev: MessageEvent) => {
       changeQueued(0)
       const page: TextPages = JSON.parse(ev.data)
-      console.log('👉 Event of data', page.page)
       dispatch({
         type: 'SET_TEXT_PAGES_APPEND',
         payload: { page }
       })
-      const forreadcleaned = page.cleaned.split(/\s+/g)
-      const forreadWithLineBreaks = page.withLineBreaks
-        .map((block) => block.content.map((inline) => inline.text))
-        .join('\n\n')
-        .replace(/\n+/gm, ' ')
-        .split(/\s+/g)
-      console.log(forreadcleaned.length === forreadWithLineBreaks.length)
     })
 
-    eventSource.addEventListener('error', (ev: MessageEvent) => {
-      console.log('📛 Event of error', ev)
+    eventSource.addEventListener('error', () => {
       changeError('Error al procesar el archivo.')
       eventSource.close()
       changeLoading(false)
     })
     eventSource.addEventListener('errorEvent', (ev: MessageEvent) => {
       const message: string = JSON.parse(ev.data).message
-      console.log('📛 Event of errorEvent')
-      console.log(message)
       changeError(message)
       eventSource.close()
       changeLoading(false)
     })
-    eventSource.addEventListener('errorReached', (ev: MessageEvent) => {
-      const message: string = JSON.parse(ev.data).message
-      console.log('📛 Event of errorReached', message)
+    eventSource.addEventListener('errorReached', () => {
       changeError('Servidor ocupado. Inténtelo en unos minutos.')
       eventSource.close()
       changeLoading(false)
     })
     eventSource.addEventListener('done', () => {
-      console.log('✅ Event of done')
       eventSource.close()
       changeLoading(false)
     })
 
     eventSource.addEventListener('queued', (ev: MessageEvent) => {
       const position = JSON.parse(ev.data).position
-      console.log('👉 Event of queued', position)
       changeQueued(position)
     })
   }

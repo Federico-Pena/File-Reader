@@ -50,10 +50,8 @@ export const useUtterance = () => {
       }
     })
     voiceDispatch({
-      type: 'SET_READED_WORDS',
-      payload: {
-        readWord: null
-      }
+      type: 'SET_READED_WORD',
+      payload: null
     })
   }
 

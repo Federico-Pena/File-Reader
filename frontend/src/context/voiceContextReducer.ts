@@ -52,15 +52,13 @@ const voiceContextReducer = (state: VoiceStateType, action: VoiceAction) => {
         ...state,
         volume: action.payload.volume
       }
-    case 'SET_READED_WORDS':
-      const newWords =
-        action.payload.readWord === null ? [] : [...state.readWords, action.payload.readWord]
+    case 'SET_READED_WORD':
       updateLocalStorage({
-        readWords: newWords
+        readWords: action.payload
       })
       return {
         ...state,
-        readWords: newWords
+        readWords: action.payload
       }
     default:
       return state

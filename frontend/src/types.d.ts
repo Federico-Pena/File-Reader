@@ -54,7 +54,7 @@ interface LocalDataContextType {
 interface VoiceStateType {
   voices: SpeechSynthesisVoice[]
   selectedVoice: string
-  readWords: Array<{ word: string; index: number }>
+  readWords: { word: string; index: number } | null
   speaking: boolean
   rateUtterance: number
   volume: number
@@ -65,13 +65,11 @@ type VoiceAction =
   | { type: 'SET_VOICE_NAME'; payload: { voice: string } }
   | { type: 'SET_VOICES'; payload: { voices: SpeechSynthesisVoice[] } }
   | {
-      type: 'SET_READED_WORDS'
+      type: 'SET_READED_WORD'
       payload: {
-        readWord: {
-          word: string
-          index: number
-        } | null
-      }
+        word: string
+        index: number
+      } | null
     }
   | { type: 'SET_SPEAKING'; payload: { speaking: boolean } }
   | { type: 'SET_RATE_UTTERANCE'; payload: { rateUtterance: number } }

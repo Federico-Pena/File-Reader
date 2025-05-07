@@ -20,20 +20,17 @@ export const useSpeechSynthesisUtterance = () => {
       let currentIndex = 0
       let currentWord = ''
 
-      const startingWordIndex = readWords[readWords.length - 1]?.index ?? 0
+      const startingWordIndex = readWords?.index ?? 0
       const truncatedWords = globalWords.slice(startingWordIndex)
       for (let i = 0; i < truncatedWords.length; i++) {
         if (currentIndex + truncatedWords[i].length >= event.charIndex) {
           currentWord = truncatedWords[i]
 
           const globalIndex = startingWordIndex + i
-          console.log('👉 handleOnBoundary', currentWord, globalIndex)
-          voiceDispatch({ type: 'SET_READED_WORDS', payload: { readWord: null } })
+          voiceDispatch({ type: 'SET_READED_WORD', payload: null })
           voiceDispatch({
-            type: 'SET_READED_WORDS',
-            payload: {
-              readWord: { word: currentWord, index: globalIndex }
-            }
+            type: 'SET_READED_WORD',
+            payload: { word: currentWord, index: globalIndex }
           })
           break
         }
@@ -53,10 +50,8 @@ export const useSpeechSynthesisUtterance = () => {
         }
       })
       voiceDispatch({
-        type: 'SET_READED_WORDS',
-        payload: {
-          readWord: null
-        }
+        type: 'SET_READED_WORD',
+        payload: null
       })
     }
     voiceDispatch({
@@ -83,7 +78,7 @@ export const useSpeechSynthesisUtterance = () => {
     if (!textPages) return
     if (queued && textPages.length < 3) return
     let textToRead = globalText
-    const startingWordIndex = readWords[readWords.length - 1]?.index
+    const startingWordIndex = readWords?.index
     if (startingWordIndex && typeof startingWordIndex === 'number') {
       const words = globalText.split(/\s+/g)
       textToRead = words.slice(startingWordIndex).join(' ').trim()

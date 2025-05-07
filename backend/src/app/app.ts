@@ -21,7 +21,6 @@ app.use(cors(apiConfig.CORS_SETTINGS))
 app.use(logger)
 
 const staticPath = path.join(cwd(), 'dist', 'public')
-console.log('staticPath', staticPath)
 
 app.use('/', express.static(staticPath))
 

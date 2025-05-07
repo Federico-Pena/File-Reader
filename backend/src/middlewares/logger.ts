@@ -1,11 +1,7 @@
 import type { Response, Request, NextFunction } from 'express'
 
 export const logger = (req: Request, res: Response, next: NextFunction) => {
-  if (
-    req.url.match(
-      /\.(css|js|png|jpg|jpeg|ico|svg|woff|woff2|ttf|eot|mp4|webm|gif)$/
-    )
-  ) {
+  if (req.url.match(/\.(css|js|png|jpg|webp|jpeg|ico|svg|woff|woff2|ttf|eot|mp4|webm|gif)$/)) {
     return next()
   }
   const date = new Date()

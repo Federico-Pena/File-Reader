@@ -5,7 +5,6 @@ import { existsSync } from 'node:fs'
 export const cleanTempDirFIles = async (tempDir: string) => {
   try {
     if (!existsSync(tempDir)) {
-      console.log('Temp dir does not exist')
       return
     }
     const files = await readdir(tempDir, {
@@ -26,7 +25,6 @@ export const cleanTempDirFIles = async (tempDir: string) => {
         console.warn(`Cannot delete file ${filePath}: ${err}`)
       }
     }
-    console.log('Temp dir cleaned')
   } catch (err) {
     console.error('Error cleaning temp dir:', err)
   }

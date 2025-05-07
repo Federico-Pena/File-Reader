@@ -8,8 +8,6 @@ import { parseTextToRichBlocks } from '../utils/normalizeText.js'
 import { sendEventStream } from '../utils/sendEventStream.js'
 
 const scriptPath = join(process.cwd(), 'python', 'main.py')
-console.log('scriptPath', scriptPath)
-
 const isWindows = os.platform() === 'win32'
 const pythonPath = isWindows
   ? join(process.cwd(), 'venv', 'Scripts', 'python.exe')
@@ -21,8 +19,7 @@ export const streamController = (req: Request, res: Response) => {
   try {
     const pythonProcess = spawn(pythonPath, [scriptPath, JSON.stringify(payload)], {})
     const rl = readline.createInterface({ input: pythonProcess.stdout })
-    const cleanup = (source: string) => {
-      console.log(`🛑 Killing process from ${source}.`)
+    const cleanup = () => {
       rl.close()
       pythonProcess.kill()
       res.end()
@@ -32,23 +29,19 @@ export const streamController = (req: Request, res: Response) => {
     }
 
     res.on('close', () => {
-      cleanup("res.on('close')")
+      cleanup()
     })
 
     rl.on('line', (line) => {
       const payload = JSON.parse(line)
       const { error, text, page } = payload
-      if (payload.text) {
-        console.log('👉 line', { ...payload, text: payload.text?.slice(0, 10) })
-      } else {
-        console.log('👉 line', error)
-      }
+      if (typeof payload === 'string') return
       if (error) {
         sendEventStream(res, {
           eventName: 'errorEvent',
           data: { message: error }
         })
-        cleanup("rl.on('line')")
+        cleanup()
         return
       }
       if (text) {
@@ -66,18 +59,17 @@ export const streamController = (req: Request, res: Response) => {
           eventName: 'done',
           data: { message: 'Tarea finalizada.' }
         })
-        cleanup("pythonProcess.on('close') - code === 0")
+        cleanup()
       } else {
         sendEventStream(res, {
           eventName: 'errorEvent',
           data: { message: `Ocurrió un error al procesar el archivo. Código: ${code ?? '?'}` }
         })
 
-        cleanup(`pythonProcess.on('close'). Code: ${code}`)
+        cleanup()
       }
     })
   } catch (error: any) {
-    console.log('📛 Error', error)
     sendEventStream(res, {
       eventName: 'errorEvent',
       data: { message: error.message }

@@ -60,7 +60,6 @@ export async function queueMiddleware(req: Request, res: Response, next: NextFun
           const numB = parseInt(b.split('.')[0]!, 10)
           return numA - numB
         })
-      console.log('👉 activeIds', activeIds)
       const position = activeIds.indexOf(fileName) + 1 - MAX_FILES
       if (position < MAX_FILES) {
         isFull = true

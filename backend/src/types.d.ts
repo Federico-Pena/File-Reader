@@ -3,12 +3,7 @@ type Data = {
   page: number
 }
 type RichBlock =
-  | { type: 'title' | 'subtitle'; content: RichInline[] }
-  | { type: 'paragraph'; content: RichInline[] }
-  | { type: 'blockquote'; content: RichInline[] }
-
-type RichInline =
-  | { type: 'text'; text: string }
-  | { type: 'link'; url: string; text: string }
-  | { type: 'email'; text: string }
-  | { type: 'quote'; text: string }
+  | { type: 'title' | 'subtitle'; content: string }
+  | { type: 'paragraph'; content: string }
+  | { type: 'blockquote'; content: string }
+  | { type: 'list'; content: string }

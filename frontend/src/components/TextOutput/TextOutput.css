@@ -125,26 +125,34 @@ header {
     pre {
       text-wrap: wrap;
     }
-    .link {
-      color: coral;
-      text-decoration: none;
+
+    .list {
+      padding-left: 1rem;
+      list-style: none;
     }
-    .quote {
-      font-family: Georgia, 'Times New Roman', Times, serif;
-    }
+
     .title {
       font-size: x-large;
-      text-align: left;
       margin-top: 2rem;
+      text-align: center;
     }
     .subtitle {
+      margin: 2rem;
+      text-align: center;
     }
     .blockquote {
       border-left: 3px solid var(--text-color);
       padding-left: 1rem;
-      margin-left: 0;
-      margin-right: 0;
       font-style: italic;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+    }
+    .quote {
+      font-style: italic;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+    }
+    .link {
+      color: coral;
+      text-decoration: none;
     }
     .word {
       word-wrap: break-word;

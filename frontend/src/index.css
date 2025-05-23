@@ -42,6 +42,8 @@
   box-sizing: border-box;
 }
 body {
+  text-rendering: optimizeLegibility;
+  line-height: 1.5rem;
   letter-spacing: 1px;
   position: relative;
   overflow-x: hidden;

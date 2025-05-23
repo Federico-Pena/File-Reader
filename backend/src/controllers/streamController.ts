@@ -35,7 +35,8 @@ export const streamController = (req: Request, res: Response) => {
     rl.on('line', (line) => {
       const payload = JSON.parse(line)
       const { error, text, page } = payload
-      if (typeof payload === 'string') return
+
+      if (typeof payload === 'string') return console.log(payload)
       if (error) {
         sendEventStream(res, {
           eventName: 'errorEvent',

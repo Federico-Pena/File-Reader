@@ -1,5 +1,5 @@
 import './TextOutput.css'
-import { useEffect, useRef } from 'react'
+import { JSX, useEffect, useRef } from 'react'
 import { useLocalDataContext, useVoiceContext } from '@/hooks/useCustomContext'
 import Header from './Header'
 
@@ -30,48 +30,93 @@ const TextOutput = () => {
     dispatch({ type: 'SET_READED_WORD', payload: { word, index } })
   }
 
-  const renderInline = (inline: RichInline) => {
-    const words = inline.text.split(/\s+/g)
-    return words.map((word) => {
-      const currentIndex = globalIndex++
-      const isRead = readWords && readWords?.index >= currentIndex
-      const span = (
-        <span
-          key={currentIndex}
-          onClick={() => handleOnClickWord(word, currentIndex)}
-          className={`word ${isRead ? 'word-highlighted' : ''}`}
-          ref={isRead ? refWordHighlighted : null}
-        >
-          {word}{' '}
-        </span>
-      )
-      switch (inline.type) {
-        case 'quote':
-          return (
-            <em className="quote" key={currentIndex}>
-              {span}
-            </em>
-          )
-        case 'link':
-          return (
-            <a
-              className="link"
-              href={inline.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              key={currentIndex}
-            >
-              {span}
-            </a>
-          )
-        default:
-          return span
+  const createSpan = (word: string) => {
+    const currentIndex = globalIndex++
+    const isRead = readWords && readWords.index >= currentIndex
+    return (
+      <span
+        data-index={currentIndex}
+        key={currentIndex}
+        onClick={() => handleOnClickWord(word, currentIndex)}
+        className={`word ${isRead ? 'word-highlighted' : ''}`}
+        ref={isRead ? refWordHighlighted : null}
+      >
+        {word}{' '}
+      </span>
+    )
+  }
+  const renderInline = (inline: string) => {
+    const words = inline.split(/\s+/g)
+    const elements: JSX.Element[] = []
+
+    let i = 0
+    while (i < words.length) {
+      const word = words[i]
+
+      if (
+        word.startsWith('"') &&
+        word.replace(/[.,;:!.?]+/, ' ').endsWith('"') &&
+        word.length > 1
+      ) {
+        elements.push(
+          <em className="quote" key={`quote-${globalIndex}`}>
+            {createSpan(word)}
+          </em>
+        )
+        i++
+        continue
       }
-    })
+
+      if (word.startsWith('"')) {
+        const quoteWords: string[] = [word]
+        i++
+        while (i < words.length && !words[i].replace(/[.,;:!.?]+/, '').endsWith('"')) {
+          quoteWords.push(words[i])
+          i++
+        }
+        if (i < words.length) {
+          quoteWords.push(words[i])
+          i++
+        }
+
+        const quoteSpans = quoteWords.map((quoteWord) => {
+          return createSpan(quoteWord)
+        })
+
+        elements.push(
+          <em className="quote" key={`quote-${globalIndex}`}>
+            {quoteSpans}
+          </em>
+        )
+        continue
+      }
+      if (word.includes('http') || word.includes('www')) {
+        const span = createSpan(word)
+        elements.push(
+          <a
+            href={word}
+            target="_blank"
+            rel="noreferrer"
+            className="link"
+            key={`link-${globalIndex}`}
+          >
+            {span}
+          </a>
+        )
+
+        i++
+        continue
+      }
+      elements.push(createSpan(word))
+      i++
+    }
+
+    return elements
   }
 
   const renderBlock = (block: RichBlock, i: number) => {
-    const content = block.content.map(renderInline)
+    const content = renderInline(block.content)
+
     switch (block.type) {
       case 'title':
         return (
@@ -96,6 +141,13 @@ const TextOutput = () => {
           <blockquote className="blockquote" key={i}>
             {content}
           </blockquote>
+        )
+      case 'list':
+        const start = block.content ? block.content.match(/^([0-9]+)[.)]/)?.[1] : null
+        return (
+          <ol className="list" key={i} start={start ? Number(start) : 1}>
+            <li>{content}</li>
+          </ol>
         )
       default:
         return null

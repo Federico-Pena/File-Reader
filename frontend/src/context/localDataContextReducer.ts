@@ -41,6 +41,11 @@ const localDataContextReducer = (state: LocalDataStateType, action: LocalDataAct
         }
       }
       const { nameFile, textPages, currentPage }: LocalDataStateType = JSON.parse(stringData)
+      if (typeof textPages[0].withLineBreaks[0].content !== 'string') {
+        return {
+          ...state
+        }
+      }
       return {
         ...state,
         nameFile: nameFile || state.nameFile,

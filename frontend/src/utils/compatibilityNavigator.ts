@@ -22,11 +22,9 @@ const userAgentDetect = (userAgent: string) => {
   }
 }
 const speechSynthesisInWindow = () => {
-  const navegador = userAgentDetect(navigator.userAgent)
-  if (navegador === 'Mozilla Firefox') {
-    return 'PC Firefox'
-  } else if (navegador !== 'Microsoft Edge' && /android/.test(navigator.userAgent.toLowerCase())) {
-    return 'Android no Edge'
+  const userNavigator = userAgentDetect(navigator.userAgent)
+  if (userNavigator !== 'Microsoft Edge') {
+    return 'No Edge'
   } else if (!window.SpeechSynthesis) {
     return 'No speech recognition'
   } else {

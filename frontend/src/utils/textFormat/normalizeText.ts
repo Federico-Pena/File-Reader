@@ -6,7 +6,7 @@ import {
   fixSymbolBeforeCapital,
   normalizeQuotes,
   removeZeroWidthAndExtraSpaces
-} from './prepocess'
+} from './preprocess'
 
 export function parseTextToRichBlocks(raw: string) {
   const sections = preprocessOCRText(raw).split(/\n\n+/g)

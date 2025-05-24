@@ -65,6 +65,7 @@ export const useSpeechSynthesisUtterance = () => {
   const handleOnError = () => {
     window.speechSynthesis.cancel()
   }
+
   const handleOnStart = () => {
     voiceDispatch({
       type: 'SET_SPEAKING',
@@ -76,7 +77,7 @@ export const useSpeechSynthesisUtterance = () => {
 
   const createUtterance = () => {
     if (!textPages) return
-    if (queued && textPages.length < 3) return
+    if (queued) return
     let textToRead = globalText
     const startingWordIndex = readWords?.index
     if (startingWordIndex && typeof startingWordIndex === 'number') {

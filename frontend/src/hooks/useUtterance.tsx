@@ -17,9 +17,11 @@ export const useUtterance = () => {
   }, [])
 
   const play = useCallback(() => {
-    const utterance = createUtterance()
-    if (!utterance) return
+    console.log('play')
+
     setTimeout(() => {
+      const utterance = createUtterance()
+      if (!utterance) return
       window.speechSynthesis.speak(utterance)
       if (speaking) {
         window.speechSynthesis.pause()
@@ -56,7 +58,9 @@ export const useUtterance = () => {
   }
 
   useEffect(() => {
-    play()
+    if (currentPage) {
+      play()
+    }
   }, [currentPage])
 
   return {

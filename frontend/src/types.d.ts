@@ -6,11 +6,10 @@ interface FileReaderContextType {
   changeLoading: (isLoading: boolean) => void
   changeQueued: (position: number) => void
 }
-type RichBlock =
-  | { type: 'title' | 'subtitle'; content: string }
-  | { type: 'paragraph'; content: string }
-  | { type: 'blockquote'; content: string }
-  | { type: 'list'; content: string }
+type RichBlock = {
+  type: 'title' | 'subtitle' | 'paragraph' | 'blockquote' | 'list'
+  content: string
+}
 
 /////////// LOCAL DATA CONTEXT ///////////
 

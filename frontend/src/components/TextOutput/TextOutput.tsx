@@ -11,14 +11,12 @@ const TextOutput = () => {
   const {
     state: { textPages, currentPage, nameFile }
   } = useLocalDataContext()
+
   const refWordHighlighted = useRef<HTMLSpanElement | null>(null)
 
   useEffect(() => {
     if (refWordHighlighted.current) {
-      refWordHighlighted.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      })
+      refWordHighlighted.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
   }, [readWords])
 
@@ -45,6 +43,7 @@ const TextOutput = () => {
       </span>
     )
   }
+
   const renderInline = (inline: string) => {
     const words = inline.split(/\s+/g)
     const elements: JSX.Element[] = []
@@ -53,43 +52,7 @@ const TextOutput = () => {
     while (i < words.length) {
       const word = words[i]
 
-      if (
-        word.startsWith('"') &&
-        word.replace(/[.,;:!.?]+/, ' ').endsWith('"') &&
-        word.length > 1
-      ) {
-        elements.push(
-          <em className="quote" key={`quote-${globalIndex}`}>
-            {createSpan(word)}
-          </em>
-        )
-        i++
-        continue
-      }
-
-      if (word.startsWith('"')) {
-        const quoteWords: string[] = [word]
-        i++
-        while (i < words.length && !words[i].replace(/[.,;:!.?]+/, '').endsWith('"')) {
-          quoteWords.push(words[i])
-          i++
-        }
-        if (i < words.length) {
-          quoteWords.push(words[i])
-          i++
-        }
-
-        const quoteSpans = quoteWords.map((quoteWord) => {
-          return createSpan(quoteWord)
-        })
-
-        elements.push(
-          <em className="quote" key={`quote-${globalIndex}`}>
-            {quoteSpans}
-          </em>
-        )
-        continue
-      }
+      // Detectar enlaces
       if (word.includes('http') || word.includes('www')) {
         const span = createSpan(word)
         elements.push(
@@ -103,10 +66,48 @@ const TextOutput = () => {
             {span}
           </a>
         )
-
         i++
         continue
       }
+
+      // Citas simples de una palabra
+      if (
+        word.replace(/^[.,;(:¡¿]+/, '').startsWith('"') &&
+        word.replace(/[.,;:)!?]+$/, '').endsWith('"') &&
+        word.length > 1
+      ) {
+        elements.push(
+          <em className="quote" key={`quote-${globalIndex}`}>
+            {createSpan(word)}
+          </em>
+        )
+        i++
+        continue
+      }
+
+      // Citas que abarcan múltiples palabras
+      if (word.replace(/^[.,;(:¡¿]+/, '').startsWith('"')) {
+        const quoteWords: string[] = [word]
+        i++
+        while (i < words.length && !words[i].replace(/[.,;:!.?]+$/, '').endsWith('"')) {
+          quoteWords.push(words[i])
+          i++
+        }
+        if (i < words.length) {
+          quoteWords.push(words[i])
+          i++
+        }
+
+        const quoteSpans = quoteWords.map(createSpan)
+        elements.push(
+          <em className="quote" key={`quote-${globalIndex}`}>
+            {quoteSpans}
+          </em>
+        )
+        continue
+      }
+
+      // Palabra normal
       elements.push(createSpan(word))
       i++
     }
@@ -116,7 +117,6 @@ const TextOutput = () => {
 
   const renderBlock = (block: RichBlock, i: number) => {
     const content = renderInline(block.content)
-
     switch (block.type) {
       case 'title':
         return (
@@ -143,14 +143,12 @@ const TextOutput = () => {
           </blockquote>
         )
       case 'list':
-        const start = block.content ? block.content.match(/^([0-9]+)[.)]/)?.[1] : null
+        const start = block.content.match(/^([0-9]+)[.)]/)?.[1]
         return (
           <ol className="list" key={i} start={start ? Number(start) : 1}>
             <li>{content}</li>
           </ol>
         )
-      default:
-        return null
     }
   }
 
@@ -170,4 +168,5 @@ const TextOutput = () => {
     </article>
   )
 }
+
 export default TextOutput

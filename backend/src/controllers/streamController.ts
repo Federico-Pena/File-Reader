@@ -4,7 +4,6 @@ import os from 'node:os'
 import { spawn } from 'child_process'
 import readline from 'readline'
 import { existsSync, readdirSync, unlinkSync } from 'node:fs'
-import { parseTextToRichBlocks } from '../utils/normalizeText.js'
 import { sendEventStream } from '../utils/sendEventStream.js'
 
 const scriptPath = join(process.cwd(), 'python', 'main.py')
@@ -36,7 +35,7 @@ export const streamController = (req: Request, res: Response) => {
       const payload = JSON.parse(line)
       const { error, text, page } = payload
 
-      if (typeof payload === 'string') return console.log(payload)
+      if (!text) return console.log(payload)
       if (error) {
         sendEventStream(res, {
           eventName: 'errorEvent',
@@ -46,10 +45,12 @@ export const streamController = (req: Request, res: Response) => {
         return
       }
       if (text) {
-        const parsed = { ...parseTextToRichBlocks(text), page }
         sendEventStream(res, {
           eventName: 'data',
-          data: parsed
+          data: {
+            text,
+            page
+          }
         })
       }
     })

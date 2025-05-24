@@ -1,3 +1,13 @@
+import {
+  cleanLineStartSymbols,
+  fixBrokenWords,
+  fixLineBreaksInsideSentences,
+  fixPageSeparators,
+  fixSymbolBeforeCapital,
+  normalizeQuotes,
+  removeZeroWidthAndExtraSpaces
+} from './prepocess'
+
 export function parseTextToRichBlocks(raw: string) {
   const sections = preprocessOCRText(raw).split(/\n\n+/g)
   const withLineBreaks: RichBlock[] = []
@@ -52,16 +62,16 @@ export function parseTextToRichBlocks(raw: string) {
 }
 
 function preprocessOCRText(text: string) {
-  return text
-    .replace(/[\u200B-\u200D\uFEFF]/g, '')
-    .replace(/\n{2,}/g, '\n\n')
-    .replace(/[ \t]+\n/g, '\n')
-    .replace(/\n[ \t]+/g, '\n')
-    .replace(/-\n\s*/g, '')
-    .replace(/(?<=[a-záéíóúñ])\n+(?=[a-záéíóúñ0-9])/gi, ' ')
-    .replace(/\.{4,}\s+([0-9]+)/g, '....$1\n\n')
-    .replace(/[«»'“”]+/g, '"')
-    .replace(/^[^\wáéíóúÁÉÍÓÚñÑ0-9"]+ /gm, '')
+  return [
+    removeZeroWidthAndExtraSpaces,
+    fixBrokenWords,
+    fixLineBreaksInsideSentences,
+    fixPageSeparators,
+    normalizeQuotes,
+    cleanLineStartSymbols,
+    fixSymbolBeforeCapital
+  ]
+    .reduce((acc, fn) => fn(acc), text)
     .trim()
 }
 
@@ -79,12 +89,12 @@ function isSubtitle(text: string): boolean {
 }
 
 function isBlockquote(text: string): boolean {
-  return /^".*"[.]?$/.test(text)
+  return /^".*"[,.?!]+?$/.test(text)
 }
 function isOnlySymbols(text: string): boolean {
   return /^[^a-zA-Z0-9]*$/.test(text)
 }
 
 function isList(text: string): boolean {
-  return /^[0-9]+[.)]/.test(text)
+  return /^[0-9]+[.)]/.test(text) || /^[a-zA-Z]+[)]/.test(text)
 }

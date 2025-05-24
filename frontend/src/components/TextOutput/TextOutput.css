@@ -12,7 +12,6 @@
     background-color: var(--bg-color-secondary);
     padding: 1rem;
     border-radius: 0.5rem;
-    word-break: break-all;
   }
 }
 
@@ -107,11 +106,14 @@ header {
   h3 {
     background-color: var(--bg-color-secondary);
     padding: 1rem;
-    word-break: keep-all;
     border-radius: 0.3rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    transition: white-space 0.2s;
+    &:hover {
+      white-space: wrap;
+    }
   }
   .richTextContent {
     flex: 1;
@@ -141,8 +143,11 @@ header {
       text-align: center;
     }
     .blockquote {
-      border-left: 3px solid var(--text-color);
-      padding-left: 1rem;
+      border-radius: 0.3rem;
+      border-left: 5px solid var(--text-color);
+      text-shadow: 2px 2px 2px var(--bg-color);
+      padding: 1rem;
+      margin: 2rem;
       font-style: italic;
       font-family: Georgia, 'Times New Roman', Times, serif;
     }

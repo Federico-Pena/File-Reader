@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useFileReaderContext, useLocalDataContext, useVoiceContext } from './useCustomContext'
 import { useUtterance } from './useUtterance'
+import { parseTextToRichBlocks } from '@/utils/textFormat/normalizeText'
 
 const BASE_URL = import.meta.env.MODE === 'development' ? 'http://localhost:1234/' : '/'
 const POST_FILE_URL = `${BASE_URL}api/v1/upload-file`
@@ -67,10 +68,11 @@ export const useFileReader = () => {
     const eventSource = new EventSource(url)
     eventSource.addEventListener('data', (ev: MessageEvent) => {
       changeQueued(0)
-      const page: TextPages = JSON.parse(ev.data)
+      const { text, page } = JSON.parse(ev.data)
+      const textPage: TextPages = { ...parseTextToRichBlocks(text), page }
       dispatch({
         type: 'SET_TEXT_PAGES_APPEND',
-        payload: { page }
+        payload: { page: textPage }
       })
     })
 

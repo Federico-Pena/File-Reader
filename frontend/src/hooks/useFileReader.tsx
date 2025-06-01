@@ -79,6 +79,7 @@ export const useFileReader = () => {
       changeTotalPages(total_pages)
     })
     eventSource.addEventListener('data', (ev: MessageEvent) => {
+      changeQueued(0)
       const { text, page } = parseEventData<OCREventData>(ev)
       console.log({
         text,

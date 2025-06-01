@@ -30,9 +30,10 @@ export const streamController = (req: Request, res: Response) => {
 
     res.on('close', () => {
       sendEventStream(res, {
-        eventName: 'done',
-        data: { message: 'Tarea finalizada.' }
+        eventName: 'errorEvent',
+        data: { message: 'User closed the connection.' }
       })
+      res.status(500)
       cleanup()
     })
 

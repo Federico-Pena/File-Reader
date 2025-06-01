@@ -39,6 +39,7 @@ COPY --from=backend-builder /app/backend/package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 
 # Código y assets
+COPY ./shared ./shared
 COPY --from=backend-builder /app/backend/dist ./dist
 COPY --from=backend-builder /app/backend/python ./python
 COPY --from=frontend-builder /app/frontend/dist ./dist/public

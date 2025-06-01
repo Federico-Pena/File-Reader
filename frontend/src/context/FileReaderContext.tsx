@@ -4,9 +4,11 @@ const initialState = {
   loading: false,
   error: '',
   queued: 0,
+  totalPages: 0,
   changeQueued: () => {},
   changeError: () => {},
-  changeLoading: () => {}
+  changeLoading: () => {},
+  changeTotalPages: () => {}
 }
 
 const FileReaderContext = createContext<FileReaderContextType>(initialState)
@@ -15,6 +17,7 @@ const FileReaderProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(initialState.loading)
   const [error, setError] = useState(initialState.error)
   const [queued, setQueued] = useState(initialState.queued)
+  const [totalPages, setTotalPages] = useState(initialState.totalPages)
 
   const changeLoading = (isLoading: boolean) => {
     setLoading(isLoading)
@@ -26,9 +29,21 @@ const FileReaderProvider = ({ children }: { children: ReactNode }) => {
   const changeQueued = (position: number) => {
     setQueued(position)
   }
+  const changeTotalPages = (totalPages: number) => {
+    setTotalPages(totalPages)
+  }
   return (
     <FileReaderContext.Provider
-      value={{ queued, loading, error, changeError, changeLoading, changeQueued }}
+      value={{
+        totalPages,
+        queued,
+        loading,
+        error,
+        changeError,
+        changeLoading,
+        changeQueued,
+        changeTotalPages
+      }}
     >
       {children}
     </FileReaderContext.Provider>

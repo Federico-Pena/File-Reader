@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express'
-import { apiConfig } from '../config/apiConfig.js'
 import { readdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { existsSync, mkdirSync } from 'node:fs'
+import { apiConfig } from '../config/apiConfig.js'
 
 const fileUploadController = async (req: Request, res: Response) => {
   try {
@@ -21,6 +21,21 @@ const fileUploadController = async (req: Request, res: Response) => {
       return
     }
 
+    const fileId = await saveTempFile(fileExt, buffer)
+    const baseUrl = `${apiConfig.API_BASE_URL}${apiConfig.API_ROUTES.streamingFile}`
+    const url = `${baseUrl}?fileId=${fileId}&ext=${fileExt}&lang=${lang}&initPage=${initPage}&endPage=${endPage}&fileName=${originalname}`
+
+    res.status(200).json({ url })
+  } catch (error: any) {
+    console.error('fileUploadController error', error)
+    res.status(500).json({ error: "Can't upload file" })
+  }
+}
+
+export default fileUploadController
+
+const saveTempFile = async (fileExt: string, buffer: Buffer) => {
+  try {
     const dirPath = apiConfig.PATH_DIR_TEMP_FILES
     if (!existsSync(dirPath)) {
       mkdirSync(dirPath, { recursive: true })
@@ -39,14 +54,8 @@ const fileUploadController = async (req: Request, res: Response) => {
     const tempPath = join(dirPath, fileName)
 
     await writeFile(tempPath, buffer)
-    const baseUrl = `${apiConfig.API_BASE_URL}${apiConfig.API_ROUTES.streamingFile}`
-    const url = `${baseUrl}?fileId=${fileId}&ext=${fileExt}&lang=${lang}&initPage=${initPage}&endPage=${endPage}`
-
-    res.status(200).json({ url })
-  } catch (error: any) {
-    console.error('fileUploadController error', error)
-    res.status(500).json({ error: "Can't upload file" })
+    return fileId
+  } catch (error) {
+    throw new Error(`Error saving temp file: ${error}`)
   }
 }
-
-export default fileUploadController

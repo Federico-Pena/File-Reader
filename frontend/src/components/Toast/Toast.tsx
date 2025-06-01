@@ -1,7 +1,10 @@
-import { useFileReaderContext } from '@/hooks/useCustomContext'
+import { useFileReaderContext, useLocalDataContext } from '@/hooks/useCustomContext'
 import './Toast.css'
 export const Toast = () => {
-  const { error, loading, queued } = useFileReaderContext()
+  const { error, loading, queued, totalPages } = useFileReaderContext()
+  const {
+    state: { textPages }
+  } = useLocalDataContext()
   if (error) {
     return (
       <div className={`toast`}>
@@ -26,7 +29,9 @@ export const Toast = () => {
     return (
       <div className={`toast`}>
         <div className="loaderContainer">
-          <span>Cargando páginas</span>
+          <span>
+            Cargando páginas {textPages[textPages.length - 1]?.page + 1 || 0} de {totalPages}
+          </span>
           <span className="loader"></span>
         </div>
       </div>

@@ -14,15 +14,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 
 # Crea entorno virtual y instala paquetes
-COPY requirements.txt .
+COPY ./backend/requirements.txt .
 
 RUN python3 -m venv /opt/venv \ 
  && /opt/venv/bin/pip install --no-cache-dir --upgrade pip \
  && /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
 
 # Copia app
-COPY . .
-
+COPY ./backend .
+COPY ../shared ../shared
 # Asegúrate de usar el pip/python del entorno virtual en tiempo de ejecución si hace falta
 ENV PATH="/opt/venv/bin:$PATH"
 

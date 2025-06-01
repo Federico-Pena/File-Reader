@@ -1,0 +1,44 @@
+{
+  "input": "Debido a la pandemia aprovecharon para hacer más videos y redondearon un libro.\n\n\n\n“Lo que vemos que sucede en la relación de los niños con el acto lúdico es que se construye una instancia del juego que permite una nueva instancia de aprendizaje. Los conciertos y los videos invitan a una comunión con personas adultas, ya que el juego no es solamente patrimonio de las infancias”, reafirma Milocco.\n\n\n\n\n\n \n\nDebutar en un libro\n\n\n\nArte y Educación en las Infancias es el título del libro escrito por Eva Harverz, Lucho Milocco y Cassio Carvalho. Allí recorren el abordaje pedagógico del proyecto argentino-brasileño Pim Pau, surgido desde la tarea docente, en el aula y los escenarios para posicionar al juego como centro de las actividades del aula.\n\n\n\nEsta obra se propone integrar los distintos lenguajes artísticos y, de esta forma, generar recursos lúdicos, creativos, corporales y de exploración para las niñas y los niños, y los adultos que los acompañan -ya sean familiares, docentes, educadores, terapeutas-; es decir, brindar recursos para acompañar los procesos educativos, de maduración, de construcción subjetiva y de crianza.\n\n\n\n“Hace tiempo teníamos el deseo de poder escribir sobre lo que nos interesaba, y así poder darle un marco a lo que hacíamos”, comenta Lucho Milocco, integrante de Pim Pau.\n\n\n\n\n\n\n\nNace del trabajo, la investigación y la creación de contenido para las infancias desde el intercambio en las aulas, los seminarios y los escenarios. El núcleo que atraviesa y sostiene todo este material es la construcción de vínculos y el acto creativo como un modo de relacionarnos con el mundo.\n\n\n\nEl material está organizado con sugerencias de recorridos para despertar y revisar la tarea diaria en el que compartimos nuestras búsquedas, exploraciones e investigaciones. Se proponen diversos abordajes; relacionando cuerpo, voz, palabra y movimiento como un todo.\n\n\n\n“Los lenguajes artísticos son lenguajes humanos que son parte de las sociedades. Es imposible pensar el aprendizaje por fuera de otro lenguaje, sino termina siendo excluyente.",
+  "expected": {
+    "withLineBreaks": [
+      {
+        "type": "paragraph",
+        "content": "Debido a la pandemia aprovecharon para hacer más videos y redondearon un libro."
+      },
+      {
+        "type": "paragraph",
+        "content": "\"Lo que vemos que sucede en la relación de los niños con el acto lúdico es que se construye una instancia del juego que permite una nueva instancia de aprendizaje. Los conciertos y los videos invitan a una comunión con personas adultas, ya que el juego no es solamente patrimonio de las infancias\", reafirma Milocco."
+      },
+      {
+        "type": "paragraph",
+        "content": "Debutar en un libro."
+      },
+      {
+        "type": "paragraph",
+        "content": "Arte y Educación en las Infancias es el título del libro escrito por Eva Harverz, Lucho Milocco y Cassio Carvalho. Allí recorren el abordaje pedagógico del proyecto argentino-brasileño Pim Pau, surgido desde la tarea docente, en el aula y los escenarios para posicionar al juego como centro de las actividades del aula."
+      },
+      {
+        "type": "paragraph",
+        "content": "Esta obra se propone integrar los distintos lenguajes artísticos y, de esta forma, generar recursos lúdicos, creativos, corporales y de exploración para las niñas y los niños, y los adultos que los acompañan -ya sean familiares, docentes, educadores, terapeutas-; es decir, brindar recursos para acompañar los procesos educativos, de maduración, de construcción subjetiva y de crianza."
+      },
+      {
+        "type": "paragraph",
+        "content": "\"Hace tiempo teníamos el deseo de poder escribir sobre lo que nos interesaba, y así poder darle un marco a lo que hacíamos\", comenta Lucho Milocco, integrante de Pim Pau."
+      },
+      {
+        "type": "paragraph",
+        "content": "Nace del trabajo, la investigación y la creación de contenido para las infancias desde el intercambio en las aulas, los seminarios y los escenarios. El núcleo que atraviesa y sostiene todo este material es la construcción de vínculos y el acto creativo como un modo de relacionarnos con el mundo."
+      },
+      {
+        "type": "paragraph",
+        "content": "El material está organizado con sugerencias de recorridos para despertar y revisar la tarea diaria en el que compartimos nuestras búsquedas, exploraciones e investigaciones. Se proponen diversos abordajes; relacionando cuerpo, voz, palabra y movimiento como un todo."
+      },
+      {
+        "type": "paragraph",
+        "content": "\"Los lenguajes artísticos son lenguajes humanos que son parte de las sociedades. Es imposible pensar el aprendizaje por fuera de otro lenguaje, sino termina siendo excluyente."
+      }
+    ],
+    "cleaned": "Debido a la pandemia aprovecharon para hacer más videos y redondearon un libro. \"Lo que vemos que sucede en la relación de los niños con el acto lúdico es que se construye una instancia del juego que permite una nueva instancia de aprendizaje. Los conciertos y los videos invitan a una comunión con personas adultas, ya que el juego no es solamente patrimonio de las infancias\", reafirma Milocco. Debutar en un libro. Arte y Educación en las Infancias es el título del libro escrito por Eva Harverz, Lucho Milocco y Cassio Carvalho. Allí recorren el abordaje pedagógico del proyecto argentino-brasileño Pim Pau, surgido desde la tarea docente, en el aula y los escenarios para posicionar al juego como centro de las actividades del aula. Esta obra se propone integrar los distintos lenguajes artísticos y, de esta forma, generar recursos lúdicos, creativos, corporales y de exploración para las niñas y los niños, y los adultos que los acompañan -ya sean familiares, docentes, educadores, terapeutas-; es decir, brindar recursos para acompañar los procesos educativos, de maduración, de construcción subjetiva y de crianza. \"Hace tiempo teníamos el deseo de poder escribir sobre lo que nos interesaba, y así poder darle un marco a lo que hacíamos\", comenta Lucho Milocco, integrante de Pim Pau. Nace del trabajo, la investigación y la creación de contenido para las infancias desde el intercambio en las aulas, los seminarios y los escenarios. El núcleo que atraviesa y sostiene todo este material es la construcción de vínculos y el acto creativo como un modo de relacionarnos con el mundo. El material está organizado con sugerencias de recorridos para despertar y revisar la tarea diaria en el que compartimos nuestras búsquedas, exploraciones e investigaciones. Se proponen diversos abordajes; relacionando cuerpo, voz, palabra y movimiento como un todo. \"Los lenguajes artísticos son lenguajes humanos que son parte de las sociedades. Es imposible pensar el aprendizaje por fuera de otro lenguaje, sino termina siendo excluyente."
+  }
+}

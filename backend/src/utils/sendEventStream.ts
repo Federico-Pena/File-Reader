@@ -1,8 +1,9 @@
 import type { Response } from 'express'
-type EventsNames = 'queued' | 'errorReached' | 'data' | 'errorEvent' | 'done'
-export function sendEventStream(
+import type { OCRStreamEventPayload } from '@shared/OCRStreamTypes'
+
+export function sendEventStream<T extends OCRStreamEventPayload>(
   res: Response,
-  { eventName, data }: { eventName: EventsNames; data: any }
+  { eventName, data }: T
 ) {
   res.write(`event: ${eventName}\ndata: ${JSON.stringify(data)}\n\n`)
 }

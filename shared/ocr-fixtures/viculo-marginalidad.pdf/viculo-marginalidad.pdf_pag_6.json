@@ -1,0 +1,32 @@
+{
+  "input": "“Toda verdad, incluso si es univer-\nsal y también si puede ser expresada en\nuna fórmula abstracta de lipo maltemá-\ntico, debe su eficacia al ser expresada\nen los lenguajes de las situaciones con-\ncretas particulares. Si no es expresable\nen lenguas particulares es una abstrac-\nción bizantina o escolástica, buena\npara el solaz de los rumiadores de\n\nfrases”.\n\nA. Gramsci - Cuaderno 1X - Frag. 63\n\nINTRODUCCION\n\nEnrique Pichon Riviere fue sin duda, un pionero en el\ncampo de la Psicología Social en Latinoamérica. Después de\nser fundador de la Asociación Psicoanalítica argentina su\npráctica clínica y su reflexión teórica lo llevan a emprender\nun arduo camino de rupturas y reformulaciones tendientes a\nconstruir una Psicología Social de base psicoanalítica, cen-\ntrada en el estudio de los individuos, grupos e instituciones\ninsertas en una Vida Cotidiana históricamente determinada.\nProyecto sin duda muy ambicioso, pero para el cual logró\nsentar importantes bases teórico metodológicas,\n\nLa cita de A. Gramsci con que encabezamos el trabajo\nno es casual. En la obra de Pichón puede descubrirse una\npermanente preocupación por que sus formulaciones pue-\ndan ser ““expresadas en los lenguajes de las situaciones con-\ncretas particulares”, de manera de constituir un instrumento\nde cambio en las realidades concretas de los hombres; en esa\nVida Cotidiana tan olvidada (en el sentido psicoanalítico del\ntérmino) por los teóricos de la Psicología y las Ciencias So-\nciales predominantes en el ámbito académico.\n\n“",
+  "expected": {
+    "withLineBreaks": [
+      {
+        "type": "blockquote",
+        "content": "\"Toda verdad, incluso si es universal y también si puede ser expresada en una fórmula abstracta de lipo maltemático, debe su eficacia al ser expresada en los lenguajes de las situaciones concretas particulares. Si no es expresable en lenguas particulares es una abstracción bizantina o escolástica, buena para el solaz de los rumiadores de frases\"."
+      },
+      {
+        "type": "paragraph",
+        "content": "A. Gramsci - Cuaderno 1X - Frag. 63."
+      },
+      {
+        "type": "title",
+        "content": "INTRODUCCION"
+      },
+      {
+        "type": "paragraph",
+        "content": "Enrique Pichon Riviere fue sin duda, un pionero en el campo de la Psicología Social en Latinoamérica. Después de ser fundador de la Asociación Psicoanalítica argentina su práctica clínica y su reflexión teórica lo llevan a emprender un arduo camino de rupturas y reformulaciones tendientes a construir una Psicología Social de base psicoanalítica, centrada en el estudio de los individuos, grupos e instituciones insertas en una Vida Cotidiana históricamente determinada."
+      },
+      {
+        "type": "paragraph",
+        "content": "Proyecto sin duda muy ambicioso, pero para el cual logró sentar importantes bases teórico metodológicas."
+      },
+      {
+        "type": "paragraph",
+        "content": "La cita de A. Gramsci con que encabezamos el trabajo no es casual. En la obra de Pichón puede descubrirse una permanente preocupación por que sus formulaciones puedan ser \"expresadas en los lenguajes de las situaciones concretas particulares\", de manera de constituir un instrumento de cambio en las realidades concretas de los hombres; en esa Vida Cotidiana tan olvidada (en el sentido psicoanalítico del término) por los teóricos de la Psicología y las Ciencias Sociales predominantes en el ámbito académico."
+      }
+    ],
+    "cleaned": ""
+  }
+}

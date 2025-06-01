@@ -9,7 +9,7 @@ import fitz
 def extract_text_from_page(page):
     """Extrae texto ignorando encabezado/pie."""
     try:
-        blocks = page.get_text("blocks")
+        blocks = page.get_textpage().extractText("blocks")
         content = []
         for block in blocks:
             if len(block) < 5:
@@ -31,6 +31,7 @@ def pdf_processor(buffer, language="eng", init_page=1, end_page=0, batch_size=10
         total_pages = len(doc)
         current_page = max(0, init_page - 1)
         max_page = min(end_page if end_page > 0 else total_pages, total_pages)
+        print(json.dumps({"total_pages": max_page}), flush=True)
 
         while current_page < max_page:
             end_batch = min(current_page + batch_size, max_page)

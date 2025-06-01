@@ -1,0 +1,28 @@
+{
+  "input": "Nos parece importante poder pensar el arte de la educación como una amalgama integrada y conjunta”, detalla Milloco.\n\n\n\nEn cada capítulo, los autores invitan a sumergirse en sus canciones y videos, para visualizar los contenidos que subyacen en ellos y las posibilidades que se expanden a partir de la propuesta, como espacio de experimentación del vínculo con nosotros mismos y con el otro, para entrar en relación con los conceptos abordados.\n\n\n\n\"Al leer se abre la oportunidad sin límite de edad de sumergirnos en la infancia como novedad, experiencia y acontecimiento, despojadas/os de las retóricas endulzadas e idealizadas de lo infantil para atravesar un viaje poético, un camino de tiempo para nombrar la educación. Educar es un acto creativo, PIM PAU lo sabe, argumenta, sostiene desde su propia obra\", afirma Patricia Redondo, pedagoga, docente y prologuista del libro.\n\n\n\n\n\n\n\nEl contenido de PIM PAU es utilizado con fines educativos en diferentes países de América y Europa como Francia, Brasil, España, México, Estados Unidos, República Checa, Cuba, Polonia, Chile, Uruguay, Ecuador, Colombia y Perú. Su material forma parte del ciclo Clic Clac en el Canal 22 de la TV Pública de México; en Canal IPE de Perú, en Pakapaka de Argentina y en el canal cultural de Cuba, además de programas educativos oficiales de México, Perú y Argentina. En el plano educativo PIM PAU dictó Cursos de Formación Pedagógica, talleres y charlas en distintos lugares del país y Latinoamérica, como así también participó de distintos congresos en Brasil, Colombia y Argentina. En el contexto del COVID-19, realizó una serie de shows online y cursos (en formato virtual) para diferentes partes del mundo, abriendo una posibilidad antes no explorada.\n\n\n\nPor: EDUCREAR",
+  "expected": {
+    "withLineBreaks": [
+      {
+        "type": "paragraph",
+        "content": "Nos parece importante poder pensar el arte de la educación como una amalgama integrada y conjunta\", detalla Milloco."
+      },
+      {
+        "type": "paragraph",
+        "content": "En cada capítulo, los autores invitan a sumergirse en sus canciones y videos, para visualizar los contenidos que subyacen en ellos y las posibilidades que se expanden a partir de la propuesta, como espacio de experimentación del vínculo con nosotros mismos y con el otro, para entrar en relación con los conceptos abordados."
+      },
+      {
+        "type": "paragraph",
+        "content": "\"Al leer se abre la oportunidad sin límite de edad de sumergirnos en la infancia como novedad, experiencia y acontecimiento, despojadas/os de las retóricas endulzadas e idealizadas de lo infantil para atravesar un viaje poético, un camino de tiempo para nombrar la educación. Educar es un acto creativo, PIM PAU lo sabe, argumenta, sostiene desde su propia obra\", afirma Patricia Redondo, pedagoga, docente y prologuista del libro."
+      },
+      {
+        "type": "paragraph",
+        "content": "El contenido de PIM PAU es utilizado con fines educativos en diferentes países de América y Europa como Francia, Brasil, España, México, Estados Unidos, República Checa, Cuba, Polonia, Chile, Uruguay, Ecuador, Colombia y Perú. Su material forma parte del ciclo Clic Clac en el Canal 22 de la TV Pública de México; en Canal IPE de Perú, en Pakapaka de Argentina y en el canal cultural de Cuba, además de programas educativos oficiales de México, Perú y Argentina. En el plano educativo PIM PAU dictó Cursos de Formación Pedagógica, talleres y charlas en distintos lugares del país y Latinoamérica, como así también participó de distintos congresos en Brasil, Colombia y Argentina. En el contexto del COVID-19, realizó una serie de shows online y cursos (en formato virtual) para diferentes partes del mundo, abriendo una posibilidad antes no explorada."
+      },
+      {
+        "type": "paragraph",
+        "content": "Por: EDUCREAR."
+      }
+    ],
+    "cleaned": "Nos parece importante poder pensar el arte de la educación como una amalgama integrada y conjunta\", detalla Milloco. En cada capítulo, los autores invitan a sumergirse en sus canciones y videos, para visualizar los contenidos que subyacen en ellos y las posibilidades que se expanden a partir de la propuesta, como espacio de experimentación del vínculo con nosotros mismos y con el otro, para entrar en relación con los conceptos abordados. \"Al leer se abre la oportunidad sin límite de edad de sumergirnos en la infancia como novedad, experiencia y acontecimiento, despojadas/os de las retóricas endulzadas e idealizadas de lo infantil para atravesar un viaje poético, un camino de tiempo para nombrar la educación. Educar es un acto creativo, PIM PAU lo sabe, argumenta, sostiene desde su propia obra\", afirma Patricia Redondo, pedagoga, docente y prologuista del libro. El contenido de PIM PAU es utilizado con fines educativos en diferentes países de América y Europa como Francia, Brasil, España, México, Estados Unidos, República Checa, Cuba, Polonia, Chile, Uruguay, Ecuador, Colombia y Perú. Su material forma parte del ciclo Clic Clac en el Canal 22 de la TV Pública de México; en Canal IPE de Perú, en Pakapaka de Argentina y en el canal cultural de Cuba, además de programas educativos oficiales de México, Perú y Argentina. En el plano educativo PIM PAU dictó Cursos de Formación Pedagógica, talleres y charlas en distintos lugares del país y Latinoamérica, como así también participó de distintos congresos en Brasil, Colombia y Argentina. En el contexto del COVID-19, realizó una serie de shows online y cursos (en formato virtual) para diferentes partes del mundo, abriendo una posibilidad antes no explorada. Por: EDUCREAR."
+  }
+}

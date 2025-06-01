@@ -13,7 +13,7 @@ def split_text_into_pages(text: str):
         while start < len(text):
             end = min(start + max_chars, len(text))
 
-            split_point = text.find(".", end) + 1
+            split_point = text.find("\n\n", end) + 1
 
             if split_point == 0:
                 split_point = end
@@ -28,5 +28,6 @@ def split_text_into_pages(text: str):
         for page in pages:
             print(json.dumps(page), flush=True)
     except Exception as e:
-        print(json.dumps({"error": "Error al dividir el texto en páginas."}), flush=True)
-    
+        print(
+            json.dumps({"error": "Error al dividir el texto en páginas."}), flush=True
+        )

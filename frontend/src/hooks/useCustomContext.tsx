@@ -1,7 +1,7 @@
-import { FileReaderContext } from '@/context/FileReaderContext'
 import { LocalDataContext } from '@/context/LocalDataContext'
 import { VoiceContext } from '@/context/VoiceContext'
 import { useContext } from 'react'
+import { FileReaderContext } from '../context/FileReaderContext'
 
 export const useFileReaderContext = () => {
   const context = useContext(FileReaderContext)

@@ -2,7 +2,7 @@ import './TextOutput.css'
 import { useEffect, useRef } from 'react'
 import { useLocalDataContext, useVoiceContext } from '@/hooks/useCustomContext'
 import Header from './Header'
-import { renderBlock } from './render'
+import { renderBlock } from '@/textParser/renderBlock'
 
 const TextOutput = () => {
   const {

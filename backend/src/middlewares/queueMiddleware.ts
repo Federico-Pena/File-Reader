@@ -11,7 +11,7 @@ const sleep = () => new Promise((resolve) => setTimeout(resolve, SLEEP_MS))
 
 export async function queueMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
-    const { fileId, ext, lang, initPage, endPage } = req.query
+    const { fileId, ext, lang, initPage, endPage, fileName: originalFileName } = req.query
     const fileName = `${fileId}.${ext}`
     const dirPath = apiConfig.PATH_DIR_TEMP_FILES
     const filePath = join(dirPath, fileName)
@@ -24,7 +24,8 @@ export async function queueMiddleware(req: Request, res: Response, next: NextFun
       filePath,
       lang,
       initPage,
-      endPage
+      endPage,
+      fileName: originalFileName
     } as any
 
     res.set({
@@ -42,7 +43,7 @@ export async function queueMiddleware(req: Request, res: Response, next: NextFun
     if (files.length > 5) {
       sendEventStream(res, {
         eventName: 'errorReached',
-        data: { message: 'Too many files in queue' }
+        data: null
       })
       res.end()
       if (existsSync(filePath)) {

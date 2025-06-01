@@ -3,8 +3,9 @@ import { join } from 'path'
 import os from 'node:os'
 import { spawn } from 'child_process'
 import readline from 'readline'
-import { existsSync, readdirSync, unlinkSync } from 'node:fs'
+import { existsSync, unlinkSync } from 'node:fs'
 import { sendEventStream } from '../utils/sendEventStream.js'
+import { saveOCRPageFixture } from '../utils/saveOCRPageFixture.js'
 
 const scriptPath = join(process.cwd(), 'python', 'main.py')
 const isWindows = os.platform() === 'win32'
@@ -13,7 +14,7 @@ const pythonPath = isWindows
   : '/opt/venv/bin/python'
 
 export const streamController = (req: Request, res: Response) => {
-  const { filePath, lang, initPage, endPage } = req.body
+  const { fileName, filePath, lang, initPage, endPage } = req.body
   const payload = { filePath, lang, initPage, endPage }
   try {
     const pythonProcess = spawn(pythonPath, [scriptPath, JSON.stringify(payload)], {})
@@ -33,9 +34,23 @@ export const streamController = (req: Request, res: Response) => {
 
     rl.on('line', (line) => {
       const payload = JSON.parse(line)
-      const { error, text, page } = payload
-
-      if (!text) return console.log(payload)
+      const {
+        error,
+        text,
+        page,
+        total_pages
+      }: {
+        error: string | undefined
+        text: string | undefined
+        page: number
+        total_pages: number
+      } = payload
+      if (total_pages) {
+        sendEventStream(res, {
+          eventName: 'total_pages',
+          data: { total_pages }
+        })
+      }
       if (error) {
         sendEventStream(res, {
           eventName: 'errorEvent',
@@ -45,6 +60,8 @@ export const streamController = (req: Request, res: Response) => {
         return
       }
       if (text) {
+        saveOCRPageFixture(fileName, text, page)
+
         sendEventStream(res, {
           eventName: 'data',
           data: {
@@ -53,6 +70,7 @@ export const streamController = (req: Request, res: Response) => {
           }
         })
       }
+      if (!text) console.log("rl.on('line'", payload)
     })
 
     pythonProcess.on('close', (code) => {

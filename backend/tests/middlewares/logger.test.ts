@@ -4,7 +4,7 @@ import app from '../../src/app/app.js'
 import { apiConfig } from '../../src/config/apiConfig.js'
 import { colors } from '../../src/middlewares/logger.js'
 
-const apiUrl = apiConfig.API_ROUTES.uploadFile.getMimeTypes
+const apiUrl = apiConfig.API_ROUTES.getMimeTypes
 
 describe('Logger Middleware', () => {
   const logSpy = vi.spyOn(console, 'log')

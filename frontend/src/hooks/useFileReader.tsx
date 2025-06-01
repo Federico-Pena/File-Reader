@@ -1,13 +1,20 @@
 import { useEffect, useState } from 'react'
-import { useFileReaderContext, useLocalDataContext, useVoiceContext } from './useCustomContext'
 import { useUtterance } from './useUtterance'
-import { parseTextToRichBlocks } from '@/utils/textFormat/normalizeText'
+import { useFileReaderContext, useLocalDataContext, useVoiceContext } from './useCustomContext'
+import { tokenizeBlocks } from '@/textParser/tokenizeBlocks'
+import {
+  DoneEventData,
+  ErrorEventData,
+  OCREventData,
+  QueuedEventData,
+  TotalPagesEventData
+} from '@shared/OCRStreamTypes'
 
 const BASE_URL = import.meta.env.MODE === 'development' ? 'http://localhost:1234/' : '/'
 const POST_FILE_URL = `${BASE_URL}api/v1/upload-file`
 const GET_MIME_TYPES_URL = `${BASE_URL}api/v1/get-mime-types`
 export const useFileReader = () => {
-  const { changeError, changeLoading, changeQueued } = useFileReaderContext()
+  const { changeError, changeLoading, changeQueued, changeTotalPages } = useFileReaderContext()
   const { dispatch: voiceDispatch } = useVoiceContext()
   const { stop } = useUtterance()
   const { dispatch } = useLocalDataContext()
@@ -57,49 +64,54 @@ export const useFileReader = () => {
       formData.append('initPage', initPage.toString() ?? '0')
       formData.append('endPage', endPage.toString() ?? '0')
       const res = await fetch(POST_FILE_URL, { method: 'POST', body: formData })
-      const { url } = await res.json()
+      const { url }: { url: string } = await res.json()
       startOCRStream(url)
     } catch {
       changeError('Ocurrió un error al leer el archivo.')
       changeLoading(false)
     }
   }
+
   const startOCRStream = (url: string) => {
     const eventSource = new EventSource(url)
+    eventSource.addEventListener('total_pages', (ev: MessageEvent) => {
+      const { total_pages } = parseEventData<TotalPagesEventData>(ev)
+      changeTotalPages(total_pages)
+    })
     eventSource.addEventListener('data', (ev: MessageEvent) => {
-      changeQueued(0)
-      const { text, page } = JSON.parse(ev.data)
-      const textPage: TextPages = { ...parseTextToRichBlocks(text), page }
-      dispatch({
-        type: 'SET_TEXT_PAGES_APPEND',
-        payload: { page: textPage }
+      const { text, page } = parseEventData<OCREventData>(ev)
+      console.log({
+        text,
+        page
       })
+
+      const textPage: TextPages = { ...tokenizeBlocks(text), page }
+      dispatch({ type: 'SET_TEXT_PAGES_APPEND', payload: { page: textPage } })
     })
 
-    eventSource.addEventListener('error', () => {
-      changeError('Error al procesar el archivo.')
-      eventSource.close()
-      changeLoading(false)
+    eventSource.addEventListener('queued', (ev: MessageEvent) => {
+      const { position } = parseEventData<QueuedEventData>(ev)
+      changeQueued(position)
     })
+
     eventSource.addEventListener('errorEvent', (ev: MessageEvent) => {
-      const message: string = JSON.parse(ev.data).message
+      const { message } = parseEventData<ErrorEventData>(ev)
       changeError(message)
       eventSource.close()
       changeLoading(false)
     })
+
     eventSource.addEventListener('errorReached', () => {
       changeError('Servidor ocupado. Inténtelo en unos minutos.')
       eventSource.close()
       changeLoading(false)
     })
-    eventSource.addEventListener('done', () => {
+
+    eventSource.addEventListener('done', (ev: MessageEvent) => {
+      const { message } = parseEventData<DoneEventData>(ev)
+      console.log(message)
       eventSource.close()
       changeLoading(false)
-    })
-
-    eventSource.addEventListener('queued', (ev: MessageEvent) => {
-      const position = JSON.parse(ev.data).position
-      changeQueued(position)
     })
   }
 
@@ -107,4 +119,8 @@ export const useFileReader = () => {
     handleFileUpload,
     clientMimeTypes
   }
+}
+
+function parseEventData<T>(ev: MessageEvent): T {
+  return JSON.parse(ev.data) as T
 }

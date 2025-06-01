@@ -2,9 +2,11 @@ interface FileReaderContextType {
   loading: boolean
   error: string
   queued: number
+  totalPages: number
   changeError: (error: string) => void
   changeLoading: (isLoading: boolean) => void
   changeQueued: (position: number) => void
+  changeTotalPages: (totalPages: number) => void
 }
 type RichBlock = {
   type: 'title' | 'subtitle' | 'paragraph' | 'blockquote' | 'list'

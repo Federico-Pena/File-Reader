@@ -7,10 +7,6 @@ export function saveOCRPageFixture(fileName: string, text: string, page: number)
   const fixtureFile = join(fileFolder, `${fileName}_pag_${page}.json`)
 
   try {
-    if (process.env.NODE_ENV === 'production') {
-      console.log(`🟢 Skipping fixture creation in production mode`)
-      return
-    }
     if (!existsSync(fileFolder)) {
       mkdirSync(fileFolder, { recursive: true })
     }

@@ -29,6 +29,10 @@ export const streamController = (req: Request, res: Response) => {
     }
 
     res.on('close', () => {
+      sendEventStream(res, {
+        eventName: 'done',
+        data: { message: 'Tarea finalizada.' }
+      })
       cleanup()
     })
 
@@ -60,7 +64,9 @@ export const streamController = (req: Request, res: Response) => {
         return
       }
       if (text) {
-        saveOCRPageFixture(fileName, text, page)
+        if (process.env.NODE_ENV === 'development') {
+          saveOCRPageFixture(fileName, text, page)
+        }
 
         sendEventStream(res, {
           eventName: 'data',

@@ -11,7 +11,7 @@ const TextOutput = () => {
     state: { readWords, speaking }
   } = useVoiceContext()
   const {
-    state: { textPages, currentPage, nameFile }
+    state: { textPages, currentPage }
   } = useLocalDataContext()
 
   const refWordHighlighted = useRef<HTMLSpanElement | null>(null)

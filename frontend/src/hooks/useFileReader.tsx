@@ -109,8 +109,8 @@ export const useFileReader = () => {
     })
 
     eventSource.addEventListener('done', (ev: MessageEvent) => {
-      // const { message } = parseEventData<DoneEventData>(ev)
-      // console.log(message)
+      const { message } = parseEventData<DoneEventData>(ev)
+      console.log(message)
       eventSource.close()
       changeLoading(false)
     })

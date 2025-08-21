@@ -48,9 +48,9 @@ export const useFileReader = () => {
       changeError('')
       stop()
 
-      dispatch({ type: 'SET_TEXT_PAGES', payload: { textPages: [] } })
+      /*    dispatch({ type: 'CLEAN_TEXT_PAGES' })
+       */
       dispatch({ type: 'SET_PAGE', payload: { currentPage: 0 } })
-
       voiceDispatch({ type: 'SET_SPEAKING', payload: { speaking: false } })
       voiceDispatch({ type: 'SET_READED_WORD', payload: null })
 
@@ -81,10 +81,10 @@ export const useFileReader = () => {
     eventSource.addEventListener('data', (ev: MessageEvent) => {
       changeQueued(0)
       const { text, page } = parseEventData<OCREventData>(ev)
-      console.log({
+      /*  console.log({
         text,
         page
-      })
+      }) */
 
       const textPage: TextPages = { ...tokenizeBlocks(text), page }
       dispatch({ type: 'SET_TEXT_PAGES_APPEND', payload: { page: textPage } })
@@ -110,7 +110,7 @@ export const useFileReader = () => {
 
     eventSource.addEventListener('done', (ev: MessageEvent) => {
       const { message } = parseEventData<DoneEventData>(ev)
-      console.log(message)
+      // console.log(message)
       eventSource.close()
       changeLoading(false)
     })

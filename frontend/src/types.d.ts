@@ -20,8 +20,13 @@ type TextPages = {
   withLineBreaks: RichBlock[]
   page: number
 }
-
+interface LastFileMetaData {
+  textPages: TextPages[] | []
+  currentPage: number
+  nameFile: string
+}
 interface LocalDataStateType {
+  lastFiles: LastFileMetaData[]
   textPages: TextPages[] | never[]
   currentPage: number
   nameFile: string
@@ -30,15 +35,13 @@ interface LocalDataStateType {
 type LocalDataAction =
   | { type: 'LOAD_STATE' }
   | {
-      type: 'SET_TEXT_PAGES'
-      payload: {
-        textPages: TextPages[]
-      }
+      type: 'CLEAN_TEXT_PAGES'
     }
   | { type: 'SET_TEXT_PAGES_APPEND'; payload: { page: TextPages } }
   | { type: 'SET_NAME_FILE'; payload: { nameFile: string } }
   | { type: 'SET_PAGE'; payload: { currentPage: number } }
   | { type: 'SET_VOICE_NAME'; payload: { voice: string } }
+  | { type: 'CHANGE_FILE'; payload: { nameFile: string } }
 
 interface LocalDataContextType {
   state: LocalDataStateType

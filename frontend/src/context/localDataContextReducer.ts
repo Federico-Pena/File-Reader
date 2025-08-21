@@ -2,14 +2,48 @@ import { updateLocalStorage } from '@/utils/updateLocalStorage'
 
 const localDataContextReducer = (state: LocalDataStateType, action: LocalDataAction) => {
   switch (action.type) {
-    case 'SET_TEXT_PAGES':
+    case 'CHANGE_FILE':
+      const changeFileSearchFile = state.lastFiles.find(
+        (file) => file.nameFile === action.payload.nameFile
+      )
+      if (!changeFileSearchFile) {
+        return state
+      }
+      const newLastFiles = [
+        ...state.lastFiles.filter(
+          (file) =>
+            file.nameFile !== changeFileSearchFile.nameFile && file.nameFile !== state.nameFile
+        ),
+        {
+          nameFile: state.nameFile,
+          textPages: state.textPages,
+          currentPage: state.currentPage
+        },
+        {
+          ...changeFileSearchFile,
+          textPages: []
+        }
+      ]
+      const newState = {
+        lastFiles: newLastFiles,
+        nameFile: changeFileSearchFile.nameFile,
+        textPages: changeFileSearchFile.textPages,
+        currentPage: changeFileSearchFile.currentPage
+      }
+      updateLocalStorage(newState)
+      return {
+        ...state,
+        ...newState
+      }
+
+    case 'CLEAN_TEXT_PAGES':
       updateLocalStorage({
-        textPages: action.payload.textPages,
+        textPages: [],
         currentPage: 0
       })
       return {
         ...state,
-        textPages: action.payload.textPages,
+        textPages: [],
         currentPage: 0
       }
     case 'SET_TEXT_PAGES_APPEND':
@@ -26,12 +60,25 @@ const localDataContextReducer = (state: LocalDataStateType, action: LocalDataAct
         textPages: sortedPages
       }
     case 'SET_NAME_FILE':
-      updateLocalStorage({
+      const newFiles = state.lastFiles.filter((file) => file.nameFile !== state.nameFile)
+      const setNameFileOldFile = {
+        textPages: state.textPages,
+        currentPage: state.currentPage,
+        nameFile: state.nameFile
+      }
+      const setNameFileNewFile = {
+        textPages: [],
+        currentPage: 0,
         nameFile: action.payload.nameFile
-      })
+      }
+      const setNameNewFiles = [setNameFileNewFile, setNameFileOldFile, ...newFiles].filter(
+        (file) => file.nameFile.trim().length > 0
+      )
+      updateLocalStorage({ lastFiles: setNameNewFiles, nameFile: action.payload.nameFile })
       return {
         ...state,
-        nameFile: action.payload.nameFile
+        nameFile: action.payload.nameFile,
+        lastFiles: setNameNewFiles
       }
     case 'LOAD_STATE':
       const stringData = window.localStorage.getItem('dataLastFile')
@@ -40,14 +87,21 @@ const localDataContextReducer = (state: LocalDataStateType, action: LocalDataAct
           ...state
         }
       }
-      const { nameFile, textPages, currentPage }: LocalDataStateType = JSON.parse(stringData)
+      const {
+        nameFile,
+        textPages,
+        currentPage,
+        lastFiles: previosFiles
+      }: LocalDataStateType = JSON.parse(stringData)
       if (textPages && typeof textPages[0]?.withLineBreaks[0]?.content !== 'string') {
         return {
           ...state
         }
       }
+
       return {
         ...state,
+        lastFiles: previosFiles || state.lastFiles,
         nameFile: nameFile || state.nameFile,
         textPages: textPages || state.textPages,
         currentPage: currentPage || state.currentPage

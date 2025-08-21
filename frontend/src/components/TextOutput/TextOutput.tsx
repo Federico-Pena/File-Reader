@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react'
 import { useLocalDataContext, useVoiceContext } from '@/hooks/useCustomContext'
 import Header from './Header'
 import { renderBlock } from '@/textParser/renderBlock'
+import { SelectFile } from './SelectFile'
 
 const TextOutput = () => {
   const {
@@ -56,7 +57,8 @@ const TextOutput = () => {
     <article className="articleText">
       <Header />
       <div className="div-text">
-        <h3>{nameFile}</h3>
+        <SelectFile />
+        {/*   <h3>{nameFile}</h3> */}
         <div className="richTextContent">
           {textNormalized.map((block, i) => renderBlock(block, i, createSpan))}
         </div>

@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import './FormFile.css'
 import { useFileReader } from '@/hooks/useFileReader'
-import { useFileReaderContext } from '@/hooks/useCustomContext'
+import { useFileReaderContext, useLocalDataContext } from '@/hooks/useCustomContext'
 import { IconBackNext, IconUpload, SendIcon } from '../Icons/Icons'
+import { getLocalStorageUsage } from '@/utils/updateLocalStorage'
 
 type FormFileState = {
   file: File | null
@@ -14,6 +15,9 @@ type FormFileState = {
 export const FormFile = () => {
   const { clientMimeTypes, handleFileUpload } = useFileReader()
   const { loading } = useFileReaderContext()
+  const {
+    state: { lastFiles }
+  } = useLocalDataContext()
   const [state, setState] = useState<FormFileState>({
     file: null,
     language: 'spa',
@@ -123,6 +127,10 @@ export const FormFile = () => {
         <button type="submit" title="Cargar archivo">
           Enviar <SendIcon />
         </button>
+        <footer>
+          <small>Espacio: {getLocalStorageUsage()}</small>
+          <small>Archivos: {lastFiles.length}</small>
+        </footer>
       </form>
     </>
   )

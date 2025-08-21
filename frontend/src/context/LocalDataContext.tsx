@@ -2,6 +2,7 @@ import { createContext, useEffect, useReducer } from 'react'
 import { localDataContextReducer } from './localDataContextReducer'
 
 const initialState: LocalDataStateType = {
+  lastFiles: [],
   textPages: [],
   currentPage: 0,
   nameFile: ''

@@ -17,7 +17,7 @@ export const useUtterance = () => {
   }, [])
 
   const play = useCallback(() => {
-    console.log('play')
+    //  console.log('play')
 
     setTimeout(() => {
       const utterance = createUtterance()

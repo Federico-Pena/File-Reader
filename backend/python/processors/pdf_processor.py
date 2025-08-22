@@ -9,16 +9,8 @@ import fitz
 def extract_text_from_page(page):
     """Extrae texto ignorando encabezado/pie."""
     try:
-        blocks = page.get_textpage().extractText("blocks")
-        content = []
-        for block in blocks:
-            if len(block) < 5:
-                continue
-            x0, y0, x1, y1, text = block[:5]
-            if y0 > 50 and y1 < page.rect.height - 50:
-                cleaned = text.strip()
-                if cleaned:
-                    content.append(cleaned)
+        blocks = page.get_text("blocks")
+        content = [block[4] for block in blocks if block[4]]
         return "\n\n".join(content)
     except Exception:
         return ""
@@ -36,9 +28,8 @@ def pdf_processor(buffer, language="eng", init_page=1, end_page=0, batch_size=10
         while current_page < max_page:
             end_batch = min(current_page + batch_size, max_page)
             for idx in range(current_page, end_batch):
-                page = doc[idx]
-                text_result = extract_text_from_page(page)
-
+                # page = doc[idx]
+                text_result = ""  # extract_text_from_page(page)
                 if not text_result:
                     images = convert_from_bytes(
                         buffer, grayscale=True, first_page=idx + 1, last_page=idx + 1

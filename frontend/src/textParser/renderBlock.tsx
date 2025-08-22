@@ -13,9 +13,12 @@ export const renderBlock = (
   switch (block.type) {
     case 'title':
       return (
-        <h1 className="title" key={i}>
+        <p className="paragraph" key={i}>
           {content}
-        </h1>
+        </p>
+        /* <h1 className="title" key={i}>
+          {content}
+        </h1> */
       )
     case 'subtitle':
       return (

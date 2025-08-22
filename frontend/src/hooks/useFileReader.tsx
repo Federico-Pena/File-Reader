@@ -51,13 +51,13 @@ export const useFileReader = () => {
       /*    dispatch({ type: 'CLEAN_TEXT_PAGES' })
        */
       dispatch({ type: 'SET_PAGE', payload: { currentPage: 0 } })
-      voiceDispatch({ type: 'SET_SPEAKING', payload: { speaking: false } })
-      voiceDispatch({ type: 'SET_READED_WORD', payload: null })
-
       dispatch({
         type: 'SET_NAME_FILE',
         payload: { nameFile: file.name }
       })
+      voiceDispatch({ type: 'SET_SPEAKING', payload: { speaking: false } })
+      voiceDispatch({ type: 'SET_READED_WORD', payload: null })
+
       const formData = new FormData()
       formData.append('file', file)
       formData.append('lang', lang)

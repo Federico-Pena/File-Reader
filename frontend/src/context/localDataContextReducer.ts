@@ -11,8 +11,7 @@ const localDataContextReducer = (state: LocalDataStateType, action: LocalDataAct
       }
       const newLastFiles = [
         ...state.lastFiles.filter(
-          (file) =>
-            file.nameFile !== changeFileSearchFile.nameFile && file.nameFile !== state.nameFile
+          (file) => file.nameFile !== action.payload.nameFile && file.nameFile !== state.nameFile
         ),
         {
           nameFile: state.nameFile,
@@ -24,6 +23,7 @@ const localDataContextReducer = (state: LocalDataStateType, action: LocalDataAct
           textPages: []
         }
       ]
+
       const newState = {
         lastFiles: newLastFiles,
         nameFile: changeFileSearchFile.nameFile,
@@ -77,6 +77,8 @@ const localDataContextReducer = (state: LocalDataStateType, action: LocalDataAct
       updateLocalStorage({ lastFiles: setNameNewFiles, nameFile: action.payload.nameFile })
       return {
         ...state,
+        textPages: [],
+        currentPage: 0,
         nameFile: action.payload.nameFile,
         lastFiles: setNameNewFiles
       }

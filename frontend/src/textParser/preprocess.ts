@@ -97,6 +97,8 @@ function normalizeParagraphs(text: string): string {
  * and ensures block-level separation with double newlines.
  */
 export function cleanText(text: string): string {
+  console.log('cleanText', text)
+
   let result = text
   result = normalizeQuotes(result)
   result = normalizeParagraphs(result)

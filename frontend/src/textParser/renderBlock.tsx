@@ -1,49 +1,89 @@
-import { JSX } from 'react'
-import { tokenizeInline } from './tokenizeInline'
-import { renderInline } from './renderInline'
+import { Blockquote, Heading, List, ListIndicator, Text } from '@chakra-ui/react'
+import { RichBlock } from '@shared/types/types'
+import { RenderInline } from './RenderInline'
 
-export const renderBlock = (
+export const RenderBlock = (
   block: RichBlock,
-  i: number,
-  createSpan: (word: string) => JSX.Element
+  indexBlock: number,
+  createSpan: (word: string) => React.JSX.Element | ' '
 ) => {
-  const inlineTokens = tokenizeInline(block.content)
-  const content = renderInline(inlineTokens, createSpan)
+  const tokens = block.inlineTokens ?? []
+  const content = RenderInline(tokens, createSpan)
 
   switch (block.type) {
-    case 'title':
+    case 'title': {
       return (
-        <p className="paragraph" key={i}>
+        <Heading className={block.type} as="h1" size="xl" key={indexBlock}>
           {content}
-        </p>
-        /* <h1 className="title" key={i}>
-          {content}
-        </h1> */
+        </Heading>
       )
-    case 'subtitle':
+    }
+    case 'subtitle': {
       return (
-        <h4 className="subtitle" key={i}>
+        <Heading className={block.type} as="h3" size="lg" key={indexBlock}>
           {content}
-        </h4>
+        </Heading>
       )
-    case 'paragraph':
+    }
+
+    case 'paragraph': {
       return (
-        <p className="paragraph" key={i}>
+        <Text className={block.type} as="p" lineHeight="1.6" key={indexBlock}>
           {content}
-        </p>
+        </Text>
       )
-    case 'blockquote':
+    }
+
+    case 'blockquote': {
       return (
-        <blockquote className="blockquote" key={i}>
+        <Blockquote.Root className={block.type} key={indexBlock}>
+          <Blockquote.Icon />
+          <Blockquote.Content fontSize="md" fontStyle="italic">
+            {content}
+          </Blockquote.Content>
+        </Blockquote.Root>
+      )
+    }
+
+    case 'list': {
+      const listType = block.inlineTokens[0]?.listType ?? 'bullet'
+
+      const listStyle =
+        listType === 'numbered'
+          ? 'decimal'
+          : listType === 'lettered'
+          ? 'lower-alpha'
+          : listType === 'roman'
+          ? 'lower-roman'
+          : 'disc'
+      return (
+        <List.Root
+          className={block.type}
+          as={listType === 'bullet' ? 'ul' : 'ol'}
+          key={indexBlock}
+          listStyle={`${listStyle} inside`}
+          gap={2}
+        >
+          {content.map((span, i) => {
+            const indicator = block.inlineTokens[i] ? block.inlineTokens[i].listIndicator : ''
+            const padding = indicator?.length < 20 ? indicator?.length : 0
+
+            return (
+              <List.Item listStyle="none" key={`${indexBlock}-${i}`} ps={padding}>
+                {indicator && <ListIndicator color="GrayText">{indicator}</ListIndicator>}
+                {span}
+              </List.Item>
+            )
+          })}
+        </List.Root>
+      )
+    }
+    default: {
+      return (
+        <Text as="p" key={indexBlock}>
           {content}
-        </blockquote>
+        </Text>
       )
-    case 'list':
-      const start = block.content.match(/^([0-9]+)[.)]/)?.[1]
-      return (
-        <ol className="list" key={i} start={start ? Number(start) : 1}>
-          <li>{content}</li>
-        </ol>
-      )
+    }
   }
 }

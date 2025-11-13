@@ -1,0 +1,59 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`OCR → tokenizeBlocks (bronckartPdf) > fragment 2 1`] = `
+[
+  {
+    "inlineTokens": [
+      {
+        "text": "COLECCIÓN",
+        "type": "text",
+      },
+      {
+        "text": "DESARROLLO DEL LENGUAJE",
+        "type": "text",
+      },
+      {
+        "text": "Y DIDÁCTICA DE LAS LENGUAS",
+        "type": "text",
+      },
+    ],
+    "type": "title",
+  },
+  {
+    "inlineTokens": [
+      {
+        "text": "1 nombre de la colección nos presenta un desafío muy actual en el debate entre diversos campos de las ciencias humanas/sociales, cuyos conocimientos, por lo general, no se interrelacionan a menudo en las investigaciones.",
+        "type": "text",
+      },
+    ],
+    "type": "paragraph",
+  },
+  {
+    "inlineTokens": [
+      {
+        "text": "Si bien el lenguaje como actividad humana constituye un objeto de investigación abordado por filósofos, lingúistas, psicólogos, sociólogos, historiadores, biólogos, físicos, etc., los sesgos de las formaciones disciplinares producen recortes metodológicos que no permiten abordar la complejidad del lenguaje humano.",
+        "type": "text",
+      },
+    ],
+    "type": "paragraph",
+  },
+  {
+    "inlineTokens": [
+      {
+        "text": "En este espacio, como temática central, desde una búsqueda que sostiene la indisección del comportamiento y el desarrollo humanos, se presentarán aportes teóricos sobre el lenguaje humano en su carácter de actividad social y discursiva, en la dimensión de dinámica histórica del desarrollo de las personas y de la sociedad.",
+        "type": "text",
+      },
+    ],
+    "type": "paragraph",
+  },
+  {
+    "inlineTokens": [
+      {
+        "text": "En consecuencia, se privilegiarán las investigaciones en didáctica de las lenguas que consideren estas mismas dimensiones activas y dinámicas del lenguaje y del desarrollo humano, teniendo en cuenta que cada lengua natural constituye un sistema específico, portador de valores culturales particulares. Se pretende así contribuir a los saberes sobre la constitución de las personas y sus capacidades discursivo-textuales, que no se reducen sólo a la cognición, sino que ahondan en el conocimiento de los procesos genéticos de la relación entre el lenguaje y el pensamiento.",
+        "type": "text",
+      },
+    ],
+    "type": "paragraph",
+  },
+]
+`;

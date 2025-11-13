@@ -1,0 +1,45 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`OCR neuroeducacionFranciscoMoraPdf > neuroeducacionFranciscoMora fragment 1 1`] = `
+"1. Definición de Neuroeducación
+
+● Es una nueva visión educativa basada en cómo funciona el cerebro, integrando neurociencia, psicología y sociología.
+
+● Busca proporcionar herramientas prácticas para enseñar mejor y fomentar un pensamiento crítico y creativo.
+
+2. Importancia de la Emoción, Curiosidad y Atención
+
+● Estas son claves en el aprendizaje. Se sugiere crear métodos que despierten la curiosidad y la alegría en los estudiantes.
+
+3.Factores que Influencian el Aprendizaje:
+
+● Aspectos como el ambiente escolar (luz, ruido, temperatura), la arquitectura del aula y los procesos emocionales juegan un rol vital en el aprendizaje.
+
+4.Detección e Intervención Temprana:
+
+● Identificar problemas como dislexia, autismo o déficit de atención desde edades tempranas puede mejorar significativamente los resultados educativos.
+
+5. Neurocultura y Nuevas Disciplinas:
+
+● La neuroeducación forma parte de una revolución cultural que incluye también campos como la neurofilosofía, la neuroética y la neuroeconomía.
+
+6 Neuromitos:
+
+● Es crucial evitar conceptos erróneos sobre el cerebro en la educación, ya que pueden generar prácticas ineficaces.
+
+7.Importancia de la Formación de Educadores:
+
+● Se destaca la necesidad de formar a los maestros con conocimientos actualizados sobre el cerebro para mejorar su desempeño educativo.
+
+Este libro subraya que aún hay mucho por investigar, pero enfatiza la urgencia de comenzar a aplicar lo que ya se sabe sobre el cerebro para transformar la educación. Este documento analiza la neuroeducación, una perspectiva que conecta los avances en neurociencia con la enseñanza, con el propósito de mejorar los procesos de aprendizaje y enseñanza.
+
+El capítulo 1 del libro "Neuroeducación" de Francisco Mora introduce el concepto de neuroeducación como una nueva perspectiva de la enseñanza basada en el conocimiento del cerebro.resumen de los puntos principales:
+
+1.Definición de Neuroeducación Es una disciplina emergente que integra neurociencia, psicología y sociología para mejorar los procesos de aprendizaje y enseñanza. Busca fomentar el pensamiento crítico y creativo en un mundo cada vez más abstracto y simbólico."
+`;
+
+exports[`OCR neuroeducacionFranciscoMoraPdf > neuroeducacionFranciscoMora fragment 2 1`] = `
+"subrayando la importancia de comprender cómo funciona el cerebro para optimizar los procesos de enseñanza y aprendizaje
+
+¿QUÉ ES NEUROEDUCACIÓN? Neuroeducación es una nueva visión de la enseñanza basada en el cerebro. Visión que ha nacido al amparo de esa revolución cultural que ha venido en llamarse neurocultura. Neuroeducación es tomar ventaja de los conocimientos sobre cómo funciona el cerebro integrados con la psicología, la sociología y la medicina en un intento de mejorar y potenciar tanto los procesos de aprendizaje y memoria de los estudiantes como enseñar mejor en los profesores. Neuroeducación es también un campo de la neurociencia nuevo, abierto, lleno de enormes posibilidades que debe proporcionar herramientas útiles para la enseñanza y, con ello, alcanzar un pensamiento verdaderamente crítico en un mundo cada vez de más calado abstracto y simbólico. Se trata de una perspectiva de muchos aspectos diferentes y complementarios. Neuroeducación significa evaluar y mejorar la preparación del que enseña (maestro), y ayudar y facilitar el proceso de quien aprende (individualidad a cualquier edad). En parte el nacimiento de la neuroeducación está en la propia comunidad de docentes. Los maestros, desde hace ya mucho tiempo, comparten la esperanza de encontrar nuevos medios educativos basados en hechos científicos y en la neurociencia en particular. Y aun maestros o profesores reconocidos como buenos maestros o buenos profesores por los resultados que obtienen con los alumnos, admiten y afirman que sería muy positivo para ellos y que mejoraría sus capacidades docentes, si se les proveyese de un mejor conocimiento de los últimos hallazgos científicos sobre la emoción, la atención, la memoria, etc. La neuroeducación puede ayudar en el proceso de potenciar la creatividad o el aprendizaje de ciertas disciplinas específicas, por ejemplo, las matemáticas, a partir de conocer que hay dos vías cerebrales diferentes por las que se alcanzan esos procesos y la potenciación de unas u otras "atenciones" para enseñanzas específicas, después de conocer que el proceso atencional no es un fenómeno neuronal único en el cerebro y que existen mecanismos cerebrales que sustentan procesos atencionales diferentes según a qué se aplique la atención. Y al igual para la memoria y otros muchos procesos relevantes para el aprendizaje. La neuroeducación, además, comienza a poner en perspectiva y reforzar la existencia del medio social, de la familia y la propia cultura como determinantes de la capacidad de aprender en los niños, además de reconocer que la variabilidad de sus capacidades durante ese aprendizaje se debe en parte no solo a los constituyentes genéticos de cada individuo, sino también a los cambios, que, desde el mismo nacimiento, produce el medio ambiente en el cerebro. Valga como ejemplo entre 15 los numerosos factores ya conocidos el efecto del tabaco sobre el recién nacido, tanto si la madre es fumadora activa o solo lo es el entorno de la familia, y que se expresa en peores respuestas de los niños a estímulos sensoriales o una capacidad de atención disminuida cuando se les compara con otros niños que no han vivido en ese entorno. Sin duda que esto es ya condicionante de las capacidades cerebrales de estos niños en los primeros años de aprendizaje en el colegio. La neuroeducación incluye entre sus cometidos ayudar a detectar procesos psicológicos o cerebrales que puedan interferir con el aprendizaje y la memoria y la misma educación. La neuroeducación está en las primeras andaduras de un largo camino que recorrerá paralelo en su trayecto el progreso tanto de la psicología como de la neurociencia cognitiva. Neuroeducación trata, con la ayuda de la neurociencia, de encontrar vías a través de las cuales poder aplicar en el aula los conocimientos que ya se poseen sobre los procesos"
+`;

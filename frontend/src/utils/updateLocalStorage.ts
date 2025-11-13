@@ -1,3 +1,5 @@
+import { LocalDataStateType, VoiceStateType } from '@/types'
+
 export const updateLocalStorage = (
   newPartialState: Partial<LocalDataStateType | VoiceStateType>,
   itemKey: string = 'dataLastFile'
@@ -9,8 +11,8 @@ export const updateLocalStorage = (
       dataLastFileString = JSON.stringify(newPartialState)
     }
 
-    let existingState = JSON.parse(dataLastFileString)
-    let updatedState: LocalDataStateType | VoiceStateType = {
+    const existingState = JSON.parse(dataLastFileString)
+    const updatedState: LocalDataStateType | VoiceStateType = {
       ...existingState,
       ...newPartialState
     }

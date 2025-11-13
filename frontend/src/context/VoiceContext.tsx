@@ -1,5 +1,6 @@
 import { createContext, useEffect, useReducer } from 'react'
 import { voiceContextReducer } from './voiceContextReducer'
+import { VoiceContextType, VoiceStateType } from '@/types'
 
 const initialState: VoiceStateType = {
   voices: [],
@@ -22,7 +23,10 @@ const VoiceProvider = ({ children }: { children: React.ReactNode }) => {
     const maxAttempts = 5
 
     const populateVoices = async () => {
-      const voices = window.speechSynthesis.getVoices()
+      const voices = window.speechSynthesis
+        .getVoices()
+        .filter((voice) => voice.lang.includes('es') || voice.lang.includes('en-US'))
+        .sort((a, b) => a.name.localeCompare(b.name))
       if (voices.length === 0 && attempts < maxAttempts) {
         attempts++
         setTimeout(populateVoices, 500)

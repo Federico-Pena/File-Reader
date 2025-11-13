@@ -52,7 +52,7 @@ export const useUtterance = () => {
       }
     })
     voiceDispatch({
-      type: 'SET_READED_WORD',
+      type: 'SET_READ_WORD',
       payload: null
     })
   }

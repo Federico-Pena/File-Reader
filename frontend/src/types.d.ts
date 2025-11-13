@@ -1,3 +1,6 @@
+import { RichBlock } from '@shared/types/types'
+
+/////////// FILE READER CONTEXT ///////////
 interface FileReaderContextType {
   loading: boolean
   error: string
@@ -8,12 +11,6 @@ interface FileReaderContextType {
   changeQueued: (position: number) => void
   changeTotalPages: (totalPages: number) => void
 }
-type RichBlock = {
-  type: 'title' | 'subtitle' | 'paragraph' | 'blockquote' | 'list'
-  content: string
-}
-
-/////////// LOCAL DATA CONTEXT ///////////
 
 type TextPages = {
   cleaned: string
@@ -34,9 +31,7 @@ interface LocalDataStateType {
 
 type LocalDataAction =
   | { type: 'LOAD_STATE' }
-  | {
-      type: 'CLEAN_TEXT_PAGES'
-    }
+  | { type: 'CLEAN_TEXT_PAGES' }
   | { type: 'SET_TEXT_PAGES_APPEND'; payload: { page: TextPages } }
   | { type: 'SET_NAME_FILE'; payload: { nameFile: string } }
   | { type: 'SET_PAGE'; payload: { currentPage: number } }
@@ -64,7 +59,7 @@ type VoiceAction =
   | { type: 'SET_VOICE_NAME'; payload: { voice: string } }
   | { type: 'SET_VOICES'; payload: { voices: SpeechSynthesisVoice[] } }
   | {
-      type: 'SET_READED_WORD'
+      type: 'SET_READ_WORD'
       payload: {
         word: string
         index: number

@@ -1,112 +1,32 @@
-:root {
-  --border-color: light-dark(#72a2fa, #72a2fa);
-  --font-size: clamp(16px, 1.5dvw, 20px);
-  --bg-color: light-dark(#eff1fc, #010409);
-  --text-color: light-dark(#0a0a0a, #fafafa);
-  --font-bold: poppins-bold;
-  --font-regular: poppins-regular;
-  --bg-color-secondary: light-dark(#e0e0e0, #212830);
-  color-scheme: light dark;
+@font-face {
+  font-family: 'poppins';
+  src: url('/fonts/Poppins-Regular.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'lato';
+  src: url('/fonts/Lato-Regular.woff2') format('woff2');
+  font-display: swap;
 }
 
-*::-webkit-scrollbar {
-  width: 0;
-  height: 5px;
-}
-
-*::-webkit-scrollbar-track {
-  background: var(--text-color);
-  border-radius: 3px;
-}
-
-*::-webkit-scrollbar-thumb {
-  background: var(--bg-color);
-  border-radius: 3px;
-}
-
-@supports not selector(::-webkit-scrollbar) {
-  * {
-    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
-  }
-}
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  &:disabled {
-    cursor: not-allowed;
-  }
-}
-*::after,
-*::before {
-  box-sizing: border-box;
-}
 body {
-  text-rendering: optimizeLegibility;
-  line-height: 1.5rem;
-  letter-spacing: 1px;
-  position: relative;
   overflow-x: hidden;
-  overflow-y: scroll;
-  color: var(--text-color);
-  font-size: var(--font-size);
-  font-family: var(--font-regular), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'poppins';
+  font-weight: 400;
+  font-size: '1.5rem';
+  line-height: '2rem';
+  letter-spacing: '-0.01em';
 }
 
-button,
-select,
-input {
-  font-family: inherit;
-  font-size: inherit;
-  width: 100%;
-  padding: 0.5rem;
-  border: none;
-  outline: none;
-  border-radius: 0.3rem;
-  cursor: pointer;
-  background-color: light-dark(#fff, #191919);
-  color: var(--text-color);
-}
-button {
-  background-color: light-dark(#004d80, var(--bg-color));
-  transition: transform 0.6s;
-  color: white;
-  &:hover {
-    transform: scale(0.98);
-    transition: transform 0.2s;
-  }
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
-
-input:focus {
-  outline: 1px solid #72a2fa;
-}
-input[type='range']:focus {
-  outline: 1px solid #72a2fa;
-}
-button:focus {
-  outline: 1px solid #72a2fa;
-}
-select:focus {
-  outline: 1px solid #72a2fa;
-}
-
-@font-face {
-  font-family: poppins-regular;
-  src: url('/fonts/Poppins-Regular.woff2');
-  font-display: swap;
-}
-@font-face {
-  font-family: poppins-bold;
-  src: url('/fonts/Poppins-Bold.woff2');
-  font-display: swap;
-}
-@font-face {
-  font-family: lato-regular;
-  src: url('/fonts/Lato-Regular.woff2');
-  font-display: swap;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'lato';
+  font-weight: 700;
+  font-size: '2rem';
+  line-height: '2.5rem';
+  letter-spacing: '-0.02em';
 }

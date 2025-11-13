@@ -20,7 +20,8 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-      'no-case-declarations': 'off'
+      'no-case-declarations': 'off',
+      '@typescript-eslint/no-explicit-any': 'off'
     }
   }
 )

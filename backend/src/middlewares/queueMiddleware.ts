@@ -1,83 +1,112 @@
-import type { NextFunction, Request, Response } from 'express'
-import { join } from 'path'
-import { existsSync, unlinkSync } from 'fs'
-import { apiConfig } from '../config/apiConfig.js'
-import { readdir } from 'fs/promises'
-import { sendEventStream } from '../utils/sendEventStream.js'
+import type { Request, Response, NextFunction } from 'express'
+import { SseEmitter } from '../service/SseEmitter.js'
 
-const MAX_FILES = 1
-const SLEEP_MS = 1000
-const sleep = () => new Promise((resolve) => setTimeout(resolve, SLEEP_MS))
+type Task = {
+  req: Request
+  res: Response
+  next: NextFunction
+  emitter: SseEmitter
+  interval?: NodeJS.Timeout
+}
 
-export async function queueMiddleware(req: Request, res: Response, next: NextFunction) {
-  try {
-    const { fileId, ext, lang, initPage, endPage, fileName: originalFileName } = req.query
-    const fileName = `${fileId}.${ext}`
-    const dirPath = apiConfig.PATH_DIR_TEMP_FILES
-    const filePath = join(dirPath, fileName)
+export class ProcessQueue {
+  private queue: Task[] = []
+  private running = 0
+  private readonly maxConcurrent: number
+  private readonly maxQueue: number
 
-    if (!fileId) throw new Error('Missing fileId')
-    if (!existsSync(dirPath)) throw new Error("Tem directory doesn't exist")
-    if (!existsSync(filePath)) throw new Error("File doesn't exist")
+  constructor(maxConcurrent: number, maxQueue: number) {
+    this.maxConcurrent = maxConcurrent
+    this.maxQueue = maxQueue
+  }
 
-    req.body = {
-      filePath,
-      lang,
-      initPage,
-      endPage,
-      fileName: originalFileName
-    } as any
+  add(req: Request, res: Response, next: NextFunction) {
+    const emitter = new SseEmitter(res)
+    emitter.init()
 
-    res.set({
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      Connection: 'keep-alive'
-    })
-    res.on('close', () => {
-      if (existsSync(filePath)) {
-        unlinkSync(filePath)
-      }
-      return
-    })
-    const files = await readdir(dirPath)
-    if (files.length > 5) {
-      sendEventStream(res, {
-        eventName: 'errorReached',
-        data: null
+    // 🔹 Si ya hay demasiados en espera, rechazamos el ingreso
+    if (this.queue.length >= this.maxQueue) {
+      emitter.send({
+        type: 'error',
+        error: 'El sistema está ocupado. Por favor, intente nuevamente más tarde.'
       })
-      res.end()
-      if (existsSync(filePath)) {
-        unlinkSync(filePath)
-      }
+      emitter.end()
       return
     }
-    let isFull = false
-    while (!isFull) {
-      const files = await readdir(dirPath)
-      const activeIds = files
-        .filter((f) => /^\d+\..+$/.test(f))
-        .sort((a, b) => {
-          const numA = parseInt(a.split('.')[0]!, 10)
-          const numB = parseInt(b.split('.')[0]!, 10)
-          return numA - numB
-        })
-      const position = activeIds.indexOf(fileName) + 1 - MAX_FILES
-      if (position < MAX_FILES) {
-        isFull = true
-      } else {
-        sendEventStream(res, {
-          eventName: 'queued',
-          data: { position: position }
-        })
-        await sleep()
-      }
+
+    const task: Task = { req, res, next, emitter }
+    this.queue.push(task)
+
+    // 🔹 Si está en espera, notificar posición dinámica
+    const position = this.getPosition(task)
+    if (position > 0) {
+      emitter.send({
+        type: 'queue',
+        status: 'waiting',
+        position
+      })
+
+      // Intervalo individual: actualiza posición cada 3 segundos
+      task.interval = setInterval(() => {
+        const currentPos = this.getPosition(task)
+        if (currentPos > 0 && !emitter.closed) {
+          emitter.send({
+            type: 'queue',
+            status: 'waiting',
+            position: currentPos
+          })
+        }
+      }, 3000)
     }
+
+    this.runNext()
+  }
+
+  private runNext() {
+    // Si no hay slots libres, no hacemos nada
+    if (this.running >= this.maxConcurrent) return
+    const task = this.queue.shift()
+    if (!task) return
+
+    // 🔹 Detener su intervalo de espera
+    if (task.interval) clearInterval(task.interval)
+
+    this.running++
+    const { req, res, next, emitter } = task
+
+    emitter.send({
+      type: 'queue',
+      status: 'started',
+      position: 0
+    })
+
+    // 🔹 Cuando termina o se cierra la conexión, liberamos el slot
+    const release = () => {
+      this.running--
+      res.removeListener('close', release)
+      res.removeListener('finish', release)
+      this.runNext()
+    }
+
+    res.on('close', release)
+    res.on('finish', release)
 
     next()
-  } catch (error: any) {
-    sendEventStream(res, {
-      eventName: 'errorEvent',
-      data: { message: error.message }
-    })
   }
+
+  // 🔹 Calcula la posición actual de un cliente en la cola
+  private getPosition(task: Task): number {
+    const index = this.queue.indexOf(task)
+    // Si está en ejecución, posición 0
+    if (index === -1) return 0
+    // Si está en cola, su posición es (index + 1)
+    return index + 1
+  }
+}
+
+// Configuración: máximo 2 en proceso, máximo 2 esperando
+const sseQueue = new ProcessQueue(2, 2)
+
+export const queueMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  sseQueue.add(req, res, next)
 }

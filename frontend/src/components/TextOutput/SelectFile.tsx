@@ -1,41 +1,49 @@
-import { useFileReaderContext, useLocalDataContext } from '@/hooks/useCustomContext'
+import { useLocalDataContext } from '@/hooks/useCustomContext'
+import { createListCollection, Portal, Select } from '@chakra-ui/react'
 
 export const SelectFile = () => {
-  const { loading } = useFileReaderContext()
   const {
     state: { lastFiles, nameFile },
     dispatch
   } = useLocalDataContext()
 
-  const handleChangeFile = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (loading) return
-    const fileName = e.target.value
+  const handleChangeFile = (fileName: string) => {
     if (fileName) {
       dispatch({ type: 'CHANGE_FILE', payload: { nameFile: fileName } })
     }
   }
-
+  const collection = createListCollection({
+    items: lastFiles.map((file) => ({ label: file.nameFile, value: file.nameFile }))
+  })
   return (
-    <select
-      name="storageFiles"
-      id="storageFiles"
-      onChange={handleChangeFile}
-      disabled={loading || window.speechSynthesis.speaking}
+    <Select.Root
+      disabled={window.speechSynthesis.speaking}
+      collection={collection}
+      onValueChange={(e) => handleChangeFile(e.items[0].value)}
+      value={[nameFile]}
     >
-      {lastFiles.length > 0 && <option value={''}>{nameFile}</option>}
-      {lastFiles.length > 0 ? (
-        lastFiles.map((file, i) => {
-          return (
-            file.nameFile !== nameFile && (
-              <option key={`${file.nameFile}-${i}`} value={file.nameFile}>
-                {file.nameFile}
-              </option>
-            )
-          )
-        })
-      ) : (
-        <option value="">{'No hay archivos cargados'}</option>
-      )}
-    </select>
+      <Select.HiddenSelect />
+      <Select.Label>Archivos guardados</Select.Label>
+      <Select.Control>
+        <Select.Trigger>
+          <Select.ValueText placeholder="Archivos guardados" />
+        </Select.Trigger>
+        <Select.IndicatorGroup>
+          <Select.Indicator />
+        </Select.IndicatorGroup>
+      </Select.Control>
+      <Portal>
+        <Select.Positioner>
+          <Select.Content zIndex={9999}>
+            {collection.items.map((item, i) => (
+              <Select.Item item={item} key={`${item.value}-${i}`}>
+                {item.label}
+                <Select.ItemIndicator />
+              </Select.Item>
+            ))}
+          </Select.Content>
+        </Select.Positioner>
+      </Portal>
+    </Select.Root>
   )
 }

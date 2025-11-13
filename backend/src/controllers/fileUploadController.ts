@@ -1,61 +1,140 @@
-import type { Request, Response } from 'express'
-import { readdir, writeFile } from 'node:fs/promises'
-import { join } from 'node:path'
-import { existsSync, mkdirSync } from 'node:fs'
+import { existsSync, unlinkSync, promises as fsPromises } from 'node:fs'
 import { apiConfig } from '../config/apiConfig.js'
+import { randomUUID } from 'node:crypto'
+import { getProcessor } from '../service/getProcessor.js'
+import type { Request, Response } from 'express'
+import { repairBreakLines } from '../service/repairBreakLines.js'
+import { tokenizeBlocks } from '../service/tokenizeBlocks.js'
+import { tokenizeInline } from '../service/tokenizeInline.js'
+import { SseEmitter } from '../service/SseEmitter.js'
 
 const fileUploadController = async (req: Request, res: Response) => {
+  const clientId = randomUUID()
+  const emitter = new SseEmitter(res)
+  if (!res.getHeaders()) {
+    // Inicializar SSE
+    emitter.init()
+  }
+  const { file } = req
+  if (!file) {
+    emitter.send({ type: 'error', error: 'No file uploaded' })
+    emitter.end()
+    return
+  }
+
+  const { originalname, path: filePath, mimetype } = file
+  const fileExt = (originalname.split('.').pop() ?? '').toLowerCase()
+  const normalizedMime = (mimetype ?? '').toLowerCase()
+  const accepted = apiConfig.ACCEPTED_MIME_TYPES.map((x: string) => x.toLowerCase())
+
+  // Validación de tipo de archivo
+  const isExtAccepted = accepted.includes(fileExt)
+  const isMimeAccepted = accepted.includes(normalizedMime)
+  if (!isExtAccepted && !isMimeAccepted) {
+    try {
+      if (existsSync(filePath)) await fsPromises.unlink(filePath)
+    } catch (err) {
+      console.warn('Failed to unlink invalid file:', err)
+    }
+
+    emitter.send({
+      type: 'error',
+      error: `Los formatos permitidos son: ${apiConfig.ACCEPTED_MIME_TYPES.join(', ')}.`
+    })
+    emitter.end()
+    return
+  }
+
+  let clientDisconnected = false
+
+  res.on('close', () => {
+    console.log(`CLIENT - ${clientId} - DISCONNECTED`)
+    clientDisconnected = true
+    emitter.closed = true
+  })
+
+  res.on('finish', () => {
+    emitter.closed = true
+  })
+
+  const processor = getProcessor(filePath, fileExt, normalizedMime)
+
   try {
-    if (!req.file || !req.file.buffer) {
-      res.status(400).json({ error: "Can't find file" })
+    const totalPages = await processor.getTotalPages()
+    const initPage = Math.max(1, Number(req.body.initPage ?? 1))
+    let endPage = Number(req.body.endPage ?? totalPages)
+    if (!Number.isFinite(endPage) || endPage <= 0) endPage = totalPages
+    if (endPage > totalPages) endPage = totalPages
+
+    if (initPage > endPage) {
+      emitter.send({
+        type: 'error',
+        error: `Rango inválido de páginas. Primera página: ${initPage}, Total de páginas: ${totalPages}`
+      })
+      emitter.end()
       return
     }
-    const { lang, initPage, endPage } = req.body
-    const { buffer, originalname } = req.file
-    const fileExt = originalname.split('.').pop()?.toLowerCase() || ''
-    const mimeTypes = apiConfig.ACCEPTED_MIME_TYPES
 
-    if (!mimeTypes.includes(fileExt)) {
-      const clientMimeTypes = mimeTypes.map((type) => `"${type}"`).join(', ')
-      res.status(400).json({ error: `Formats allowed are: ${clientMimeTypes}.` })
-      return
+    emitter.send({
+      type: 'info',
+      totalPages,
+      filename: originalname,
+      initPage,
+      endPage
+    })
+
+    // 🔹 Procesar página a página (sin workers, secuencial)
+    for (let pageNumber = initPage; pageNumber <= endPage; pageNumber++) {
+      if (clientDisconnected) break
+
+      try {
+        const pageText = await processor.extractPageText(pageNumber)
+        if (!pageText?.trim()) continue
+
+        const rawTextCleaned = repairBreakLines(pageText)
+        const { blocks, textCleaned } = tokenizeBlocks(rawTextCleaned)
+
+        emitter.send({
+          type: 'page',
+          pageNumber,
+          rawText: pageText,
+          blocks,
+          textCleaned,
+          progress: Math.round((pageNumber / endPage) * 100),
+          extension: fileExt
+        })
+      } catch (err) {
+        emitter.send({
+          type: 'error',
+          pageNumber,
+          error: `Error al procesar la página N°${pageNumber}: ${(err as Error).message}`
+        })
+      }
     }
 
-    const fileId = await saveTempFile(fileExt, buffer)
-    const baseUrl = `${apiConfig.API_BASE_URL}${apiConfig.API_ROUTES.streamingFile}`
-    const url = `${baseUrl}?fileId=${fileId}&ext=${fileExt}&lang=${lang}&initPage=${initPage}&endPage=${endPage}&fileName=${originalname}`
+    if (!clientDisconnected) {
+      emitter.send({
+        type: 'complete',
+        message: 'Extracción y procesamiento completados.'
+      })
+    }
 
-    res.status(200).json({ url })
+    emitter.end()
   } catch (error: any) {
-    console.error('fileUploadController error', error)
-    res.status(500).json({ error: "Can't upload file" })
+    console.error('❌ Error global en controlador:', error)
+    if (!emitter.closed) {
+      emitter.send({ type: 'error', error: error.message })
+      emitter.end()
+    }
+  } finally {
+    if (existsSync(filePath)) {
+      try {
+        unlinkSync(filePath)
+      } catch (e) {
+        console.warn('⚠️ No se pudo eliminar archivo temporal:', e)
+      }
+    }
   }
 }
 
 export default fileUploadController
-
-const saveTempFile = async (fileExt: string, buffer: Buffer) => {
-  try {
-    const dirPath = apiConfig.PATH_DIR_TEMP_FILES
-    if (!existsSync(dirPath)) {
-      mkdirSync(dirPath, { recursive: true })
-    }
-    const files = await readdir(dirPath)
-    const ids = files
-      .map((f) => f.split('.')[0])
-      .filter((s): s is string => !!s)
-      .map((s) => parseInt(s, 10))
-      .filter((n) => !isNaN(n))
-      .sort((a, b) => a - b)
-
-    const fileId = (ids.pop() ?? 0) + 1
-
-    const fileName = `${fileId}.${fileExt}`
-    const tempPath = join(dirPath, fileName)
-
-    await writeFile(tempPath, buffer)
-    return fileId
-  } catch (error) {
-    throw new Error(`Error saving temp file: ${error}`)
-  }
-}

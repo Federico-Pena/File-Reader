@@ -1,0 +1,59 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`OCR vinculoPdf > vinculoPdf fragment 1 1`] = `
+"Este trabajo se centra en un aspecto de su rica producción teórica: la Teoría del Vínculo con la cual intenta dar cuenta de las relaciones entre el individuo y su medio social.
+
+No obstante, las características de su obra hacen imposible el tratamiento de cada uno de sus conceptos centrales si no se articulan con el resto. Para comprender la significación del aporte pichoniano en la historia de la psicología social comenzaremos por ubicar brevemente las condicionantes históricas del surgimiento de esta disciplina y las vicisitudes por que atraviesa para definir su campo y su objeto de estudio.
+
+1. Condiciones y determinantes históricas del surgimiento de la Psicología Social
+
+La historia de la ciencia muestra que la inquietud y curiosidad sobre determinado problema, no es suficiente para generar la aparición de una nueva disciplina científica que lo estudie. Se requiere una coyuntura socio-económica que catalice el conocimiento existente y estimule la producción de nuevos planteos explicativos e instrumentos para responder a una demanda social. En otras palabras, se requiere que el problema alcance una trascendencia tal que su manejo y resolución se constituyan en necesidad social.
+
+¿Cuál es el problema que viene a solucionar la Psicología Social?
+
+Nuestra hipótesis es que dicho problema es precisamente el generado por los cambios dentro de la sociedad.
+
+En determinados momentos de la historia de la humanidad los cambios y sus consecuencias alcanzan importancia tal, que su control y manejo se convierten en necesidad social.
+
+En Ja sociedad feudal, sociedad "cerrada" y rigidamente estructurada, la ubicación del individuo y sus relaciones con los demás, estaban determinadas desde el nacimiento. Su status era heredado. En tal sociedad el problema del individuo y su relación con lo social no se plantea. La movilidad
+
+V2
+
+social es minima y no causa desajustes.
+
+Pero, con la industrialización aparece el problema de cómo una sociedad cambiante, que estimula la competencia entre sus miembros, puede mantener la armonía en la convivencia.
+
+En este contexto surgen las "Ciencias Sociales".
+
+El desarrollo de la producción, los cambios técnicos, la necesidad de consumo plantean nuevos problemas.
+
+¿Cómo hacer para que el trabajador se adapte a los cambios en la técnica de producción sin descender su rendimiento?
+
+¿Cómo hacer que el consumidor adopte un nuevo producto para poder así ganar un mercado?
+
+Esto se resume finalmente en una pregunta que la psicología a lo largo de su historia intentará responder de diversas maneras: ¿cuáles son las motivaciones de la conducta humana?
+
+Quien lograra responder esta interrogante tendría el instrumento para manipular las conductas, tanto del obrero productor como del público consumidor, los dos secretos claves para el éxito de una empresa frente a la competencia.
+
+En este contexto tienen lugar una serie de investigaciones y experiencias que señalan el nacimiento de la Psicología Social, pero cuya finalidad no es teórica ni científica. Se busca satisfacer demandas sociales inmediatas.
+
+La búsqueda de instrumentos y formas de manipular situaciones sociales concretas y el desarrollo teórico de la disciplina se mantienen relativamente separados hasta la década del 40 (Lewin, Moreno, Pichon Riviere, Bion).
+
+2. El punto de partida teórico: la relación individuo-sociedad
+
+La historia de la psicología social desde el punto de vista teórico, es la historia de las dificultades y posibilidades para lograr una explicación científica en la articulación de los conceptos de individuo y sociedad (Sobrado, 1974) (24)."
+`;
+
+exports[`OCR vinculoPdf > vinculoPdf fragment 2 1`] = `
+""Toda verdad, incluso si es univer sal y también si puede ser expresada en una fórmula abstracta de lipo matemático, debe su eficacia al ser expresada en los lenguajes de las situaciones concretas particulares. Si no es expresable en lenguas particulares es una abstracción bizantina o escolástica, buena para el solaz de los rumiadores de frases",
+
+A. Gramsci Cuaderno 1X Frag. 63
+
+INTRODUCCION
+
+Enrique Pichon Riviere fue sin duda, un pionero en el campo de la Psicología Social en Latinoamérica. Después de ser fundador de la Asociación Psicoanalítica argentina su práctica clínica y su reflexión teórica lo llevan a emprender un arduo camino de rupturas y reformulaciones tendientes a construir una Psicología Social de base psicoanalítica, centrada en el estudio de los individuos, grupos e instituciones insertas en una Vida Cotidiana históricamente determinada.
+
+Proyecto sin duda muy ambicioso, pero para el cual logró sentar importantes bases teórico metodológicas.
+
+La cita de A. Gramsci con que encabezamos el trabajo no es casual. En la obra de Pichón puede descubrirse una permanente preocupación por que sus formulaciones puedan ser "expresadas en los lenguajes de las situaciones concretas particulares", de manera de constituir un instrumento de cambio en las realidades concretas de los hombres; en esa Vida Cotidiana tan olvidada (en el sentido psicoanalítico del término) por los teóricos de la Psicología y las Ciencias Sociales predominantes en el ámbito académico."
+`;

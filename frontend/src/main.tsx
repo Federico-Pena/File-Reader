@@ -1,21 +1,18 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
 import App from './App.tsx'
 import { LocalDataContextProvider } from './context/LocalDataContext.tsx'
-import { FileReaderProvider } from './context/FileReaderContext.tsx'
 import { VoiceProvider } from './context/VoiceContext.tsx'
-import { Background } from './components/Background/Background.tsx'
-
+import { Provider } from './components/ui/provider.tsx'
+import './index.css'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <VoiceProvider>
-      <FileReaderProvider>
-        <LocalDataContextProvider>
-          <Background />
+    <Provider>
+      <LocalDataContextProvider>
+        <VoiceProvider>
           <App />
-        </LocalDataContextProvider>
-      </FileReaderProvider>
-    </VoiceProvider>
+        </VoiceProvider>
+      </LocalDataContextProvider>
+    </Provider>
   </StrictMode>
 )

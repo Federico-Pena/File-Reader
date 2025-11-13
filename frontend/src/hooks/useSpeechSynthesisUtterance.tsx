@@ -1,11 +1,10 @@
-import { useFileReaderContext, useLocalDataContext, useVoiceContext } from './useCustomContext'
+import { useLocalDataContext, useVoiceContext } from './useCustomContext'
 
 export const useSpeechSynthesisUtterance = () => {
   const {
     dispatch: dataDispatch,
     state: { currentPage, textPages }
   } = useLocalDataContext()
-  const { queued } = useFileReaderContext()
 
   const {
     dispatch: voiceDispatch,
@@ -13,52 +12,52 @@ export const useSpeechSynthesisUtterance = () => {
   } = useVoiceContext()
 
   const globalText = textPages[currentPage]?.cleaned ?? ''
+  const globalWords = globalText.split(/\s+/)
 
   const handleOnBoundary = (event: SpeechSynthesisEvent) => {
     if (event.name === 'word') {
-      const globalWords = globalText.split(/\s+/g)
-      let currentIndex = 0
-      let currentWord = ''
-
       const startingWordIndex = readWords?.index ?? 0
-      const truncatedWords = globalWords.slice(startingWordIndex)
-      for (let i = 0; i < truncatedWords.length; i++) {
-        if (currentIndex + truncatedWords[i].length >= event.charIndex) {
-          currentWord = truncatedWords[i]
+      let currentIndex = 0
+      let found = false
 
-          const globalIndex = startingWordIndex + i
-          voiceDispatch({ type: 'SET_READED_WORD', payload: null })
+      for (let i = startingWordIndex; i < globalWords.length; i++) {
+        const word = globalWords[i]
+        if (currentIndex + word.length >= event.charIndex) {
           voiceDispatch({
-            type: 'SET_READED_WORD',
-            payload: { word: currentWord, index: globalIndex }
+            type: 'SET_READ_WORD',
+            payload: { word, index: i }
           })
+          found = true
           break
         }
-        currentIndex += truncatedWords[i].length + 1
+        currentIndex += word.length + 1
+      }
+
+      // fallback de seguridad (por si el evento no cae dentro de ningún rango)
+      if (!found && startingWordIndex < globalWords.length) {
+        const word = globalWords[startingWordIndex]
+        voiceDispatch({
+          type: 'SET_READ_WORD',
+          payload: { word, index: startingWordIndex }
+        })
       }
     }
   }
 
   const handleOnEnd = () => {
     window.speechSynthesis.cancel()
+
     if (currentPage < textPages.length - 1) {
-      const nextPage = currentPage + 1
       dataDispatch({
         type: 'SET_PAGE',
-        payload: {
-          currentPage: nextPage
-        }
+        payload: { currentPage: currentPage + 1 }
       })
-      voiceDispatch({
-        type: 'SET_READED_WORD',
-        payload: null
-      })
+      voiceDispatch({ type: 'SET_READ_WORD', payload: null })
     }
+
     voiceDispatch({
       type: 'SET_SPEAKING',
-      payload: {
-        speaking: false
-      }
+      payload: { speaking: false }
     })
   }
 
@@ -69,29 +68,25 @@ export const useSpeechSynthesisUtterance = () => {
   const handleOnStart = () => {
     voiceDispatch({
       type: 'SET_SPEAKING',
-      payload: {
-        speaking: window.speechSynthesis.speaking
-      }
+      payload: { speaking: true }
     })
   }
 
   const createUtterance = () => {
     if (!textPages) return
-    if (queued) return
-    let textToRead = globalText
-    const startingWordIndex = readWords?.index
-    if (startingWordIndex && typeof startingWordIndex === 'number') {
-      const words = globalText.split(/\s+/g)
-      textToRead = words.slice(startingWordIndex).join(' ').trim()
-    }
+
+    const startingWordIndex = readWords?.index ?? 0
+    const textToRead = globalWords.slice(startingWordIndex).join(' ').trim()
+
     const utterance = new SpeechSynthesisUtterance(textToRead)
-    utterance.voice = voices.find((voice) => voice.name === selectedVoice) || null
+    utterance.voice = voices.find((v) => v.name === selectedVoice) || null
     utterance.rate = rateUtterance
     utterance.volume = volume
     utterance.onstart = handleOnStart
     utterance.onboundary = handleOnBoundary
     utterance.onend = handleOnEnd
     utterance.onerror = handleOnError
+
     return utterance
   }
 

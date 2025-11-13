@@ -1,3 +1,4 @@
+import { LocalDataAction, LocalDataStateType } from '@/types'
 import { updateLocalStorage } from '@/utils/updateLocalStorage'
 
 const localDataContextReducer = (state: LocalDataStateType, action: LocalDataAction) => {
@@ -43,6 +44,7 @@ const localDataContextReducer = (state: LocalDataStateType, action: LocalDataAct
       })
       return {
         ...state,
+
         textPages: [],
         currentPage: 0
       }
@@ -60,28 +62,22 @@ const localDataContextReducer = (state: LocalDataStateType, action: LocalDataAct
         textPages: sortedPages
       }
     case 'SET_NAME_FILE':
-      const newFiles = state.lastFiles.filter((file) => file.nameFile !== state.nameFile)
-      const setNameFileOldFile = {
-        textPages: state.textPages,
-        currentPage: state.currentPage,
-        nameFile: state.nameFile
-      }
-      const setNameFileNewFile = {
-        textPages: [],
-        currentPage: 0,
+      const updatedFiles = [
+        ...state.lastFiles.filter(
+          (file) => file.nameFile !== action.payload.nameFile && file.nameFile.trim().length > 0
+        )
+      ]
+
+      updateLocalStorage({
+        lastFiles: updatedFiles,
         nameFile: action.payload.nameFile
-      }
-      const setNameNewFiles = [setNameFileNewFile, setNameFileOldFile, ...newFiles].filter(
-        (file) => file.nameFile.trim().length > 0
-      )
-      updateLocalStorage({ lastFiles: setNameNewFiles, nameFile: action.payload.nameFile })
+      })
       return {
         ...state,
-        textPages: [],
-        currentPage: 0,
         nameFile: action.payload.nameFile,
-        lastFiles: setNameNewFiles
+        lastFiles: updatedFiles
       }
+
     case 'LOAD_STATE':
       const stringData = window.localStorage.getItem('dataLastFile')
       if (stringData === null) {
@@ -95,7 +91,8 @@ const localDataContextReducer = (state: LocalDataStateType, action: LocalDataAct
         currentPage,
         lastFiles: previosFiles
       }: LocalDataStateType = JSON.parse(stringData)
-      if (textPages && typeof textPages[0]?.withLineBreaks[0]?.content !== 'string') {
+
+      if (!textPages[0]?.withLineBreaks) {
         return {
           ...state
         }

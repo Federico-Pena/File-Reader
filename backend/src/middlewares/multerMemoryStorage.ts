@@ -1,16 +1,8 @@
-import multer, { memoryStorage } from 'multer'
-
-const newMemoryStorage = memoryStorage()
+import multer from 'multer'
 
 export const multerMemoryStorage = multer({
-  storage: newMemoryStorage,
-  fileFilter: (req, file, cb) => {
-    if (
-      file.mimetype === 'application/octet-stream' &&
-      file.originalname.endsWith('.md')
-    ) {
-      file.mimetype = '.md'
-    }
-    cb(null, true)
+  dest: '/tmp/uploads/',
+  limits: {
+    fileSize: 50 * 1024 * 1024 // 50MB límite
   }
 }).single('file')

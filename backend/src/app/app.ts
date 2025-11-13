@@ -22,12 +22,12 @@ app.use(logger)
 
 const staticPath = path.join(cwd(), 'dist', 'public')
 
-app.use('/', express.static(staticPath))
+// app.use('/', express.static(staticPath))
 
 // Use one router
 app.use(fileReader)
 
 // Handle all other requests.
-app.use('*', express.static(staticPath))
+// app.use('*', express.static(staticPath))
 
 export default app

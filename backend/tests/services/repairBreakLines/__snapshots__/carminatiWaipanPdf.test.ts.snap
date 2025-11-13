@@ -1,0 +1,51 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`OCR carminatiWaipanPdf > carminatiWaipan fragment 1 1`] = `
+"Liliana Elizabeth Waipan
+
+Cursó el posgrado en Neurobiología del Aprendizaje (Universidad de La Plata) y el posgrado en Gestión de la Educación.
+
+Es neuropsicoeducadora y neuropsicoentrenadora. Técnica en Comunicación Institucional y Medios. Psicóloga social y profesora de Historia y Geografía.
+
+Se desempeña como coordinadora pedagógica y docente de nivel primario y secundario en "Nueva Escuela del Sur".
+
+Es la creadora del programa "Cerebrones", Neurociencia para chicos, que ha desarrollado desde 2006 con alumnos de 1° a 6° grado de "Nueva Escuela del Sur".
+
+Mabel Ester Carminati de Limongelli
+
+Profesora para la Enseñanza Primaria.
+
+Posee Diploma Superior en Ciencias Sociales, con mención en Gestión de las Instituciones Educativas (FLACSO Argentina).
+
+Profesora para deficientes del oído, la voz y la palabra. Neuropsicoeducadora y neuropsicoentrenadora. Directora de nivel primario del Colegio "Río de la Plata".
+
+Capacitadora en talleres, seminarios y encuentros docentes sobre el quehacer matemático. Trabaja con docentes y alumnos en la búsqueda de acercar las neurociencias a la educación, y desarrollar las inteligencias múltiples en el aula.
+
+Disertante en congresos nacionales e internacionales de neurociencias y educación.
+
+Fue docente del Instituto "Renard" y de la Escuela Nacional Superior de Maestros en Lenguas Vivas "John F. Kennedy".
+
+Coautora de diversos artículos y libros sobre matemática y neuroeducación.
+
+Fue colaboradora de la revista cultural Moriana. Se ha formado en Gimnasia para el cerebro (Brain Gym)."
+`;
+
+exports[`OCR carminatiWaipanPdf > carminatiWaipan fragment 2 1`] = `
+"● Cuando aprendemos, nuestro cerebro cambia su forma.
+
+● La experiencia moldea nuestro plástico y flexible cerebro.
+
+● El aprendizaje organiza y reorganiza el cerebro.
+
+Infinidad de preguntas de los educadores tienen respuesta a través de la Neurociencia.
+
+La mayoría de los estudios referidos a los procesos de iprendizaje se realiza fuera de las aulas. El desafío de los maestros es ponerse en contacto con los conceptos básicos obre el cerebro y su forma de aprender. De esta manera, la oeducacion se construirá en la rica interacción dentro del aula.
+
+"Los valiosos resultados de la neurociencia cognitiva continuan siendo ignorados en las escuelas, a menos que exista evidena fidedigna para apoyar su uso. La investigación práctica es un rétodo económico para evaluar la efectividad de las estrategias ompatibles con el funcionamiento cerebral, que probablemente tan un mayor aprendizaje de los estudiantes."
+
+Nuestra misión es transformar el aula en un espacio londe la investigación práctica aporte datos sobre el éxito dificultades en el proceso de enseñanza-aprendizaje.
+
+Conocer la historia evolutiva del cerebro permite infeir que en el comportamiento humano aún existen resaios del animal. Mientras docentes y alumnos se ponen
+
+¢n contacto con los aportes de la Neurociencia, entran en juego los valores trascendentes que el ser humano está ol-"
+`;

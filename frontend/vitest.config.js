@@ -9,7 +9,6 @@ export default defineConfig({
   },
   test: {
     include: ['src/tests/**/*.test.ts'],
-    exclude: ['src', 'node_modules'],
-    environment: 'jsdom'
+    exclude: ['src', 'node_modules']
   }
 })

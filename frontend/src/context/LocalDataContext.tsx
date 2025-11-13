@@ -1,5 +1,6 @@
 import { createContext, useEffect, useReducer } from 'react'
 import { localDataContextReducer } from './localDataContextReducer'
+import { LocalDataContextType, LocalDataStateType } from '@/types'
 
 const initialState: LocalDataStateType = {
   lastFiles: [],

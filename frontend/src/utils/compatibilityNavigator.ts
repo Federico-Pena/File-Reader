@@ -21,15 +21,30 @@ const userAgentDetect = (userAgent: string) => {
     return 'Navegador desconocido'
   }
 }
-const speechSynthesisInWindow = () => {
+
+const speechCompatibilityCheck = () => {
   const userNavigator = userAgentDetect(navigator.userAgent)
-  if (userNavigator !== 'Microsoft Edge') {
-    return 'No Edge'
-  } else if (!window.SpeechSynthesis) {
-    return 'No speech recognition'
-  } else {
-    return true
+  const hasSpeechAPI = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window
+
+  return {
+    browser: userNavigator,
+    hasSpeechAPI,
+    isEdge: userNavigator === 'Microsoft Edge'
   }
 }
 
-export { userAgentDetect, speechSynthesisInWindow }
+const getDeviceType = () => {
+  const userAgent = navigator.userAgent.toLowerCase()
+  const isMobile = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/.test(userAgent)
+  const isAndroid = /android/.test(userAgent)
+  const isIOS = /iphone|ipad|ipod/.test(userAgent)
+
+  return {
+    isMobile,
+    isAndroid,
+    isIOS,
+    isDesktop: !isMobile
+  }
+}
+
+export { userAgentDetect, speechCompatibilityCheck, getDeviceType }

@@ -1,56 +1,25 @@
-import { useLocalDataContext, useVoiceContext } from '@/hooks/useCustomContext'
-import { IconPause, IconPlay, IconStop } from '../Icons/Icons'
-import React, { useEffect } from 'react'
-import { useUtterance } from '@/hooks/useUtterance'
+import { useVoiceContext } from '@/hooks/useCustomContext'
+import { Portal, Select, createListCollection, Box } from '@chakra-ui/react'
 
 const Header = () => {
   const {
     dispatch,
     state: { rateUtterance, volume, voices, speaking, selectedVoice }
   } = useVoiceContext()
-  const {
-    dispatch: dispatchLocalData,
-    state: { textPages, currentPage }
-  } = useLocalDataContext()
-  const { play, stop } = useUtterance()
-  const pageRef = React.useRef<HTMLSpanElement>(null)
-  useEffect(() => {
-    if (pageRef.current) {
-      pageRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      })
-    }
-  }, [currentPage])
 
   const isSpeaking = speaking || window.speechSynthesis.speaking
 
-  const handleVoiceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleVoiceChange = (value: { label: string; value: string }) => {
     if (isSpeaking) return
-    if (event.target.value.trim() === '') return
-    const voiceName = event.target.value
-    const voice = voices.find((voice) => voice.name === voiceName)
+    if (value.value.trim() === '') return
+    const voiceName = value.value
+    const voice = voices.find((voice) => voice.voiceURI === voiceName)
     if (!voice) return
-    stop()
     dispatch({
       type: 'SET_VOICE_NAME',
       payload: {
         voice: voice.name ?? selectedVoice
       }
-    })
-  }
-
-  const handleSetPage = (page: number) => {
-    stop()
-    dispatchLocalData({
-      type: 'SET_PAGE',
-      payload: {
-        currentPage: page
-      }
-    })
-    dispatch({
-      type: 'SET_READED_WORD',
-      payload: null
     })
   }
 
@@ -74,62 +43,40 @@ const Header = () => {
     })
   }
 
+  const collection = createListCollection({
+    items: voices.map((voice) => ({ label: voice.voiceURI, value: voice.voiceURI }))
+  })
   return (
-    <header>
-      <div className="voice-select">
-        <label htmlFor="voiceSelect">Voz:</label>
-        <input
-          disabled={isSpeaking}
-          defaultValue={selectedVoice}
-          onChange={handleVoiceChange}
-          type="search"
-          list="listVoices"
-          id="voiceSelect"
-          name="voiceSelect"
-        />
-        <datalist id="listVoices" aria-label="Selecciona la voz para la lectura en voz alta">
-          {voices.map((voice) => (
-            <option key={voice.name} value={voice.name}>
-              {voice.name}
-            </option>
-          ))}
-        </datalist>
-      </div>
-      <div className="btns-controls">
-        <button
-          title={speaking ? 'Pause' : 'Play'}
-          type="button"
-          className="btn-control"
-          onClick={play}
-        >
-          {speaking ? <IconPause /> : <IconPlay />}
-        </button>
-        <button
-          disabled={!isSpeaking}
-          title={'Stop'}
-          type="button"
-          className="btn-control"
-          onClick={stop}
-        >
-          <IconStop />
-        </button>
-      </div>
-      <div className="pages-btns">
-        {textPages.length > 0 && (
-          <>
-            {textPages.map((page, i) => (
-              <span
-                ref={currentPage === i ? pageRef : null}
-                key={i}
-                className={currentPage === i ? 'active' : ''}
-                onClick={() => handleSetPage(i)}
-              >
-                {page.page + 1}
-              </span>
-            ))}
-          </>
-        )}
-      </div>
+    <Box as={'header'} aria-label="Voice header" w={'full'}>
+      <Select.Root
+        disabled={isSpeaking}
+        collection={collection}
+        onValueChange={(e) => handleVoiceChange(e.items[0])}
+        value={[selectedVoice]}
+      >
+        <Select.HiddenSelect />
+        <Select.Label>Selecciona una voz</Select.Label>
+        <Select.Control>
+          <Select.Trigger>
+            <Select.ValueText placeholder="Selecciona una voz" />
+          </Select.Trigger>
+          <Select.IndicatorGroup>
+            <Select.Indicator />
+          </Select.IndicatorGroup>
+        </Select.Control>
+        <Portal>
+          <Select.Positioner>
+            <Select.Content zIndex={9999}>
+              {collection.items.map((item) => (
+                <Select.Item item={item} key={item.value}>
+                  {item.label}
+                  <Select.ItemIndicator />
+                </Select.Item>
+              ))}
+            </Select.Content>
+          </Select.Positioner>
+        </Portal>
+      </Select.Root>
       <div className="volume-rate-container">
         <div>
           <label htmlFor="volumeRate">Volumen: {volume}</label>
@@ -160,7 +107,7 @@ const Header = () => {
           />
         </div>
       </div>
-    </header>
+    </Box>
   )
 }
 export default Header

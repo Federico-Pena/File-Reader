@@ -61,7 +61,6 @@ const VoiceProvider = ({ children }: { children: React.ReactNode }) => {
 
     window.speechSynthesis.addEventListener('voiceschanged', handleVoicesChanged)
 
-    // Cleanup
     return () => {
       if (timeoutId) {
         clearTimeout(timeoutId)

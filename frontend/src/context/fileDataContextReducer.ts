@@ -131,8 +131,6 @@ const fileDataContextReducer = (state: FilesStateType, action: FilesActionType) 
         ...state
       }
     case 'SET_PAGE':
-      // Revisar desde aca
-
       return {
         ...state,
         currentPage: action.payload.currentPage

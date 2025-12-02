@@ -17,7 +17,7 @@ FROM node:22-slim
 WORKDIR /app/backend
 ENV NODE_ENV=production
 
-# Instala OCR y Python (solo lo necesario)
+# Instala OCR
 RUN apt-get update && apt-get install -y --no-install-recommends \
     tesseract-ocr \
     tesseract-ocr-spa \

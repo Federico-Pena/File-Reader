@@ -45,7 +45,9 @@ export const RenderBlock = (
     }
 
     case 'list': {
-      const listType = block.inlineTokens[0]?.listType ?? 'bullet'
+      const first = block.inlineTokens.find((t) => t.type === 'list')
+
+      const listType = first?.listType ?? 'bullet'
 
       const listStyle =
         listType === 'numbered'
@@ -55,6 +57,7 @@ export const RenderBlock = (
           : listType === 'roman'
           ? 'lower-roman'
           : 'disc'
+
       return (
         <List.Root
           className={block.type}
@@ -64,8 +67,11 @@ export const RenderBlock = (
           gap={2}
         >
           {content.map((span, i) => {
-            const indicator = block.inlineTokens[i] ? block.inlineTokens[i].listIndicator : ''
-            const padding = indicator?.length < 20 ? indicator?.length : 0
+            const token = block.inlineTokens[i]
+
+            const indicator = token?.type === 'list' ? token.listIndicator : ''
+            const padding =
+              token?.type === 'list' ? (token.listIndicator.length < 20 ? token.listIndicator.length : 0) : 0
 
             return (
               <List.Item listStyle="none" key={`${indexBlock}-${i}`} ps={padding}>
@@ -77,6 +83,7 @@ export const RenderBlock = (
         </List.Root>
       )
     }
+
     default: {
       return (
         <Text as="p" key={indexBlock}>

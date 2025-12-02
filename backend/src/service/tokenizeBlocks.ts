@@ -1,4 +1,3 @@
-import type { ListType, RichBlock } from '@shared/types/types'
 import { tokenizeInline } from './tokenizeInline'
 
 // REGEX PATTERNS
@@ -7,8 +6,7 @@ const RE = {
   titleAllCaps: /^[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ\s,;:'"()\-\–—]{8,}$/,
   titleWithNumber: /^[\s]*(CAP[ÍI]TULO|SECCI[ÓO]N|PARTE|UNIDAD|TEMA)\s+([IVXLCDM\d]+)\s*$/i,
   roman: /^[\s]*([IVXLCDM]+)(?:[.)\]-])\s+([A-ZÁÉÍÓÚÑ][^\n]{2,})$/,
-  numbering:
-    /^[\s]*(\d+(?:\.\d+)*)(?:[\.\)\]\-])\s+([A-ZÁÉÍÓÚÑ¿¡][A-ZÁÉÍÓÚÑa-záéíóúñü\s\-,;:.()?!¿¡]{3,})$/,
+  numbering: /^[\s]*(\d+(?:\.\d+)*)(?:[\.\)\]\-])\s+([A-ZÁÉÍÓÚÑ¿¡][A-ZÁÉÍÓÚÑa-záéíóúñü\s\-,;:.()?!¿¡]{3,})$/,
   subtitle: /^[A-ZÁÉÍÓÚÑ¿¡][A-ZÁÉÍÓÚÑ\s\-,;:.()?!¿¡]{5,}$/,
   bullet: /^[\s]*([●•\*◦\-–—])\s+(.+)$/,
   lettered: /^[\s]*([a-záéíóúñA-ZÁÉÍÓÚÑ])[\.)\]-]\s+(.{3,})$/,
@@ -17,10 +15,7 @@ const RE = {
 
 //  HELPERS DE CREACIÓN DE BLOQUES
 
-const makeBlock = (
-  type: 'title' | 'subtitle' | 'blockquote' | 'paragraph',
-  content: string
-): RichBlock => ({
+const makeBlock = (type: 'title' | 'subtitle' | 'blockquote' | 'paragraph', content: string): RichBlock => ({
   type,
   inlineTokens: [{ type: 'text', text: content.trim() }]
 })
@@ -87,9 +82,7 @@ function classifyLine(nextLine: string, linea: string, allCaps = false): RichBlo
 
   const mRoman = clean.match(RE.roman)
   if (mRoman && mRoman[2] && isValidRomanNumeral(mRoman[1] ?? '')) {
-    return RE.titleAllCaps.test(mRoman[2])
-      ? makeBlock('title', clean)
-      : makeList('roman', mRoman[1] ?? '', mRoman[2])
+    return RE.titleAllCaps.test(mRoman[2]) ? makeBlock('title', clean) : makeList('roman', mRoman[1] ?? '', mRoman[2])
   }
 
   if (RE.titleAllCaps.test(clean) && !allCaps) {
@@ -103,8 +96,7 @@ function classifyLine(nextLine: string, linea: string, allCaps = false): RichBlo
     return makeList('numbered', indicator, content)
   }
 
-  if (RE.indexLine.test(clean) && isIndexLine(clean))
-    return makeList('indexLine', clean.split(' ')[0] ?? '', clean)
+  if (RE.indexLine.test(clean) && isIndexLine(clean)) return makeList('indexLine', clean.split(' ')[0] ?? '', clean)
 
   if (RE.bullet.test(clean)) {
     const [, indicator = '', content = ''] = clean.match(RE.bullet)!
@@ -141,12 +133,7 @@ function shouldGroupWith(current: RichBlock | null, next: RichBlock, allCaps: bo
   const currentToken = current.inlineTokens[0]
   const nextToken = next.inlineTokens[0]
 
-  if (
-    current.type === 'list' &&
-    next.type === 'list' &&
-    currentToken?.type === 'list' &&
-    nextToken?.type === 'list'
-  ) {
+  if (current.type === 'list' && next.type === 'list' && currentToken?.type === 'list' && nextToken?.type === 'list') {
     return currentToken.listType === nextToken.listType
   }
 
@@ -204,7 +191,7 @@ export function tokenizeBlocks(input: string) {
 
   push()
   const textCleaned = blocks
-    .map((b) => b.inlineTokens.map((t) => t.text).join(' '))
+    .map((b) => b.inlineTokens.map((t: InlineToken) => t.text).join(' '))
     .join(' ')
     .replace(/\s+/g, ' ')
     .trim()

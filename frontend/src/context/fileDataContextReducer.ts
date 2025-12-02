@@ -37,6 +37,12 @@ const fileDataContextReducer = (state: FilesStateType, action: FilesActionType) 
       if (storageData) {
         const fileSaved = storageData.files.find((file) => file.nameFile === action.payload.nameFile)
         if (fileSaved) {
+          updateLocalStorage(
+            {
+              currentFileName: action.payload.nameFile
+            },
+            'fileDataState'
+          )
           return {
             ...state,
             nameFile: action.payload.nameFile,
@@ -110,14 +116,15 @@ const fileDataContextReducer = (state: FilesStateType, action: FilesActionType) 
 
     case 'LOAD_STATE':
       if (storageData) {
-        return {
-          ...state,
-          nameFile: storageData.currentFileName,
-          textPages: storageData.files.find((file) => file.nameFile === storageData.currentFileName)?.textPages ?? [],
-          currentPage:
-            storageData.files.find((file) => file.nameFile === storageData.currentFileName)?.currentPage ?? 0,
-          currentWord:
-            storageData.files.find((file) => file.nameFile === storageData.currentFileName)?.currentWord ?? null
+        const currentFile = storageData.files.find((file) => file.nameFile === storageData.currentFileName)
+        if (currentFile) {
+          return {
+            ...state,
+            nameFile: storageData.currentFileName,
+            textPages: currentFile.textPages,
+            currentPage: currentFile.currentPage,
+            currentWord: currentFile.currentWord
+          }
         }
       }
       return {

@@ -56,15 +56,6 @@ const TextOutput = () => {
         </Text>
       </Flex>
       <Separator my={4} />
-      {/* <pre
-        style={{
-          whiteSpace: 'pre-wrap'
-        }}
-      >
-        {textPages[currentPage]?.withLineBreaks
-          .map((block) => block.content)
-          .join('\n\n')}
-      </pre> */}
       <Stack gap={8} maxW={'breakpoint-lg'} mx={'auto'} bg={'bg.subtle'} p={4} borderRadius={'md'}>
         {textPages[currentPage].forRender.map((block, i) => RenderBlock(block, i, createSpan))}
       </Stack>

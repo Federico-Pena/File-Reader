@@ -25,7 +25,7 @@ const userAgentDetect = (userAgent: string) => {
 
 const speechCompatibilityCheck = () => {
   const userNavigator = userAgentDetect(navigator.userAgent)
-  const hasSpeechAPI = 'speechSynthesis' in window
+  const hasSpeechAPI = window.speechSynthesis
 
   return {
     browser: userNavigator,

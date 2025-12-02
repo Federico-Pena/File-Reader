@@ -5,7 +5,7 @@ import { getLocalStorageItem } from '@/utils/updateLocalStorage'
 const initialState: VoiceStateType = {
   voices: [],
   selectedVoice: null,
-  speaking: window.speechSynthesis.speaking ?? false,
+  speaking: false,
   rateUtterance: 1,
   volume: 100
 }

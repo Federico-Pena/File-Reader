@@ -9,7 +9,6 @@ const sharedOptions = {
   sourcemap: 'inline',
   bundle: true,
   platform: 'node',
-  external: ['node-llama-cpp'],
   banner: {
     js: 'import { createRequire } from "node:module"; const require = createRequire(import.meta.url);'
   }

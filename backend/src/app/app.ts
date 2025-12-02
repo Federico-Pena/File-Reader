@@ -11,23 +11,19 @@ const app = express()
 // Disable the header 'X-Powered-By'
 app.disable('x-powered-by')
 
-// Parse incoming JSON data.
 app.use(express.json())
 
-// Enable CORS
 app.use(cors(apiConfig.CORS_SETTINGS))
 
-// Log HTTP requests format.
 app.use(logger)
 
 const staticPath = path.join(cwd(), 'dist', 'public')
 
-// app.use('/', express.static(staticPath))
+app.use('/', express.static(staticPath))
 
-// Use one router
 app.use(fileReader)
 
 // Handle all other requests.
-// app.use('*', express.static(staticPath))
+app.use(express.static(staticPath))
 
 export default app

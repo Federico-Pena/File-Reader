@@ -12,6 +12,7 @@ const voiceContextReducer = (state: VoiceStateType, action: VoiceAction) => {
       const { rateUtterance, volume }: LocalStorageVoiceStateType = stringData
       return {
         ...state,
+
         rateUtterance: rateUtterance || state.rateUtterance,
         volume: volume || state.volume
       }

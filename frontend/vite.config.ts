@@ -2,6 +2,8 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import path from 'node:path'
 import { VitePWA } from 'vite-plugin-pwa'
+import basicSsl from '@vitejs/plugin-basic-ssl'
+
 // https://vite.dev/config/
 export default defineConfig({
   build: {
@@ -14,6 +16,7 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    basicSsl({}),
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {

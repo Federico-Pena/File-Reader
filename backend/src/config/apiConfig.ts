@@ -3,7 +3,7 @@ const ACCEPTED_MIME_TYPES = ['pdf', 'docx', 'txt', 'md', 'odt', 'png', 'jpg', 'j
 const PORT = process.env.PORT ?? 1234
 const API_BASE_URL = isDev ? `http://localhost:${PORT}` : `https://file-reader.onrender.com`
 const CORS_SETTINGS = {
-  origin: [API_BASE_URL, 'http://localhost:5173'],
+  origin: [API_BASE_URL, 'http://localhost:5173', 'https://192.168.1.49:5173'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Control-Allow-Credentials']
 }

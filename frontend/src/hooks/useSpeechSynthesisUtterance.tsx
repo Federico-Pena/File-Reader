@@ -1,94 +1,115 @@
-import { useLocalDataContext, useVoiceContext } from './useCustomContext'
+import { useCallback } from 'react'
+import { UseFileDataContext } from '@/context/FileDataContext'
+import { UseVoiceContext } from '@/context/VoiceContext'
 
 export const useSpeechSynthesisUtterance = () => {
   const {
-    dispatch: dataDispatch,
-    state: { currentPage, textPages }
-  } = useLocalDataContext()
+    dispatch,
+    state: { currentPage, textPages, currentWord }
+  } = UseFileDataContext()
 
   const {
     dispatch: voiceDispatch,
-    state: { rateUtterance, selectedVoice, volume, readWords, voices }
-  } = useVoiceContext()
+    state: { rateUtterance, selectedVoice, volume, voices }
+  } = UseVoiceContext()
 
-  const globalText = textPages[currentPage]?.cleaned ?? ''
+  const globalText = textPages[currentPage]?.forSpeech ?? ''
   const globalWords = globalText.split(/\s+/)
 
-  const handleOnBoundary = (event: SpeechSynthesisEvent) => {
-    if (event.name === 'word') {
-      const startingWordIndex = readWords?.index ?? 0
-      let currentIndex = 0
-      let found = false
+  const handleOnBoundary = useCallback(
+    (event: SpeechSynthesisEvent) => {
+      if (event.name === 'word') {
+        const startingWordIndex = currentWord?.index ?? 0
+        let currentIndex = 0
+        let found = false
 
-      for (let i = startingWordIndex; i < globalWords.length; i++) {
-        const word = globalWords[i]
-        if (currentIndex + word.length >= event.charIndex) {
-          voiceDispatch({
-            type: 'SET_READ_WORD',
-            payload: { word, index: i }
-          })
-          found = true
-          break
+        for (let i = startingWordIndex; i < globalWords.length; i++) {
+          const word = globalWords[i]
+          if (currentIndex + word.length >= event.charIndex) {
+            dispatch({
+              type: 'SET_CURRENT_WORD',
+              payload: { word, index: i }
+            })
+            found = true
+            break
+          }
+          currentIndex += word.length + 1
         }
-        currentIndex += word.length + 1
+
+        if (!found && startingWordIndex < globalWords.length) {
+          const word = globalWords[startingWordIndex]
+          dispatch({
+            type: 'SET_CURRENT_WORD',
+            payload: { word, index: startingWordIndex }
+          })
+        }
       }
+    },
+    [currentWord, globalWords, dispatch]
+  )
 
-      // fallback de seguridad (por si el evento no cae dentro de ningún rango)
-      if (!found && startingWordIndex < globalWords.length) {
-        const word = globalWords[startingWordIndex]
-        voiceDispatch({
-          type: 'SET_READ_WORD',
-          payload: { word, index: startingWordIndex }
-        })
+  const handleUtteranceEnd = useCallback(() => {
+    voiceDispatch({
+      type: 'SET_SPEAKING',
+      payload: {
+        speaking: false
       }
-    }
-  }
-
-  const handleOnEnd = () => {
-    window.speechSynthesis.cancel()
-
+    })
     if (currentPage < textPages.length - 1) {
-      dataDispatch({
+      dispatch({
         type: 'SET_PAGE',
         payload: { currentPage: currentPage + 1 }
       })
-      voiceDispatch({ type: 'SET_READ_WORD', payload: null })
+      dispatch({ type: 'SET_CURRENT_WORD', payload: null })
     }
+  }, [voiceDispatch, dispatch, currentPage, textPages])
 
-    voiceDispatch({
-      type: 'SET_SPEAKING',
-      payload: { speaking: false }
-    })
-  }
+  const handleUtteranceError = useCallback(
+    (event: SpeechSynthesisErrorEvent) => {
+      if (event.error === 'interrupted') {
+        return
+      }
+      window.speechSynthesis.cancel()
+      voiceDispatch({
+        type: 'SET_SPEAKING',
+        payload: {
+          speaking: false
+        }
+      })
+    },
+    [voiceDispatch]
+  )
 
-  const handleOnError = () => {
-    window.speechSynthesis.cancel()
-  }
+  const createUtterance = useCallback(() => {
+    if (!textPages || !textPages[currentPage]) return null
 
-  const handleOnStart = () => {
-    voiceDispatch({
-      type: 'SET_SPEAKING',
-      payload: { speaking: true }
-    })
-  }
-
-  const createUtterance = () => {
-    if (!textPages) return
-
-    const startingWordIndex = readWords?.index ?? 0
+    const startingWordIndex = currentWord?.index ?? 0
     const textToRead = globalWords.slice(startingWordIndex).join(' ').trim()
 
+    if (!textToRead) return null
+
     const utterance = new SpeechSynthesisUtterance(textToRead)
-    utterance.voice = voices.find((v) => v.name === selectedVoice) || null
+    utterance.voice = voices.find((v) => v.name === selectedVoice?.name) || null
     utterance.rate = rateUtterance
-    utterance.volume = volume
-    utterance.onstart = handleOnStart
+    utterance.volume = volume / 100
     utterance.onboundary = handleOnBoundary
-    utterance.onend = handleOnEnd
-    utterance.onerror = handleOnError
+    utterance.onend = handleUtteranceEnd
+    utterance.onerror = handleUtteranceError
 
     return utterance
-  }
+  }, [
+    textPages,
+    currentPage,
+    currentWord,
+    globalWords,
+    voices,
+    selectedVoice,
+    rateUtterance,
+    volume,
+    handleOnBoundary,
+    handleUtteranceEnd,
+    handleUtteranceError
+  ])
 
   return { createUtterance }
 }

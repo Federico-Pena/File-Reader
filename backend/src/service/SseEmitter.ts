@@ -1,4 +1,3 @@
-import type { SSEEvent } from '@shared/sse/events'
 import type { Response } from 'express'
 export class SseEmitter {
   res: Response

@@ -1,19 +1,26 @@
-import { useLocalDataContext } from '@/hooks/useCustomContext'
+import { UseFileDataContext } from '@/context/FileDataContext'
+import { getLocalStorageItem } from '@/utils/updateLocalStorage'
 import { createListCollection, Portal, Select } from '@chakra-ui/react'
 
 export const SelectFile = () => {
   const {
-    state: { lastFiles, nameFile },
+    state: { nameFile },
     dispatch
-  } = useLocalDataContext()
+  } = UseFileDataContext()
 
   const handleChangeFile = (fileName: string) => {
     if (fileName) {
       dispatch({ type: 'CHANGE_FILE', payload: { nameFile: fileName } })
     }
   }
+
+  let savedFiles = getLocalStorageItem('fileDataState')?.files
+  if (!savedFiles) {
+    savedFiles = []
+  }
+
   const collection = createListCollection({
-    items: lastFiles.map((file) => ({ label: file.nameFile, value: file.nameFile }))
+    items: savedFiles.map((file) => ({ label: file.nameFile ?? '', value: file.nameFile ?? '' }))
   })
   return (
     <Select.Root
@@ -26,7 +33,9 @@ export const SelectFile = () => {
       <Select.Label>Archivos guardados</Select.Label>
       <Select.Control>
         <Select.Trigger>
-          <Select.ValueText placeholder="Archivos guardados" />
+          <Select.ValueText
+            placeholder={collection.items.length > 0 ? 'Archivos guardados' : 'No hay archivos guardados'}
+          />
         </Select.Trigger>
         <Select.IndicatorGroup>
           <Select.Indicator />

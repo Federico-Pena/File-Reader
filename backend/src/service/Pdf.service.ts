@@ -79,9 +79,7 @@ export class PdfService {
         this.filePath,
         `${this.tempDir}/page`
       ])
-      const generatedFiles = fs
-        .readdirSync(this.tempDir)
-        .filter((f) => f.startsWith('page-') && f.endsWith('.tif'))
+      const generatedFiles = fs.readdirSync(this.tempDir).filter((f) => f.startsWith('page-') && f.endsWith('.tif'))
       if (generatedFiles.length > 0) {
         const generatedPath = path.join(this.tempDir, generatedFiles[0] ?? '')
         fs.renameSync(generatedPath, imagePath)
@@ -117,14 +115,11 @@ export class PdfService {
 
   async extractPageText(pageNumber: number): Promise<string> {
     if (isImage(this.filePath)) {
-      console.log('File is an Image')
       return await this.extractImageText()
     }
     if (await this.isPdfScanned()) {
-      console.log('File is a PDF Scanned')
       return await this.extractTextFromScannedPdfPage(pageNumber)
     } else {
-      console.log('File is a PDF')
       return await this.extractTextFromPdfPage(pageNumber)
     }
   }
@@ -132,9 +127,6 @@ export class PdfService {
 
 const isImage = (filePath: string) => {
   return (
-    filePath.endsWith('.png') ||
-    filePath.endsWith('.jpg') ||
-    filePath.endsWith('.jpeg') ||
-    filePath.endsWith('.tiff')
+    filePath.endsWith('.png') || filePath.endsWith('.jpg') || filePath.endsWith('.jpeg') || filePath.endsWith('.tiff')
   )
 }

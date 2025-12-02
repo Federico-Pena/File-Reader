@@ -1,5 +1,4 @@
 import { Blockquote, Heading, List, ListIndicator, Text } from '@chakra-ui/react'
-import { RichBlock } from '@shared/types/types'
 import { RenderInline } from './RenderInline'
 
 export const RenderBlock = (

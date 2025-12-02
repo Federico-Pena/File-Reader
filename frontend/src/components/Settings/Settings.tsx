@@ -2,15 +2,16 @@ import { Button, CloseButton, Drawer, Portal, Separator } from '@chakra-ui/react
 import { useState } from 'react'
 import { MdSettings } from 'react-icons/md'
 import { ColorModeButton } from '../ui/color-mode'
-import Header from '../TextOutput/Header'
-import { useVoiceContext } from '@/hooks/useCustomContext'
-import { SelectFile } from '../TextOutput/SelectFile'
+import { VolumeAndRate } from './VolumeAndRate'
+import { UseVoiceContext } from '@/context/VoiceContext'
+import { SelectVoice } from './SelectVoice'
+import { SelectFile } from './SelectFile'
 
 export const Settings = () => {
   const [open, setOpen] = useState(false)
   const {
     state: { speaking }
-  } = useVoiceContext()
+  } = UseVoiceContext()
   const isSpeaking = speaking || window.speechSynthesis.speaking
 
   return (
@@ -27,9 +28,10 @@ export const Settings = () => {
             <Drawer.Header>
               <Drawer.Title>Opciones</Drawer.Title>
             </Drawer.Header>
-            <Drawer.Body>
+            <Drawer.Body gap={4} display={'flex'} flexDirection={'column'}>
               <SelectFile />
-              <Header />
+              <SelectVoice />
+              <VolumeAndRate />
             </Drawer.Body>
             <Separator my={2} />
             <Drawer.Footer>

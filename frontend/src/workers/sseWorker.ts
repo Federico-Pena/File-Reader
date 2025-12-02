@@ -1,21 +1,7 @@
-import { tokenizeBlocks } from '@/textParser/tokenizeBlocks'
-import type { SSEEvent } from '@shared/sse/events'
-
-type StartMsg = {
-  type: 'start'
-  file: File
-  lang: string
-  initPage: string
-  endPage: string
-  postUrl: string
-}
-
-type StopMsg = { type: 'stop' }
-
 let controller: AbortController | null = null
 
-self.addEventListener('message', async (ev: MessageEvent) => {
-  const msg = ev.data as StartMsg | StopMsg
+self.addEventListener('message', async (ev: MessageEvent<WorkerIncomingMsg>) => {
+  const msg = ev.data
   if (msg.type === 'stop') {
     controller?.abort()
     return
@@ -36,7 +22,8 @@ self.addEventListener('message', async (ev: MessageEvent) => {
       signal: controller.signal
     })
     if (!res.ok || !res.body) {
-      self.postMessage({ type: 'error', error: `HTTP ${res.status}` })
+      const errorMsg: WorkerOutgoingMsg = { type: 'error', error: `HTTP ${res.status}` }
+      self.postMessage(errorMsg)
       return
     }
 
@@ -56,28 +43,28 @@ self.addEventListener('message', async (ev: MessageEvent) => {
         if (line.startsWith('data: ')) {
           try {
             const data: SSEEvent = JSON.parse(line.replace('data: ', ''))
-            if (data.type === 'page') {
-              self.postMessage({ type: 'sse', data })
-            } else {
-              self.postMessage({ type: 'sse', data })
-            }
+            const msgOut: WorkerOutgoingMsg = { type: 'sse', data }
+            self.postMessage(msgOut)
           } catch (err) {
-            // comunicar parsing error
-            self.postMessage({
+            const parseErr: WorkerOutgoingMsg = {
               type: 'parse-error',
               error: String(err),
               raw: line
-            })
+            }
+            self.postMessage(parseErr)
           }
         }
       }
     }
-    self.postMessage({ type: 'done' })
+    const doneMsg: WorkerOutgoingMsg = { type: 'done' }
+    self.postMessage(doneMsg)
   } catch (err) {
     if ((err as any)?.name === 'AbortError') {
-      self.postMessage({ type: 'aborted' })
+      const abortedMsg: WorkerOutgoingMsg = { type: 'aborted' }
+      self.postMessage(abortedMsg)
     } else {
-      self.postMessage({ type: 'error', error: String(err) })
+      const errorMsg: WorkerOutgoingMsg = { type: 'error', error: String(err) }
+      self.postMessage(errorMsg)
     }
   } finally {
     controller = null

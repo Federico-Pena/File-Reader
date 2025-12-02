@@ -1,8 +1,6 @@
-import type { InlineToken } from '@shared/types/types'
-
-// patrones básicos (podés ir ampliándolos)
 const regexes = {
   link: /\bhttps?:\/\/[^\s/$.?#].[^\s]*/gi,
+  wwwLink: /\bwww\.[^\s/$.?#].[^\s]*/gi,
   email: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
   quote: /("[^"]+"[\.,]?)/g,
   code: /`([^`]+)`/g,
@@ -49,13 +47,17 @@ export const tokenizeInline = (blockInlineTokens: InlineToken[]): InlineToken[] 
           const start = match.index ?? 0
           const end = start + matched.length
 
-          if (start > lastIndex)
-            newParts.push({ type: 'text', text: token.text.slice(lastIndex, start).trim() })
+          if (start > lastIndex) newParts.push({ type: 'text', text: token.text.slice(lastIndex, start).trim() })
 
           const trimmed = matched.trim()
           switch (type) {
             case 'link':
               newParts.push({ type: 'link', href: trimmed, text: trimmed })
+              break
+            case 'wwwLink':
+              // Agregar https:// si empieza con www.
+              const href = `https://${trimmed}`
+              newParts.push({ type: 'link', href, text: trimmed })
               break
             case 'email':
               newParts.push({ type: 'email', email: trimmed, text: trimmed })
@@ -80,8 +82,7 @@ export const tokenizeInline = (blockInlineTokens: InlineToken[]): InlineToken[] 
           lastIndex = end
         }
 
-        if (lastIndex < token.text.length)
-          newParts.push({ type: 'text', text: token.text.slice(lastIndex) })
+        if (lastIndex < token.text.length) newParts.push({ type: 'text', text: token.text.slice(lastIndex) })
       }
       parts = newParts
     }

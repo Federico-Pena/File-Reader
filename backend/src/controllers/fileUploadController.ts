@@ -48,7 +48,7 @@ const fileUploadController = async (req: Request, res: Response) => {
   let clientDisconnected = false
 
   res.on('close', () => {
-    console.log(`CLIENT - ${clientId} - DISCONNECTED`)
+    // console.log(`CLIENT - ${clientId} - DISCONNECTED`)
     clientDisconnected = true
     emitter.closed = true
   })
@@ -96,10 +96,9 @@ const fileUploadController = async (req: Request, res: Response) => {
 
         emitter.send({
           type: 'page',
-          pageNumber,
-          rawText: pageText,
-          blocks,
-          textCleaned,
+          forRender: blocks,
+          forSpeech: textCleaned,
+          page: pageNumber,
           progress: Math.round((pageNumber / endPage) * 100),
           extension: fileExt
         })

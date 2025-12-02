@@ -1,14 +1,13 @@
-import { createContext, useEffect, useReducer } from 'react'
+import { createContext, useContext, useEffect, useReducer } from 'react'
 import { voiceContextReducer } from './voiceContextReducer'
-import { VoiceContextType, VoiceStateType } from '@/types'
+import { getLocalStorageItem } from '@/utils/updateLocalStorage'
 
 const initialState: VoiceStateType = {
   voices: [],
-  selectedVoice: '',
-  speaking: false,
+  selectedVoice: null,
+  speaking: window.speechSynthesis.speaking,
   rateUtterance: 1,
-  volume: 1,
-  readWords: null
+  volume: 100
 }
 const VoiceContext = createContext<VoiceContextType>({
   state: initialState,
@@ -19,6 +18,9 @@ const VoiceProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(voiceContextReducer, initialState)
 
   useEffect(() => {
+    dispatch({
+      type: 'LOAD_STATE'
+    })
     let attempts = 0
     const maxAttempts = 5
 
@@ -27,18 +29,22 @@ const VoiceProvider = ({ children }: { children: React.ReactNode }) => {
         .getVoices()
         .filter((voice) => voice.lang.includes('es') || voice.lang.includes('en-US'))
         .sort((a, b) => a.name.localeCompare(b.name))
+      dispatch({ type: 'SET_VOICES', payload: { voices } })
+
       if (voices.length === 0 && attempts < maxAttempts) {
         attempts++
         setTimeout(populateVoices, 500)
         return
       }
-      if (voices.length > 0) {
-        dispatch({ type: 'SET_VOICES', payload: { voices } })
-        const stringData = window.localStorage.getItem('dataLastFile')
-        const selectedVoice = stringData ? JSON.parse(stringData).selectedVoice : voices[0].name
-        dispatch({ type: 'SET_VOICE_NAME', payload: { voice: selectedVoice } })
+      const dataLocalStorage = getLocalStorageItem('voiceState')
+      if (!dataLocalStorage) {
+        dispatch({ type: 'SET_CURRENT_VOICE', payload: { voice: voices[0] } })
+        return
       }
+      const selectedVoice = voices.find((voice) => voice.name === dataLocalStorage.voiceName) ?? voices[0]
+      dispatch({ type: 'SET_CURRENT_VOICE', payload: { voice: selectedVoice } })
     }
+
     window.speechSynthesis.onvoiceschanged = populateVoices
     populateVoices()
   }, [])
@@ -46,4 +52,12 @@ const VoiceProvider = ({ children }: { children: React.ReactNode }) => {
   return <VoiceContext.Provider value={{ state, dispatch }}>{children}</VoiceContext.Provider>
 }
 
-export { VoiceProvider, VoiceContext }
+const UseVoiceContext = () => {
+  const context = useContext(VoiceContext)
+  if (context === undefined) {
+    throw new Error('useVoiceContext must be used within a VoiceContextProvider')
+  }
+  return context
+}
+
+export { VoiceProvider, UseVoiceContext }

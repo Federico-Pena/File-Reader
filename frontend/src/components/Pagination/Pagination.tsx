@@ -1,25 +1,25 @@
 import { useEffect, useRef } from 'react'
-import { useLocalDataContext, useVoiceContext } from '@/hooks/useCustomContext'
 import { IconButton, HStack, ScrollArea } from '@chakra-ui/react'
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
+import { UseVoiceContext } from '@/context/VoiceContext'
+import { UseFileDataContext } from '@/context/FileDataContext'
 
 export const PaginationPages = () => {
   const {
-    dispatch: dispatchLocalData,
-    state: { textPages, currentPage }
-  } = useLocalDataContext()
-  const {
     dispatch,
+    state: { textPages, currentPage }
+  } = UseFileDataContext()
+  const {
     state: { speaking }
-  } = useVoiceContext()
+  } = UseVoiceContext()
   const isSpeaking = speaking || window.speechSynthesis.speaking
 
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const handleSetPage = (page: number) => {
     if (isSpeaking) return
-    dispatchLocalData({ type: 'SET_PAGE', payload: { currentPage: page } })
-    dispatch({ type: 'SET_READ_WORD', payload: null })
+    dispatch({ type: 'SET_PAGE', payload: { currentPage: page } })
+    dispatch({ type: 'SET_CURRENT_WORD', payload: null })
   }
 
   // Auto-scroll al cambiar de página

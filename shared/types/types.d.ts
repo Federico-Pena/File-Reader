@@ -1,8 +1,8 @@
-export interface RichBlock {
+interface RichBlock {
   type: 'title' | 'subtitle' | 'paragraph' | 'list' | 'blockquote'
   inlineTokens: InlineToken[]
 }
-export type InlineToken =
+type InlineToken =
   | { type: 'text'; text: string }
   | { type: 'link'; href: string; text: string }
   | { type: 'email'; email: string; text: string }
@@ -23,4 +23,42 @@ export type InlineToken =
       listIndicator: string
     }
 
-export type ListType = 'bullet' | 'numbered' | 'lettered' | 'roman' | 'indexLine'
+type ListType = 'bullet' | 'numbered' | 'lettered' | 'roman' | 'indexLine'
+
+// SSE
+
+type SSEInfoEvent = {
+  type: 'info'
+  totalPages: number
+  filename: string
+  initPage: number
+  endPage: number
+}
+
+type SSEQueueEvent = {
+  type: 'queue'
+  status: 'waiting' | 'started'
+  position?: number
+}
+
+type SSEPageEvent = {
+  type: 'page'
+  page: number
+  forSpeech: string
+  forRender: RichBlock[]
+  progress: number
+  extension: string
+}
+
+type SSEErrorEvent = {
+  type: 'error'
+  pageNumber?: number
+  error: string
+}
+
+type SSECompleteEvent = {
+  type: 'complete'
+  message: string
+}
+
+type SSEEvent = SSEInfoEvent | SSEQueueEvent | SSEPageEvent | SSEErrorEvent | SSECompleteEvent

@@ -1,11 +1,7 @@
 import { Badge, Em, Link, Text, Code } from '@chakra-ui/react'
-import { InlineToken } from '@shared/types/types'
 import React from 'react'
 
-export const RenderInline = (
-  tokens: InlineToken[],
-  createSpan: (word: string) => React.JSX.Element | ' '
-) => {
+export const RenderInline = (tokens: InlineToken[], createSpan: (word: string) => React.JSX.Element | ' ') => {
   return tokens.map((token, index) => {
     const content = token.text.split(/\s+/g).map(createSpan)
     switch (token.type) {
@@ -79,12 +75,7 @@ export const RenderInline = (
 
       case 'number':
         return (
-          <Text
-            as={'span'}
-            fontWeight="semibold"
-            fontVariantNumeric="tabular-nums"
-            key={`number-${index}`}
-          >
+          <Text as={'span'} fontWeight="semibold" fontVariantNumeric="tabular-nums" key={`number-${index}`}>
             {content}
           </Text>
         )

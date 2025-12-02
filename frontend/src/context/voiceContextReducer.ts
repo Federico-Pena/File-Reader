@@ -1,20 +1,17 @@
-import { updateLocalStorage } from '@/utils/updateLocalStorage'
+import { getLocalStorageItem, updateLocalStorage } from '@/utils/updateLocalStorage'
 
 const voiceContextReducer = (state: VoiceStateType, action: VoiceAction) => {
   switch (action.type) {
     case 'LOAD_STATE':
-      const stringData = window.localStorage.getItem('dataLastFile')
-      if (stringData === null) {
+      const stringData = getLocalStorageItem('voiceState')
+      if (!stringData) {
         return {
           ...state
         }
       }
-      const { readWords, selectedVoice, rateUtterance, volume }: VoiceStateType =
-        JSON.parse(stringData)
+      const { rateUtterance, volume }: LocalStorageVoiceStateType = stringData
       return {
         ...state,
-        readWords: readWords || state.readWords,
-        selectedVoice: selectedVoice || state.selectedVoice,
         rateUtterance: rateUtterance || state.rateUtterance,
         volume: volume || state.volume
       }
@@ -23,10 +20,13 @@ const voiceContextReducer = (state: VoiceStateType, action: VoiceAction) => {
         ...state,
         voices: action.payload.voices
       }
-    case 'SET_VOICE_NAME':
-      updateLocalStorage({
-        selectedVoice: action.payload.voice
-      })
+    case 'SET_CURRENT_VOICE':
+      updateLocalStorage(
+        {
+          voiceName: action.payload.voice.name
+        },
+        'voiceState'
+      )
       return {
         ...state,
         selectedVoice: action.payload.voice
@@ -37,29 +37,28 @@ const voiceContextReducer = (state: VoiceStateType, action: VoiceAction) => {
         speaking: action.payload.speaking
       }
     case 'SET_RATE_UTTERANCE':
-      updateLocalStorage({
-        rateUtterance: action.payload.rateUtterance
-      })
+      updateLocalStorage(
+        {
+          rateUtterance: action.payload.rateUtterance
+        },
+        'voiceState'
+      )
       return {
         ...state,
         rateUtterance: action.payload.rateUtterance
       }
     case 'SET_VOLUME':
-      updateLocalStorage({
-        volume: action.payload.volume
-      })
+      updateLocalStorage(
+        {
+          volume: action.payload.volume
+        },
+        'voiceState'
+      )
       return {
         ...state,
         volume: action.payload.volume
       }
-    case 'SET_READ_WORD':
-      updateLocalStorage({
-        readWords: action.payload
-      })
-      return {
-        ...state,
-        readWords: action.payload
-      }
+
     default:
       return state
   }

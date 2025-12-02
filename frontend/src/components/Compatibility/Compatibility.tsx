@@ -13,7 +13,7 @@ const Compatibility = () => {
   // Determinar la URL de descarga según el dispositivo
   const getDownloadUrl = () => {
     if (isAndroid) {
-      return 'https://play.google.com/store/apps/details?id=com.microsoft.edgemobile'
+      return 'https://play.google.com/store/apps/details?id=com.microsoft.emmx'
     } else if (isIOS) {
       return 'https://apps.apple.com/app/microsoft-edge/id1288723196'
     } else {
@@ -32,16 +32,7 @@ const Compatibility = () => {
   }
 
   return (
-    <Heading
-      as={'h2'}
-      pos={'sticky'}
-      top={0}
-      left={0}
-      bg={'bg.muted'}
-      p={3}
-      w={'fit-content'}
-      rounded={'md'}
-    >
+    <Heading as={'h2'} pos={'sticky'} top={0} left={0} bg={'bg.muted'} p={3} w={'fit-content'} rounded={'md'}>
       {getMessage()} te recomendamos usar{' '}
       <Link
         color={'blue.500'}

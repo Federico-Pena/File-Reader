@@ -1,16 +1,17 @@
 const userAgentDetect = (userAgent: string) => {
   userAgent = userAgent.toLowerCase()
 
-  if (/chrome|crios|crmo/.test(userAgent) && !/edg|opera|opr/.test(userAgent)) {
-    return 'Google Chrome'
-  } else if (/firefox|fxios/.test(userAgent)) {
-    return 'Mozilla Firefox'
-  } else if (/safari/.test(userAgent) && !/chrome|crios/.test(userAgent)) {
-    return 'Safari'
-  } else if (/edg/.test(userAgent)) {
+  // Edge debe ir antes que Chrome porque contiene "chrome" en su UA
+  if (/edg|edge/.test(userAgent)) {
     return 'Microsoft Edge'
   } else if (/opr|opera/.test(userAgent)) {
     return 'Opera'
+  } else if (/chrome|crios|crmo/.test(userAgent)) {
+    return 'Google Chrome'
+  } else if (/firefox|fxios/.test(userAgent)) {
+    return 'Mozilla Firefox'
+  } else if (/safari/.test(userAgent)) {
+    return 'Safari'
   } else if (/msie|trident/.test(userAgent)) {
     return 'Internet Explorer'
   } else if (/android/.test(userAgent)) {
@@ -24,7 +25,7 @@ const userAgentDetect = (userAgent: string) => {
 
 const speechCompatibilityCheck = () => {
   const userNavigator = userAgentDetect(navigator.userAgent)
-  const hasSpeechAPI = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window
+  const hasSpeechAPI = 'speechSynthesis' in window
 
   return {
     browser: userNavigator,
